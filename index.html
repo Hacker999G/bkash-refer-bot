@@ -12,7 +12,6 @@
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 <style>
@@ -1139,7 +1138,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const auth = firebase.auth();
 const db = firebase.database();
 
 const tg = window.Telegram && window.Telegram.WebApp
@@ -1152,7 +1150,6 @@ const tg = window.Telegram && window.Telegram.WebApp
 ========================================================= */
 
 let currentUser = null;
-let firebaseUser = null;
 let settings = {};
 
 let userRef = null;
@@ -1277,31 +1274,12 @@ function getTelegramUser(){
 
 
 /* =========================================================
-   FIREBASE AUTH
+   AUTHENTICATION
+=========================================================
+   User authentication is NOT used here.
+   Firebase is used only for Realtime Database.
+   Telegram user ID is used as the application account ID.
 ========================================================= */
-
-async function startAuth(){
-
-    try{
-
-        await auth.signInAnonymously();
-
-        firebaseUser = auth.currentUser;
-
-        return true;
-
-    }catch(error){
-
-        console.error(error);
-
-        showToast("Firebase authentication failed");
-
-        return false;
-
-    }
-
-}
-
 
 /* =========================================================
    LOAD SETTINGS
@@ -3178,20 +3156,10 @@ async function startApp(){
 
         document.getElementById("loaderText")
             .innerText =
-            "Connecting...";
+            "Connecting to database...";
 
-        const authOK =
-            await startAuth();
-
-        if(!authOK){
-
-            document.getElementById("loaderText")
-                .innerText =
-                "Authentication failed";
-
-            return;
-
-        }
+        // No Firebase Authentication is used.
+        // The app account is identified by Telegram user ID.
 
         document.getElementById("loaderText")
             .innerText =
