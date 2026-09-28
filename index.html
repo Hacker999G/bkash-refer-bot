@@ -1,0 +1,3517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>Loading...</title>
+
+<!-- Telegram -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+    --pink:#e2136e;
+    --pink2:#f42b82;
+    --pink3:#ff5b9d;
+    --dark:#202124;
+    --gray:#707070;
+    --light:#f7f7f8;
+    --white:#fff;
+    --green:#16a56b;
+    --red:#ef4444;
+    --yellow:#ffb800;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f6f6f7;
+    color:var(--dark);
+    min-height:100vh;
+}
+
+button,
+input,
+select{
+    font-family:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+}
+
+.app{
+    max-width:520px;
+    margin:auto;
+    min-height:100vh;
+    background:#f7f7f8;
+    overflow:hidden;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+    position:relative;
+    background:linear-gradient(145deg,#e2136e,#f53a8a);
+    padding:22px 18px 28px;
+    color:white;
+    overflow:hidden;
+}
+
+.header:before,
+.header:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.09);
+}
+
+.header:before{
+    width:210px;
+    height:210px;
+    right:-90px;
+    top:-110px;
+}
+
+.header:after{
+    width:150px;
+    height:150px;
+    left:-90px;
+    bottom:-100px;
+}
+
+.topbar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.avatar{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:white;
+    padding:3px;
+    object-fit:cover;
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+.profile-info{
+    min-width:0;
+}
+
+.profile-name{
+    font-size:18px;
+    font-weight:800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:200px;
+}
+
+.profile-user{
+    font-size:12px;
+    opacity:.85;
+    margin-top:3px;
+}
+
+.menu-btn{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:white;
+    color:var(--pink);
+    font-size:21px;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+/* ================= BALANCE ================= */
+
+.balance-card{
+    position:relative;
+    z-index:3;
+    margin:-12px 16px 0;
+    background:white;
+    border-radius:20px;
+    padding:17px 18px;
+    box-shadow:0 8px 30px rgba(0,0,0,.10);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.balance-label{
+    color:#777;
+    font-size:12px;
+    font-weight:700;
+}
+
+.balance{
+    font-size:25px;
+    font-weight:900;
+    color:var(--pink);
+    margin-top:4px;
+}
+
+.withdraw-mini{
+    background:var(--pink);
+    color:white;
+    padding:11px 15px;
+    border-radius:13px;
+    font-size:12px;
+    font-weight:800;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+    padding:20px 15px 100px;
+}
+
+.section-title{
+    font-size:18px;
+    font-weight:900;
+    margin:5px 3px 13px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.service{
+    background:white;
+    border-radius:18px;
+    padding:13px 4px 12px;
+    text-align:center;
+    box-shadow:0 2px 12px rgba(0,0,0,.045);
+    border:1px solid #f0f0f0;
+    transition:.18s;
+}
+
+.service:active{
+    transform:scale(.95);
+}
+
+.service-icon{
+    width:48px;
+    height:48px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    background:#fff1f7;
+}
+
+.service-name{
+    font-size:11px;
+    font-weight:800;
+    margin-top:9px;
+    color:#333;
+}
+
+/* ================= BANNER ================= */
+
+.banner-box{
+    margin:20px 0;
+    border-radius:18px;
+    overflow:hidden;
+    background:white;
+    min-height:130px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+}
+
+.banner{
+    width:100%;
+    height:145px;
+    object-fit:cover;
+    display:block;
+}
+
+.banner-placeholder{
+    height:145px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#e2136e,#ff5899);
+    color:white;
+    font-size:20px;
+    font-weight:900;
+}
+
+/* ================= QUICK CARDS ================= */
+
+.quick{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:15px;
+}
+
+.quick-card{
+    background:white;
+    border-radius:17px;
+    padding:14px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+
+.quick-icon{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    background:#fff0f6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+.quick-text b{
+    display:block;
+    font-size:13px;
+}
+
+.quick-text span{
+    display:block;
+    font-size:10px;
+    color:#888;
+    margin-top:3px;
+}
+
+/* ================= BOTTOM NAV ================= */
+
+.bottom-nav{
+    position:fixed;
+    z-index:50;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(520px,100%);
+    height:68px;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(15px);
+    border-top:1px solid #eee;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    box-shadow:0 -5px 25px rgba(0,0,0,.06);
+}
+
+.nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    color:#777;
+    font-size:10px;
+    font-weight:800;
+}
+
+.nav-item span:first-child{
+    font-size:21px;
+}
+
+.nav-item.active{
+    color:var(--pink);
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:none;
+    align-items:flex-end;
+    background:rgba(0,0,0,.45);
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:min(520px,100%);
+    max-height:92vh;
+    overflow:auto;
+    background:#f7f7f8;
+    border-radius:25px 25px 0 0;
+    animation:slideUp .22s ease;
+}
+
+@keyframes slideUp{
+    from{transform:translateY(100%)}
+    to{transform:translateY(0)}
+}
+
+.modal-head{
+    position:sticky;
+    top:0;
+    z-index:3;
+    background:white;
+    padding:17px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #eee;
+}
+
+.modal-title{
+    font-size:18px;
+    font-weight:900;
+}
+
+.close{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#f2f2f2;
+    font-size:19px;
+}
+
+.modal-content{
+    padding:17px;
+    padding-bottom:35px;
+}
+
+/* ================= FORM ================= */
+
+.label{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    margin:14px 0 7px;
+    color:#555;
+}
+
+.input,
+.select{
+    width:100%;
+    height:49px;
+    background:white;
+    border:1px solid #e5e5e5;
+    border-radius:13px;
+    padding:0 14px;
+    outline:none;
+    font-size:14px;
+}
+
+.input:focus,
+.select:focus{
+    border-color:var(--pink);
+}
+
+.primary-btn{
+    width:100%;
+    height:50px;
+    margin-top:16px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--pink),var(--pink2));
+    color:white;
+    font-size:14px;
+    font-weight:900;
+    box-shadow:0 7px 18px rgba(226,19,110,.20);
+}
+
+.secondary-btn{
+    width:100%;
+    height:48px;
+    margin-top:10px;
+    border-radius:14px;
+    background:white;
+    color:var(--pink);
+    border:1px solid #f2c2d8;
+    font-weight:800;
+}
+
+/* ================= REFERRAL ================= */
+
+.ref-card{
+    background:linear-gradient(135deg,#e2136e,#f43b87);
+    color:white;
+    border-radius:21px;
+    padding:20px;
+    box-shadow:0 10px 25px rgba(226,19,110,.20);
+}
+
+.ref-title{
+    font-size:14px;
+    font-weight:800;
+    opacity:.9;
+}
+
+.ref-code{
+    font-size:24px;
+    font-weight:900;
+    margin:6px 0 15px;
+    letter-spacing:1px;
+}
+
+.ref-link{
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.25);
+    padding:11px;
+    border-radius:11px;
+    font-size:11px;
+    word-break:break-all;
+}
+
+.ref-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    margin-top:11px;
+}
+
+.ref-buttons button{
+    height:43px;
+    border-radius:12px;
+    background:white;
+    color:var(--pink);
+    font-weight:900;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+    margin-top:12px;
+}
+
+.stat{
+    background:white;
+    border-radius:15px;
+    padding:14px 7px;
+    text-align:center;
+}
+
+.stat b{
+    display:block;
+    color:var(--pink);
+    font-size:18px;
+}
+
+.stat span{
+    font-size:9px;
+    color:#888;
+}
+
+/* ================= LIST ================= */
+
+.list{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.list-item{
+    background:white;
+    border-radius:16px;
+    padding:13px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    border:1px solid #eee;
+}
+
+.list-icon{
+    width:43px;
+    height:43px;
+    border-radius:13px;
+    background:#fff0f6;
+    object-fit:cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    flex-shrink:0;
+}
+
+.list-info{
+    flex:1;
+    min-width:0;
+}
+
+.list-info b{
+    display:block;
+    font-size:13px;
+}
+
+.list-info span{
+    display:block;
+    font-size:10px;
+    color:#888;
+    margin-top:4px;
+}
+
+.small-btn{
+    background:var(--pink);
+    color:white;
+    border-radius:10px;
+    padding:9px 12px;
+    font-size:10px;
+    font-weight:800;
+}
+
+/* ================= SPIN ================= */
+
+.spin-area{
+    background:white;
+    border-radius:22px;
+    padding:22px 15px;
+    text-align:center;
+}
+
+.wheel-wrap{
+    width:275px;
+    height:275px;
+    margin:5px auto 20px;
+    position:relative;
+}
+
+.wheel{
+    width:275px;
+    height:275px;
+    border-radius:50%;
+    border:9px solid white;
+    box-shadow:0 5px 25px rgba(0,0,0,.15);
+    background:
+      conic-gradient(
+        #e2136e 0deg 45deg,
+        #ff9ac2 45deg 90deg,
+        #e2136e 90deg 135deg,
+        #ff9ac2 135deg 180deg,
+        #e2136e 180deg 225deg,
+        #ff9ac2 225deg 270deg,
+        #e2136e 270deg 315deg,
+        #ff9ac2 315deg 360deg
+      );
+    transition:transform 4s cubic-bezier(.12,.75,.17,1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.wheel-center{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    background:white;
+    color:var(--pink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    font-size:13px;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+}
+
+.pointer{
+    position:absolute;
+    top:-8px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:12px solid transparent;
+    border-right:12px solid transparent;
+    border-top:25px solid #222;
+    z-index:3;
+}
+
+.spin-note{
+    font-size:12px;
+    color:#888;
+    line-height:1.6;
+}
+
+/* ================= MINING ================= */
+
+.mining-card{
+    background:linear-gradient(135deg,#21152a,#e2136e);
+    border-radius:23px;
+    padding:22px;
+    color:white;
+    box-shadow:0 12px 30px rgba(226,19,110,.22);
+}
+
+.mining-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.mining-title{
+    font-size:21px;
+    font-weight:900;
+}
+
+.mining-icon{
+    width:55px;
+    height:55px;
+    border-radius:18px;
+    background:rgba(255,255,255,.13);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px;
+}
+
+.mining-amount{
+    font-size:34px;
+    font-weight:900;
+    margin:20px 0 3px;
+}
+
+.mining-sub{
+    opacity:.75;
+    font-size:11px;
+}
+
+.mining-progress{
+    margin-top:17px;
+    height:9px;
+    background:rgba(255,255,255,.15);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.mining-progress div{
+    height:100%;
+    width:0%;
+    background:white;
+    border-radius:20px;
+    transition:.5s;
+}
+
+.mining-btn{
+    width:100%;
+    height:48px;
+    background:white;
+    color:var(--pink);
+    border-radius:14px;
+    margin-top:17px;
+    font-weight:900;
+}
+
+.mining-tier{
+    margin-top:15px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+}
+
+.tier{
+    background:rgba(255,255,255,.1);
+    border-radius:11px;
+    padding:10px 5px;
+    text-align:center;
+    font-size:9px;
+}
+
+.tier b{
+    display:block;
+    font-size:12px;
+    margin-bottom:2px;
+}
+
+/* ================= NOTICE ================= */
+
+.notice{
+    background:white;
+    border-radius:17px;
+    padding:15px;
+    border-left:4px solid var(--pink);
+}
+
+.notice b{
+    display:block;
+    font-size:14px;
+}
+
+.notice p{
+    color:#666;
+    font-size:12px;
+    line-height:1.6;
+    margin-top:7px;
+}
+
+.notice small{
+    display:block;
+    color:#aaa;
+    margin-top:9px;
+}
+
+/* ================= LOADING ================= */
+
+.loading{
+    position:fixed;
+    inset:0;
+    z-index:999;
+    background:#e2136e;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+}
+
+.loader-logo{
+    width:75px;
+    height:75px;
+    border-radius:23px;
+    background:white;
+    color:var(--pink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    font-weight:900;
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+.loader-text{
+    margin-top:16px;
+    font-size:14px;
+    font-weight:800;
+}
+
+.spinner{
+    width:27px;
+    height:27px;
+    border:3px solid rgba(255,255,255,.3);
+    border-top-color:white;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin-top:15px;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+    position:fixed;
+    z-index:1000;
+    left:50%;
+    bottom:85px;
+    transform:translateX(-50%) translateY(20px);
+    background:#222;
+    color:white;
+    padding:12px 17px;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:700;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    max-width:90%;
+    text-align:center;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* ================= EMPTY ================= */
+
+.empty{
+    text-align:center;
+    padding:30px 15px;
+    color:#999;
+    font-size:12px;
+}
+
+@media(max-width:360px){
+    .grid{
+        gap:7px;
+    }
+
+    .service-icon{
+        width:43px;
+        height:43px;
+    }
+
+    .service-name{
+        font-size:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="loading" class="loading">
+    <div class="loader-logo">৳</div>
+    <div id="loaderText" class="loader-text">Loading...</div>
+    <div class="spinner"></div>
+</div>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="topbar">
+
+            <div class="profile">
+                <img id="userPhoto"
+                     class="avatar"
+                     src="https://ui-avatars.com/api/?name=User&background=e2136e&color=fff">
+
+                <div class="profile-info">
+                    <div id="userName" class="profile-name">Loading...</div>
+                    <div id="userUsername" class="profile-user">@telegram</div>
+                </div>
+            </div>
+
+            <button class="menu-btn" onclick="openSettingsMenu()">☰</button>
+
+        </div>
+    </header>
+
+    <!-- BALANCE -->
+    <div class="balance-card">
+
+        <div>
+            <div class="balance-label">AVAILABLE BALANCE</div>
+            <div class="balance">৳ <span id="balance">0.00</span></div>
+        </div>
+
+        <button class="withdraw-mini" onclick="openPage('withdraw')">
+            Withdraw
+        </button>
+
+    </div>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+        <div class="section-title">Quick Services</div>
+
+        <!-- FIRST 4 -->
+        <div class="grid">
+
+            <button class="service" onclick="openPage('withdraw')">
+                <div class="service-icon">💸</div>
+                <div class="service-name">Withdraw</div>
+            </button>
+
+            <button class="service" onclick="openPage('refer')">
+                <div class="service-icon">👥</div>
+                <div class="service-name">Refer</div>
+            </button>
+
+            <button class="service" onclick="openPage('task')">
+                <div class="service-icon">🎯</div>
+                <div class="service-name">Task</div>
+            </button>
+
+            <button class="service" onclick="openPage('bonus')">
+                <div class="service-icon">🎁</div>
+                <div class="service-name">Bonus</div>
+            </button>
+
+        </div>
+
+        <!-- BANNER -->
+        <div id="bannerBox" class="banner-box">
+            <div class="banner-placeholder">
+                Welcome 💗
+            </div>
+        </div>
+
+        <!-- SECOND 4 -->
+        <div class="grid">
+
+            <button class="service" onclick="openPage('spin')">
+                <div class="service-icon">🎡</div>
+                <div class="service-name">Spin</div>
+            </button>
+
+            <button class="service" onclick="openPage('support')">
+                <div class="service-icon">🆘</div>
+                <div class="service-name">Support</div>
+            </button>
+
+            <button class="service" onclick="openPage('official')">
+                <div class="service-icon">📢</div>
+                <div class="service-name">Official</div>
+            </button>
+
+            <button class="service" onclick="openPage('notice')">
+                <div class="service-icon">🔔</div>
+                <div class="service-name">Notice</div>
+            </button>
+
+        </div>
+
+        <!-- MINING -->
+        <div style="margin-top:20px">
+
+            <div class="section-title">Mining</div>
+
+            <button
+                onclick="openPage('mining')"
+                style="
+                width:100%;
+                text-align:left;
+                background:linear-gradient(135deg,#e2136e,#ff5599);
+                color:white;
+                padding:18px;
+                border-radius:20px;
+                box-shadow:0 8px 25px rgba(226,19,110,.18);
+                ">
+
+                <div style="display:flex;align-items:center;gap:13px">
+
+                    <div style="
+                    width:50px;
+                    height:50px;
+                    border-radius:16px;
+                    background:rgba(255,255,255,.15);
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:25px">
+                        ⛏️
+                    </div>
+
+                    <div>
+                        <b style="font-size:16px">Daily Mining</b>
+                        <div style="font-size:11px;opacity:.8;margin-top:4px">
+                            Mine every 24 hours & earn
+                        </div>
+                    </div>
+
+                    <div style="margin-left:auto;font-size:22px">›</div>
+
+                </div>
+
+            </button>
+
+        </div>
+
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+
+        <button class="nav-item active" onclick="goHome()">
+            <span>⌂</span>
+            <span>Home</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('refer')">
+            <span>👥</span>
+            <span>Refer</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('mining')">
+            <span>⛏️</span>
+            <span>Mining</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('support')">
+            <span>💬</span>
+            <span>Support</span>
+        </button>
+
+    </nav>
+
+</div>
+
+
+<!-- MODAL -->
+<div id="modal" class="modal" onclick="closeModalOutside(event)">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <div id="modalTitle" class="modal-title">
+                Page
+            </div>
+
+            <button class="close" onclick="closeModal()">×</button>
+
+        </div>
+
+        <div id="modalContent" class="modal-content"></div>
+
+    </div>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   FIREBASE
+========================================================= */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDDW-mPGwDxZhETSDWw-we41zy2hHtT1Kc",
+    authDomain: "bkash-refer-bot.firebaseapp.com",
+    databaseURL: "https://bkash-refer-bot-default-rtdb.firebaseio.com",
+    projectId: "bkash-refer-bot",
+    storageBucket: "bkash-refer-bot.firebasestorage.app",
+    messagingSenderId: "642702342319",
+    appId: "1:642702342319:web:2f92be0cf13d77b3773c5a",
+    measurementId: "G-ZB8XWS70W4"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.database();
+
+const tg = window.Telegram && window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+let currentUser = null;
+let firebaseUser = null;
+let settings = {};
+
+let userRef = null;
+let userData = {};
+
+let spinRotation = 0;
+
+
+/* =========================================================
+   TELEGRAM
+========================================================= */
+
+function initTelegram(){
+
+    if(!tg) return;
+
+    tg.ready();
+    tg.expand();
+
+    try{
+        tg.setHeaderColor("#e2136e");
+        tg.setBackgroundColor("#f7f7f8");
+    }catch(e){}
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHtml(value){
+
+    if(value === null || value === undefined) return "";
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+function money(value){
+
+    const n = Number(value || 0);
+
+    return n.toLocaleString("en-US",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+
+}
+
+
+function showToast(message){
+
+    const el = document.getElementById("toast");
+
+    el.innerText = message;
+
+    el.classList.add("show");
+
+    setTimeout(()=>{
+        el.classList.remove("show");
+    },2500);
+
+}
+
+
+function formatDate(timestamp){
+
+    if(!timestamp) return "";
+
+    const d = new Date(timestamp);
+
+    return d.toLocaleString("en-GB",{
+        day:"2-digit",
+        month:"short",
+        year:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+    });
+
+}
+
+
+function todayKey(){
+
+    const d = new Date();
+
+    return d.getFullYear()+"-"+
+        String(d.getMonth()+1).padStart(2,"0")+"-"+
+        String(d.getDate()).padStart(2,"0");
+
+}
+
+
+function getTelegramUser(){
+
+    if(tg && tg.initDataUnsafe && tg.initDataUnsafe.user){
+
+        return tg.initDataUnsafe.user;
+
+    }
+
+    /*
+       Browser testing fallback.
+       Telegram-এর ভিতরে গেলে actual Telegram user আসবে.
+    */
+
+    return {
+        id:"test_"+Date.now(),
+        first_name:"Test",
+        last_name:"User",
+        username:"test_user",
+        photo_url:"https://ui-avatars.com/api/?name=Test+User&background=e2136e&color=fff"
+    };
+
+}
+
+
+/* =========================================================
+   FIREBASE AUTH
+========================================================= */
+
+async function startAuth(){
+
+    try{
+
+        await auth.signInAnonymously();
+
+        firebaseUser = auth.currentUser;
+
+        return true;
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Firebase authentication failed");
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD SETTINGS
+========================================================= */
+
+async function loadSettings(){
+
+    try{
+
+        const snap = await db.ref("settings").once("value");
+
+        settings = snap.val() || {};
+
+        document.title =
+            settings.botName ||
+            "Mini App";
+
+    }catch(error){
+
+        console.error("Settings:",error);
+
+    }
+
+}
+
+
+/* =========================================================
+   USER INITIALIZE
+========================================================= */
+
+async function initializeUser(){
+
+    currentUser = getTelegramUser();
+
+    const telegramId = String(currentUser.id);
+
+    userRef = db.ref("users/"+telegramId);
+
+    const snap = await userRef.once("value");
+
+    if(snap.exists()){
+
+        userData = snap.val() || {};
+
+    }else{
+
+        const referralCode =
+            createReferralCode(currentUser.id);
+
+        userData = {
+
+            telegramId:telegramId,
+
+            firstName:currentUser.first_name || "",
+
+            lastName:currentUser.last_name || "",
+
+            username:currentUser.username || "",
+
+            photoUrl:currentUser.photo_url || "",
+
+            balance:0,
+
+            referralCode:referralCode,
+
+            referredBy:"",
+
+            totalReferrals:0,
+
+            referralEarnings:0,
+
+            totalWithdraw:0,
+
+            createdAt:firebase.database.ServerValue.TIMESTAMP,
+
+            lastActive:firebase.database.ServerValue.TIMESTAMP
+
+        };
+
+        await userRef.set(userData);
+
+        /*
+          Handle referral after user creation.
+        */
+        await processReferral();
+
+    }
+
+    await userRef.update({
+
+        firstName:currentUser.first_name || userData.firstName || "",
+
+        lastName:currentUser.last_name || userData.lastName || "",
+
+        username:currentUser.username || userData.username || "",
+
+        photoUrl:currentUser.photo_url || userData.photoUrl || "",
+
+        lastActive:firebase.database.ServerValue.TIMESTAMP
+
+    });
+
+    updateProfileUI();
+
+}
+
+
+/* =========================================================
+   REFERRAL CODE
+========================================================= */
+
+function createReferralCode(id){
+
+    return "REF" +
+        String(id)
+        .replace(/\D/g,"")
+        .slice(-8);
+
+}
+
+
+/* =========================================================
+   GET START PARAM
+========================================================= */
+
+function getStartParam(){
+
+    try{
+
+        if(tg &&
+           tg.initDataUnsafe &&
+           tg.initDataUnsafe.start_param){
+
+            return tg.initDataUnsafe.start_param;
+
+        }
+
+    }catch(e){}
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    return params.get("ref") || "";
+
+}
+
+
+/* =========================================================
+   PROCESS REFERRAL
+========================================================= */
+
+async function processReferral(){
+
+    const param = getStartParam();
+
+    if(!param) return;
+
+    let refCode = param;
+
+    if(refCode.startsWith("ref_")){
+
+        refCode = refCode.substring(4);
+
+    }
+
+    if(!refCode) return;
+
+    if(userData.referredBy) return;
+
+    /*
+       Find referrer.
+       Because referralCode is stored under users,
+       this is a simple scan.
+       For a very large app, use a dedicated
+       referralCodes/{code} -> telegramId index.
+    */
+
+    const usersSnap =
+        await db.ref("users")
+        .orderByChild("referralCode")
+        .equalTo(refCode)
+        .once("value");
+
+    if(!usersSnap.exists()) return;
+
+    let referrerId = null;
+
+    usersSnap.forEach(child=>{
+
+        referrerId = child.key;
+
+    });
+
+    if(!referrerId) return;
+
+    if(String(referrerId) === String(currentUser.id)){
+
+        return;
+
+    }
+
+    const minRefer =
+        Number(settings.minRefer || 0);
+
+    /*
+       Register referral.
+       Actual cash reward can be controlled
+       from server/admin rules later.
+    */
+
+    const referralData = {
+
+        referrerId:String(referrerId),
+
+        referredId:String(currentUser.id),
+
+        referredName:
+            currentUser.first_name || "",
+
+        referredUsername:
+            currentUser.username || "",
+
+        createdAt:
+            firebase.database.ServerValue.TIMESTAMP
+
+    };
+
+    await db.ref(
+        "referrals/"+referrerId+"/"+currentUser.id
+    ).set(referralData);
+
+    await userRef.update({
+
+        referredBy:String(referrerId)
+
+    });
+
+    const refUserRef =
+        db.ref("users/"+referrerId);
+
+    const refSnap =
+        await refUserRef.once("value");
+
+    const refUser =
+        refSnap.val() || {};
+
+    await refUserRef.update({
+
+        totalReferrals:
+            Number(refUser.totalReferrals || 0)+1
+
+    });
+
+    /*
+       If Admin config has referral reward,
+       record it.
+
+       Balance modification should ideally be
+       performed server-side in production.
+    */
+
+    const reward =
+        Number(settings.referralReward || 0);
+
+    if(reward > 0){
+
+        await db.ref(
+            "referralRewards/"+referrerId+"/"+currentUser.id
+        ).set({
+
+            amount:reward,
+
+            createdAt:
+                firebase.database.ServerValue.TIMESTAMP,
+
+            status:"pending"
+
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function updateProfileUI(){
+
+    const name =
+        [
+            currentUser.first_name || "",
+            currentUser.last_name || ""
+        ].join(" ").trim()
+        || "Telegram User";
+
+    document.getElementById("userName")
+        .innerText = name;
+
+    document.getElementById("userUsername")
+        .innerText =
+        currentUser.username
+        ? "@"+currentUser.username
+        : "Telegram User";
+
+    if(currentUser.photo_url){
+
+        document.getElementById("userPhoto").src =
+            currentUser.photo_url;
+
+    }
+
+    updateBalance();
+
+}
+
+
+function updateBalance(){
+
+    document.getElementById("balance")
+        .innerText =
+        money(userData.balance || 0);
+
+}
+
+
+/* =========================================================
+   LIVE USER LISTENER
+========================================================= */
+
+function listenUser(){
+
+    if(!userRef) return;
+
+    userRef.on("value",snap=>{
+
+        userData = snap.val() || {};
+
+        updateBalance();
+
+    });
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal(title,html){
+
+    document.getElementById("modalTitle")
+        .innerText = title;
+
+    document.getElementById("modalContent")
+        .innerHTML = html;
+
+    document.getElementById("modal")
+        .classList.add("show");
+
+}
+
+
+function closeModal(){
+
+    document.getElementById("modal")
+        .classList.remove("show");
+
+}
+
+
+function closeModalOutside(event){
+
+    if(event.target.id === "modal"){
+
+        closeModal();
+
+    }
+
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function goHome(){
+
+    closeModal();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   WITHDRAW
+========================================================= */
+
+async function openWithdraw(){
+
+    const snap =
+        await db.ref("withdrawMethods")
+        .orderByChild("status")
+        .equalTo(true)
+        .once("value");
+
+    let methods = [];
+
+    snap.forEach(child=>{
+
+        methods.push({
+            id:child.key,
+            ...child.val()
+        });
+
+    });
+
+    /*
+       Support "active" string too.
+    */
+
+    if(methods.length === 0){
+
+        const all =
+            await db.ref("withdrawMethods")
+            .once("value");
+
+        all.forEach(child=>{
+
+            const data = child.val() || {};
+
+            if(
+                data.status === true ||
+                data.status === "active" ||
+                data.status === 1
+            ){
+
+                methods.push({
+                    id:child.key,
+                    ...data
+                });
+
+            }
+
+        });
+
+    }
+
+    let methodOptions = "";
+
+    methods.forEach(method=>{
+
+        methodOptions += `
+            <option value="${escapeHtml(method.id)}">
+                ${escapeHtml(method.name || "Withdraw")}
+            </option>
+        `;
+
+    });
+
+    if(!methodOptions){
+
+        methodOptions =
+            `<option value="">No withdraw method available</option>`;
+
+    }
+
+    const minWithdraw =
+        Number(settings.minWithdraw || 0);
+
+    const minRefer =
+        Number(settings.minRefer || 0);
+
+    const totalRefer =
+        Number(userData.totalReferrals || 0);
+
+    openModal("Withdraw",`
+
+        <div class="list-item" style="margin-bottom:12px">
+
+            <div class="list-icon">💰</div>
+
+            <div class="list-info">
+
+                <b>Available Balance</b>
+
+                <span>৳ ${money(userData.balance || 0)}</span>
+
+            </div>
+
+        </div>
+
+        <div style="
+            background:#fff5f9;
+            padding:12px;
+            border-radius:13px;
+            font-size:11px;
+            line-height:1.6;
+            color:#777">
+
+            Minimum Withdraw:
+            <b style="color:#e2136e">
+                ৳${money(minWithdraw)}
+            </b>
+
+            <br>
+
+            Minimum Referral:
+            <b style="color:#e2136e">
+                ${minRefer}
+            </b>
+
+            <br>
+
+            Your Referral:
+            <b style="color:#e2136e">
+                ${totalRefer}
+            </b>
+
+        </div>
+
+        <label class="label">Withdraw Method</label>
+
+        <select id="withdrawMethod" class="select">
+            ${methodOptions}
+        </select>
+
+        <label class="label">Amount</label>
+
+        <input
+            id="withdrawAmount"
+            class="input"
+            type="number"
+            placeholder="Enter amount">
+
+        <label class="label">Account Number</label>
+
+        <input
+            id="withdrawNumber"
+            class="input"
+            type="text"
+            placeholder="01XXXXXXXXX">
+
+        <button
+            class="primary-btn"
+            onclick="submitWithdraw()">
+
+            Submit Withdraw
+
+        </button>
+
+    `);
+
+}
+
+
+/* =========================================================
+   SUBMIT WITHDRAW
+========================================================= */
+
+async function submitWithdraw(){
+
+    const amount =
+        Number(
+            document.getElementById("withdrawAmount").value
+        );
+
+    const number =
+        document.getElementById("withdrawNumber")
+        .value.trim();
+
+    const method =
+        document.getElementById("withdrawMethod")
+        .value;
+
+    const minWithdraw =
+        Number(settings.minWithdraw || 0);
+
+    const minRefer =
+        Number(settings.minRefer || 0);
+
+    const balance =
+        Number(userData.balance || 0);
+
+    const referrals =
+        Number(userData.totalReferrals || 0);
+
+    if(!method){
+
+        showToast("Select withdraw method");
+
+        return;
+
+    }
+
+    if(!amount || amount <= 0){
+
+        showToast("Enter valid amount");
+
+        return;
+
+    }
+
+    if(amount < minWithdraw){
+
+        showToast(
+            "Minimum withdraw ৳"+minWithdraw
+        );
+
+        return;
+
+    }
+
+    if(referrals < minRefer){
+
+        showToast(
+            "You need at least "+minRefer+" referrals"
+        );
+
+        return;
+
+    }
+
+    if(amount > balance){
+
+        showToast("Insufficient balance");
+
+        return;
+
+    }
+
+    if(!number){
+
+        showToast("Enter account number");
+
+        return;
+
+    }
+
+    const requestId =
+        db.ref("withdrawals").push().key;
+
+    await db.ref(
+        "withdrawals/"+requestId
+    ).set({
+
+        id:requestId,
+
+        userId:String(currentUser.id),
+
+        userName:
+            [
+                currentUser.first_name || "",
+                currentUser.last_name || ""
+            ].join(" ").trim(),
+
+        username:
+            currentUser.username || "",
+
+        amount:amount,
+
+        methodId:method,
+
+        accountNumber:number,
+
+        status:"pending",
+
+        createdAt:
+            firebase.database.ServerValue.TIMESTAMP
+
+    });
+
+    /*
+       IMPORTANT:
+       Do NOT deduct balance from client in a
+       production money system.
+
+       Admin/server should approve and atomically
+       deduct balance.
+
+       Here we only create request.
+    */
+
+    showToast("Withdraw request submitted");
+
+    closeModal();
+
+}
+
+
+/* =========================================================
+   REFERRAL
+========================================================= */
+
+async function openRefer(){
+
+    const botUsername =
+        String(
+            settings.botUsername ||
+            "YourBotUsername"
+        )
+        .replace("@","");
+
+    const code =
+        userData.referralCode ||
+        createReferralCode(currentUser.id);
+
+    const link =
+        "https://t.me/"+
+        botUsername+
+        "?startapp=ref_"+
+        encodeURIComponent(code);
+
+    const refSnap =
+        await db.ref(
+            "referrals/"+currentUser.id
+        ).once("value");
+
+    let referrals = [];
+
+    refSnap.forEach(child=>{
+
+        referrals.push({
+            id:child.key,
+            ...child.val()
+        });
+
+    });
+
+    let referralList = "";
+
+    referrals.reverse().forEach(item=>{
+
+        const name =
+            item.referredName ||
+            "Telegram User";
+
+        referralList += `
+
+            <div class="list-item">
+
+                <div class="list-icon">
+                    👤
+                </div>
+
+                <div class="list-info">
+
+                    <b>
+                        ${escapeHtml(name)}
+                    </b>
+
+                    <span>
+                        ${
+                            item.referredUsername
+                            ? "@"+escapeHtml(item.referredUsername)
+                            : "Telegram user"
+                        }
+                    </span>
+
+                </div>
+
+                <div style="
+                    font-size:10px;
+                    color:#16a56b;
+                    font-weight:800">
+
+                    Joined
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+    if(!referralList){
+
+        referralList =
+            `<div class="empty">
+                No referrals yet.<br>
+                Share your referral link.
+            </div>`;
+
+    }
+
+    openModal("Refer & Earn",`
+
+        <div class="ref-card">
+
+            <div class="ref-title">
+                YOUR REFERRAL CODE
+            </div>
+
+            <div class="ref-code">
+                ${escapeHtml(code)}
+            </div>
+
+            <div class="ref-link">
+                ${escapeHtml(link)}
+            </div>
+
+            <div class="ref-buttons">
+
+                <button onclick="copyReferral()">
+                    📋 Copy
+                </button>
+
+                <button onclick="shareReferral()">
+                    🚀 Share
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="stats">
+
+            <div class="stat">
+                <b>${userData.totalReferrals || 0}</b>
+                <span>Total Refer</span>
+            </div>
+
+            <div class="stat">
+                <b>
+                    ৳${money(userData.referralEarnings || 0)}
+                </b>
+                <span>Earned</span>
+            </div>
+
+            <div class="stat">
+                <b>
+                    ${settings.minRefer || 0}
+                </b>
+                <span>Required</span>
+            </div>
+
+        </div>
+
+        <div style="margin-top:20px">
+
+            <div class="section-title"
+                 style="margin-left:0">
+
+                Your Referrals
+
+            </div>
+
+            <div class="list">
+                ${referralList}
+            </div>
+
+        </div>
+
+    `);
+
+    window.currentReferralLink = link;
+
+}
+
+
+/* =========================================================
+   COPY REFERRAL
+========================================================= */
+
+async function copyReferral(){
+
+    const link =
+        window.currentReferralLink || "";
+
+    try{
+
+        await navigator.clipboard.writeText(link);
+
+        showToast("Referral link copied!");
+
+    }catch(e){
+
+        showToast(link);
+
+    }
+
+}
+
+
+/* =========================================================
+   SHARE REFERRAL
+========================================================= */
+
+function shareReferral(){
+
+    const link =
+        window.currentReferralLink || "";
+
+    const botName =
+        settings.botName ||
+        "Our Bot";
+
+    const text =
+        "Join "+botName+
+        " and earn rewards! 🎁";
+
+    if(tg && tg.openTelegramLink){
+
+        const shareUrl =
+            "https://t.me/share/url?url="+
+            encodeURIComponent(link)+
+            "&text="+
+            encodeURIComponent(text);
+
+        tg.openTelegramLink(shareUrl);
+
+    }else{
+
+        window.open(
+            "https://t.me/share/url?url="+
+            encodeURIComponent(link)+
+            "&text="+
+            encodeURIComponent(text),
+            "_blank"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   TASK
+========================================================= */
+
+async function openTasks(){
+
+    const snap =
+        await db.ref("tasks").once("value");
+
+    let html = "";
+
+    snap.forEach(child=>{
+
+        const task =
+            child.val() || {};
+
+        if(
+            task.status === false ||
+            task.status === "inactive"
+        ){
+
+            return;
+
+        }
+
+        html += `
+
+            <div class="list-item">
+
+                <div class="list-icon">
+                    🎯
+                </div>
+
+                <div class="list-info">
+
+                    <b>
+                        ${escapeHtml(
+                            task.name || "Task"
+                        )}
+                    </b>
+
+                    <span>
+                        Reward:
+                        ৳${money(task.reward || 0)}
+                    </span>
+
+                </div>
+
+                <button
+                    class="small-btn"
+                    onclick="openTask(
+                        '${escapeHtml(task.link || "")}',
+                        '${escapeHtml(child.key)}',
+                        ${Number(task.reward || 0)}
+                    )">
+
+                    START
+
+                </button>
+
+            </div>
+
+        `;
+
+    });
+
+    if(!html){
+
+        html =
+            `<div class="empty">
+                No active tasks available.
+            </div>`;
+
+    }
+
+    openModal("Tasks",`
+
+        <div style="
+            background:#fff5f9;
+            padding:13px;
+            border-radius:14px;
+            font-size:11px;
+            color:#777;
+            margin-bottom:13px">
+
+            Complete tasks and earn rewards.
+            Task rewards are controlled by admin.
+
+        </div>
+
+        <div class="list">
+            ${html}
+        </div>
+
+    `);
+
+}
+
+
+/* =========================================================
+   OPEN TASK
+========================================================= */
+
+async function openTask(link,id,reward){
+
+    if(link){
+
+        if(tg && tg.openTelegramLink &&
+           link.includes("t.me/")){
+
+            tg.openTelegramLink(link);
+
+        }else{
+
+            window.open(link,"_blank");
+
+        }
+
+    }
+
+    /*
+       Task verification should ideally happen
+       server-side.
+
+       We record task start here.
+    */
+
+    await db.ref(
+        "taskClaims/"+currentUser.id+"/"+id
+    ).set({
+
+        taskId:id,
+
+        reward:reward,
+
+        status:"started",
+
+        createdAt:
+            firebase.database.ServerValue.TIMESTAMP
+
+    });
+
+    showToast(
+        "Task opened. Complete it to receive reward."
+    );
+
+}
+
+
+/* =========================================================
+   BONUS
+========================================================= */
+
+async function openBonus(){
+
+    const today =
+        todayKey();
+
+    const claimRef =
+        db.ref(
+            "bonusClaims/"+currentUser.id+"/"+today
+        );
+
+    const snap =
+        await claimRef.once("value");
+
+    const claimed =
+        snap.exists();
+
+    const reward =
+        Number(settings.dailyBonus || 0);
+
+    openModal("Daily Bonus",`
+
+        <div style="
+            text-align:center;
+            background:white;
+            border-radius:20px;
+            padding:25px">
+
+            <div style="font-size:55px">
+                🎁
+            </div>
+
+            <h2 style="margin-top:10px">
+                Daily Bonus
+            </h2>
+
+            <div style="
+                color:#e2136e;
+                font-size:30px;
+                font-weight:900;
+                margin-top:8px">
+
+                ৳${money(reward)}
+
+            </div>
+
+            <p style="
+                color:#888;
+                font-size:11px;
+                margin-top:8px">
+
+                ${claimed
+                    ? "You already claimed today's bonus."
+                    : "Claim once every 24 hours."
+                }
+
+            </p>
+
+            <button
+                class="primary-btn"
+                ${claimed ? "disabled" : ""}
+                onclick="claimBonus()">
+
+                ${claimed
+                    ? "Already Claimed"
+                    : "CLAIM BONUS"
+                }
+
+            </button>
+
+        </div>
+
+    `);
+
+}
+
+
+/* =========================================================
+   CLAIM BONUS
+========================================================= */
+
+async function claimBonus(){
+
+    const today =
+        todayKey();
+
+    const claimRef =
+        db.ref(
+            "bonusClaims/"+currentUser.id+"/"+today
+        );
+
+    const snap =
+        await claimRef.once("value");
+
+    if(snap.exists()){
+
+        showToast("Already claimed today");
+
+        return;
+
+    }
+
+    const reward =
+        Number(settings.dailyBonus || 0);
+
+    await claimRef.set({
+
+        amount:reward,
+
+        createdAt:
+            firebase.database.ServerValue.TIMESTAMP
+
+    });
+
+    /*
+       Production:
+       Reward should be added through secure
+       server-side transaction.
+    */
+
+    showToast(
+        "Bonus claim submitted"
+    );
+
+    closeModal();
+
+}
+
+
+/* =========================================================
+   SPIN
+========================================================= */
+
+async function openSpin(){
+
+    const today =
+        todayKey();
+
+    const snap =
+        await db.ref(
+            "spinClaims/"+currentUser.id+"/"+today
+        ).once("value");
+
+    const claimed =
+        snap.exists();
+
+    openModal("Daily Spin",`
+
+        <div class="spin-area">
+
+            <div class="wheel-wrap">
+
+                <div class="pointer"></div>
+
+                <div id="wheel" class="wheel">
+
+                    <div class="wheel-center">
+                        SPIN
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div style="
+                font-size:15px;
+                font-weight:900;
+                color:#e2136e">
+
+                Win ৳50 - ৳150
+
+            </div>
+
+            <div class="spin-note"
+                 style="margin-top:7px">
+
+                One spin every 24 hours.<br>
+                Admin can configure rewards.
+
+            </div>
+
+            <button
+                id="spinButton"
+                class="primary-btn"
+                onclick="doSpin()"
+                ${claimed ? "disabled" : ""}>
+
+                ${claimed
+                    ? "Already Spun Today"
+                    : "🎡 SPIN NOW"
+                }
+
+            </button>
+
+        </div>
+
+    `);
+
+}
+
+
+/* =========================================================
+   DO SPIN
+========================================================= */
+
+async function doSpin(){
+
+    const today =
+        todayKey();
+
+    const claimRef =
+        db.ref(
+            "spinClaims/"+currentUser.id+"/"+today
+        );
+
+    const snap =
+        await claimRef.once("value");
+
+    if(snap.exists()){
+
+        showToast("You already spun today");
+
+        return;
+
+    }
+
+    const button =
+        document.getElementById("spinButton");
+
+    button.disabled = true;
+
+    /*
+       Current reward range requested:
+       50 - 150.
+
+       Wheel itself can visually represent
+       the broader admin prize range later.
+    */
+
+    const reward =
+        Math.floor(
+            Math.random()*101
+        ) + 50;
+
+    spinRotation +=
+        1440 +
+        Math.floor(Math.random()*360);
+
+    const wheel =
+        document.getElementById("wheel");
+
+    wheel.style.transform =
+        "rotate("+spinRotation+"deg)";
+
+    setTimeout(async()=>{
+
+        await claimRef.set({
+
+            reward:reward,
+
+            createdAt:
+                firebase.database.ServerValue.TIMESTAMP,
+
+            status:"pending"
+
+        });
+
+        showToast(
+            "You won ৳"+reward+
+            "! Reward submitted."
+        );
+
+    },4200);
+
+}
+
+
+/* =========================================================
+   MINING
+========================================================= */
+
+async function openMining(){
+
+    const miningRef =
+        db.ref(
+            "mining/"+currentUser.id
+        );
+
+    const snap =
+        await miningRef.once("value");
+
+    const mining =
+        snap.val() || {};
+
+    const totalRefer =
+        Number(userData.totalReferrals || 0);
+
+    /*
+       Requested tiers:
+       Base ~30-40
+       3 refer = ~50
+       6 refer = ~70
+       10 refer = ~100-120
+    */
+
+    let minReward = 30;
+    let maxReward = 40;
+
+    if(totalRefer >= 10){
+
+        minReward = 100;
+        maxReward = 120;
+
+    }else if(totalRefer >= 6){
+
+        minReward = 70;
+        maxReward = 70;
+
+    }else if(totalRefer >= 3){
+
+        minReward = 50;
+        maxReward = 50;
+
+    }
+
+    const lastClaim =
+        Number(mining.lastClaim || 0);
+
+    const now =
+        Date.now();
+
+    const dayMs =
+        24*60*60*1000;
+
+    const canMine =
+        !lastClaim ||
+        (now-lastClaim >= dayMs);
+
+    let progress = 0;
+
+    if(lastClaim){
+
+        progress =
+            Math.min(
+                100,
+                ((now-lastClaim)/dayMs)*100
+            );
+
+    }
+
+    openModal("Daily Mining",`
+
+        <div class="mining-card">
+
+            <div class="mining-top">
+
+                <div>
+
+                    <div class="mining-title">
+                        ⛏️ Mining
+                    </div>
+
+                    <div style="
+                        font-size:10px;
+                        opacity:.7;
+                        margin-top:4px">
+
+                        Referral based mining
+
+                    </div>
+
+                </div>
+
+                <div class="mining-icon">
+                    💎
+                </div>
+
+            </div>
+
+            <div class="mining-amount">
+
+                ৳${minReward}
+                ${
+                    minReward !== maxReward
+                    ? "-"+maxReward
+                    : ""
+                }
+
+            </div>
+
+            <div class="mining-sub">
+                Estimated daily mining reward
+            </div>
+
+            <div class="mining-progress">
+                <div
+                    id="mineProgress"
+                    style="width:${progress}%">
+                </div>
+            </div>
+
+            <button
+                id="mineButton"
+                class="mining-btn"
+                onclick="startMining()"
+                ${canMine ? "" : "disabled"}>
+
+                ${
+                    canMine
+                    ? "⛏ START MINING"
+                    : "⏳ MINING COOLDOWN"
+                }
+
+            </button>
+
+            <div class="mining-tier">
+
+                <div class="tier">
+                    <b>0 Refer</b>
+                    ৳30-40
+                </div>
+
+                <div class="tier">
+                    <b>3 Refer</b>
+                    ৳50
+                </div>
+
+                <div class="tier">
+                    <b>6 Refer</b>
+                    ৳70
+                </div>
+
+            </div>
+
+            <div style="
+                margin-top:8px;
+                background:rgba(255,255,255,.1);
+                border-radius:11px;
+                padding:10px;
+                text-align:center;
+                font-size:10px">
+
+                10+ referrals →
+                <b>৳100-120/day</b>
+
+            </div>
+
+        </div>
+
+        <div style="
+            margin-top:12px;
+            background:white;
+            border-radius:16px;
+            padding:15px">
+
+            <b style="font-size:14px">
+                Your Mining Level
+            </b>
+
+            <div style="
+                font-size:12px;
+                color:#777;
+                margin-top:6px">
+
+                ${totalRefer} referral(s)
+
+            </div>
+
+        </div>
+
+    `);
+
+}
+
+
+/* =========================================================
+   START MINING
+========================================================= */
+
+async function startMining(){
+
+    const miningRef =
+        db.ref(
+            "mining/"+currentUser.id
+        );
+
+    const snap =
+        await miningRef.once("value");
+
+    const mining =
+        snap.val() || {};
+
+    const now =
+        Date.now();
+
+    const lastClaim =
+        Number(mining.lastClaim || 0);
+
+    const dayMs =
+        24*60*60*1000;
+
+    if(
+        lastClaim &&
+        now-lastClaim < dayMs
+    ){
+
+        showToast(
+            "Mining is available after 24 hours"
+        );
+
+        return;
+
+    }
+
+    const refs =
+        Number(userData.totalReferrals || 0);
+
+    let minReward = 30;
+    let maxReward = 40;
+
+    if(refs >= 10){
+
+        minReward = 100;
+        maxReward = 120;
+
+    }else if(refs >= 6){
+
+        minReward = 70;
+        maxReward = 70;
+
+    }else if(refs >= 3){
+
+        minReward = 50;
+        maxReward = 50;
+
+    }
+
+    const reward =
+        Math.floor(
+            Math.random() *
+            (maxReward-minReward+1)
+        ) + minReward;
+
+    await miningRef.set({
+
+        lastClaim:
+            now,
+
+        reward:
+            reward,
+
+        status:
+            "started",
+
+        createdAt:
+            mining.createdAt ||
+            firebase.database.ServerValue.TIMESTAMP
+
+    });
+
+    /*
+       Important:
+       The actual balance credit should be performed
+       securely by Cloud Functions/admin backend.
+
+       Do not trust this client-side value as
+       financial proof.
+    */
+
+    showToast(
+        "Mining started! Reward: ৳"+reward
+    );
+
+    setTimeout(()=>{
+        openMining();
+    },700);
+
+}
+
+
+/* =========================================================
+   SUPPORT
+========================================================= */
+
+function openSupport(){
+
+    const support =
+        String(
+            settings.supportTelegram || ""
+        );
+
+    const clean =
+        support.replace("@","");
+
+    openModal("Support",`
+
+        <div style="
+            background:white;
+            border-radius:20px;
+            padding:25px;
+            text-align:center">
+
+            <div style="font-size:55px">
+                🆘
+            </div>
+
+            <h2 style="margin-top:10px">
+                Need Help?
+            </h2>
+
+            <p style="
+                color:#888;
+                font-size:12px;
+                margin-top:8px;
+                line-height:1.6">
+
+                If you have any problem,
+                contact our official support.
+
+            </p>
+
+            <button
+                class="primary-btn"
+                onclick="openTelegram(
+                    '${escapeHtml(clean)}'
+                )">
+
+                💬 Contact Support
+
+            </button>
+
+        </div>
+
+    `);
+
+}
+
+
+/* =========================================================
+   OFFICIAL CHANNEL
+========================================================= */
+
+function openOfficial(){
+
+    const channel =
+        String(
+            settings.officialChannel || ""
+        );
+
+    openModal("Official Channel",`
+
+        <div style="
+            background:white;
+            border-radius:20px;
+            padding:25px;
+            text-align:center">
+
+            <div style="font-size:55px">
+                📢
+            </div>
+
+            <h2 style="margin-top:10px">
+                Official Channel
+            </h2>
+
+            <p style="
+                color:#888;
+                font-size:12px;
+                margin-top:8px">
+
+                Follow our official Telegram channel
+                for updates.
+
+            </p>
+
+            <button
+                class="primary-btn"
+                onclick="openExternal(
+                    '${escapeHtml(channel)}'
+                )">
+
+                📢 Open Channel
+
+            </button>
+
+        </div>
+
+    `);
+
+}
+
+
+/* =========================================================
+   NOTICE
+========================================================= */
+
+async function openNotice(){
+
+    const snap =
+        await db.ref("notices").once("value");
+
+    let html = "";
+
+    snap.forEach(child=>{
+
+        const n =
+            child.val() || {};
+
+        if(
+            n.status === false ||
+            n.status === "inactive"
+        ) return;
+
+        html += `
+
+            <div class="notice">
+
+                <b>
+                    ${escapeHtml(
+                        n.title || "Notice"
+                    )}
+                </b>
+
+                <p>
+                    ${escapeHtml(
+                        n.text || n.description || ""
+                    )}
+                </p>
+
+                <small>
+                    ${formatDate(n.date || n.createdAt)}
+                </small>
+
+            </div>
+
+        `;
+
+    });
+
+    if(!html){
+
+        html =
+            `<div class="empty">
+                No notices available.
+            </div>`;
+
+    }
+
+    openModal("Notice",`
+
+        <div class="list">
+            ${html}
+        </div>
+
+    `);
+
+}
+
+
+/* =========================================================
+   TUTORIAL
+========================================================= */
+
+function openTutorial(){
+
+    const url =
+        String(
+            settings.tutorialUrl || ""
+        );
+
+    if(!url){
+
+        showToast("Tutorial not configured");
+
+        return;
+
+    }
+
+    openExternal(url);
+
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function openSettingsMenu(){
+
+    openModal(
+        settings.botName || "Menu",
+        `
+
+        <div class="list">
+
+            <button
+                class="list-item"
+                onclick="openTutorial()">
+
+                <div class="list-icon">
+                    🎬
+                </div>
+
+                <div class="list-info">
+                    <b>Tutorial</b>
+                    <span>Learn how to use the app</span>
+                </div>
+
+                <span>›</span>
+
+            </button>
+
+            <button
+                class="list-item"
+                onclick="openNotice()">
+
+                <div class="list-icon">
+                    🔔
+                </div>
+
+                <div class="list-info">
+                    <b>Notice</b>
+                    <span>Latest announcements</span>
+                </div>
+
+                <span>›</span>
+
+            </button>
+
+            <button
+                class="list-item"
+                onclick="openOfficial()">
+
+                <div class="list-icon">
+                    📢
+                </div>
+
+                <div class="list-info">
+                    <b>Official Channel</b>
+                    <span>Join our official channel</span>
+                </div>
+
+                <span>›</span>
+
+            </button>
+
+            <button
+                class="list-item"
+                onclick="openSupport()">
+
+                <div class="list-icon">
+                    🆘
+                </div>
+
+                <div class="list-info">
+                    <b>Support</b>
+                    <span>Contact support</span>
+                </div>
+
+                <span>›</span>
+
+            </button>
+
+        </div>
+
+        `
+    );
+
+}
+
+
+/* =========================================================
+   PAGE ROUTER
+========================================================= */
+
+async function openPage(page){
+
+    try{
+
+        if(page === "withdraw")
+            return await openWithdraw();
+
+        if(page === "refer")
+            return await openRefer();
+
+        if(page === "task")
+            return await openTasks();
+
+        if(page === "bonus")
+            return await openBonus();
+
+        if(page === "spin")
+            return await openSpin();
+
+        if(page === "mining")
+            return await openMining();
+
+        if(page === "support")
+            return openSupport();
+
+        if(page === "official")
+            return openOfficial();
+
+        if(page === "notice")
+            return openNotice();
+
+        if(page === "tutorial")
+            return openTutorial();
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            "Something went wrong"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   TELEGRAM LINKS
+========================================================= */
+
+function openTelegram(username){
+
+    if(!username){
+
+        showToast("Support is not configured");
+
+        return;
+
+    }
+
+    const url =
+        "https://t.me/"+username;
+
+    if(tg && tg.openTelegramLink){
+
+        tg.openTelegramLink(url);
+
+    }else{
+
+        window.open(url,"_blank");
+
+    }
+
+}
+
+
+function openExternal(url){
+
+    if(!url){
+
+        showToast("Link not configured");
+
+        return;
+
+    }
+
+    if(tg && tg.openLink){
+
+        tg.openLink(url);
+
+    }else{
+
+        window.open(url,"_blank");
+
+    }
+
+}
+
+
+/* =========================================================
+   BANNER
+========================================================= */
+
+async function loadBanner(){
+
+    try{
+
+        const snap =
+            await db.ref("banners").once("value");
+
+        let banners = [];
+
+        snap.forEach(child=>{
+
+            const b =
+                child.val() || {};
+
+            if(
+                b.status === false ||
+                b.status === "inactive"
+            ){
+
+                return;
+
+            }
+
+            banners.push(b);
+
+        });
+
+        banners.sort(
+            (a,b)=>
+            Number(a.order || 0)-
+            Number(b.order || 0)
+        );
+
+        const box =
+            document.getElementById("bannerBox");
+
+        if(!banners.length){
+
+            box.innerHTML = `
+                <div class="banner-placeholder">
+                    ${escapeHtml(
+                        settings.botName ||
+                        "Welcome"
+                    )}
+                </div>
+            `;
+
+            return;
+
+        }
+
+        let index = 0;
+
+        function render(){
+
+            const banner =
+                banners[index];
+
+            const image =
+                banner.image ||
+                banner.imageUrl ||
+                "";
+
+            if(image){
+
+                box.innerHTML = `
+
+                    <img
+                        class="banner"
+                        src="${escapeHtml(image)}"
+                        alt="Banner"
+                        onclick="${
+                            banner.url
+                            ? `openExternal('${escapeHtml(banner.url)}')`
+                            : ""
+                        }">
+
+                `;
+
+            }else{
+
+                box.innerHTML = `
+
+                    <div class="banner-placeholder">
+
+                        ${escapeHtml(
+                            banner.title ||
+                            settings.botName ||
+                            "Welcome"
+                        )}
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+        render();
+
+        if(banners.length > 1){
+
+            setInterval(()=>{
+
+                index =
+                    (index+1)%banners.length;
+
+                render();
+
+            },5000);
+
+        }
+
+    }catch(error){
+
+        console.error("Banner:",error);
+
+    }
+
+}
+
+
+/* =========================================================
+   START APP
+========================================================= */
+
+async function startApp(){
+
+    try{
+
+        initTelegram();
+
+        document.getElementById("loaderText")
+            .innerText =
+            "Connecting...";
+
+        const authOK =
+            await startAuth();
+
+        if(!authOK){
+
+            document.getElementById("loaderText")
+                .innerText =
+                "Authentication failed";
+
+            return;
+
+        }
+
+        document.getElementById("loaderText")
+            .innerText =
+            "Loading settings...";
+
+        await loadSettings();
+
+        document.getElementById("loaderText")
+            .innerText =
+            "Loading account...";
+
+        await initializeUser();
+
+        listenUser();
+
+        await loadBanner();
+
+        document.getElementById("loading")
+            .style.display = "none";
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("loaderText")
+            .innerText =
+            "Failed to load";
+
+        showToast(
+            error.message ||
+            "Application failed to start"
+        );
+
+    }
+
+}
+
+
+startApp();
+
+</script>
+
+</body>
+</html>
