@@ -9,11 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0;}
 :root{
     --pink:#e2136e;
     --pink2:#f52f82;
@@ -28,101 +24,30 @@
     --blue:#3b82f6;
     --border:#e9e9ed;
 }
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-}
-button,input,select,textarea{
-    font-family:inherit;
-}
-button{
-    cursor:pointer;
-    border:0;
-}
-.hidden{
-    display:none!important;
-}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);}
+button,input,select,textarea{font-family:inherit;}
+button{cursor:pointer;border:0;}
+.hidden{display:none!important;}
 
-/* ================= LOGIN ================= */
+/* LOGIN */
 .login-screen{
     min-height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
     padding:20px;
-    background:
-        radial-gradient(circle at 10% 10%,#ff79ae 0,transparent 28%),
-        radial-gradient(circle at 90% 90%,#e2136e 0,transparent 30%),
-        #f7f7f8;
+    background:radial-gradient(circle at 10% 10%,#ff79ae 0,transparent 28%),radial-gradient(circle at 90% 90%,#e2136e 0,transparent 30%),#f7f7f8;
 }
-.login-box{
-    width:100%;
-    max-width:420px;
-    background:white;
-    border-radius:28px;
-    padding:30px;
-    box-shadow:0 20px 60px rgba(0,0,0,.12);
-}
-.logo{
-    width:65px;
-    height:65px;
-    margin:0 auto 15px;
-    border-radius:20px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,var(--pink),#ff579a);
-    color:white;
-    font-size:28px;
-    font-weight:900;
-}
-.login-box h1{
-    text-align:center;
-    font-size:24px;
-}
-.login-box p{
-    text-align:center;
-    color:#888;
-    font-size:12px;
-    margin-top:7px;
-    margin-bottom:22px;
-}
-.field{
-    margin-bottom:13px;
-}
-.field label{
-    display:block;
-    font-size:11px;
-    font-weight:800;
-    color:#555;
-    margin-bottom:7px;
-}
-.input,.select,.textarea{
-    width:100%;
-    border:1px solid var(--border);
-    border-radius:13px;
-    height:48px;
-    padding:0 13px;
-    outline:none;
-    background:#fff;
-    font-size:13px;
-}
-.textarea{
-    height:100px;
-    padding:12px;
-    resize:vertical;
-}
-.input:focus,.select:focus,.textarea:focus{
-    border-color:var(--pink);
-}
-.btn{
-    min-height:43px;
-    border-radius:12px;
-    padding:0 15px;
-    font-size:12px;
-    font-weight:800;
-}
+.login-box{width:100%;max-width:420px;background:white;border-radius:28px;padding:30px;box-shadow:0 20px 60px rgba(0,0,0,.12);}
+.logo{width:65px;height:65px;margin:0 auto 15px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pink),#ff579a);color:white;font-size:28px;font-weight:900;}
+.login-box h1{text-align:center;font-size:24px;}
+.login-box p{text-align:center;color:#888;font-size:12px;margin-top:7px;margin-bottom:22px;}
+.field{margin-bottom:13px;}
+.field label{display:block;font-size:11px;font-weight:800;color:#555;margin-bottom:7px;}
+.input,.select,.textarea{width:100%;border:1px solid var(--border);border-radius:13px;height:48px;padding:0 13px;outline:none;background:#fff;font-size:13px;}
+.textarea{height:100px;padding:12px;resize:vertical;}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--pink);}
+.btn{min-height:43px;border-radius:12px;padding:0 15px;font-size:12px;font-weight:800;}
 .btn-primary{background:var(--pink);color:white;}
 .btn-secondary{background:#f2f3f5;color:#333;}
 .btn-success{background:var(--green);color:white;}
@@ -130,191 +55,63 @@ button{
 .btn-warning{background:var(--orange);color:white;}
 .btn-blue{background:var(--blue);color:white;}
 
-/* ================= APP ================= */
+/* APP LAYOUT */
 .app{min-height:100vh;}
-.sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    width:245px;
-    background:#171719;
-    color:white;
-    z-index:100;
-    overflow:auto;
-}
-.brand{
-    padding:22px 20px;
-    font-size:20px;
-    font-weight:900;
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:#171719;color:white;z-index:100;overflow:auto;}
+.brand{padding:22px 20px;font-size:20px;font-weight:900;border-bottom:1px solid rgba(255,255,255,.08);}
 .brand span{color:#ff4c95;}
-.admin-info{
-    padding:15px 20px;
-    font-size:10px;
-    color:#999;
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
+.admin-info{padding:15px 20px;font-size:10px;color:#999;border-bottom:1px solid rgba(255,255,255,.08);}
 .nav{padding:12px;}
-.nav-btn{
-    width:100%;
-    height:44px;
-    border-radius:11px;
-    margin-bottom:4px;
-    background:transparent;
-    color:#aaa;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:0 13px;
-    text-align:left;
-    font-size:12px;
-    font-weight:700;
-}
+.nav-btn{width:100%;height:44px;border-radius:11px;margin-bottom:4px;background:transparent;color:#aaa;display:flex;align-items:center;gap:12px;padding:0 13px;text-align:left;font-size:12px;font-weight:700;}
 .nav-btn:hover{background:rgba(255,255,255,.06);color:white;}
 .nav-btn.active{background:var(--pink);color:white;}
 .nav-icon{width:23px;text-align:center;font-size:17px;}
 .main{margin-left:245px;min-height:100vh;}
-.topbar{
-    height:68px;
-    background:white;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 25px;
-    position:sticky;
-    top:0;
-    z-index:50;
-}
+.topbar{height:68px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 25px;position:sticky;top:0;z-index:50;}
 .page-title{font-size:19px;font-weight:900;}
 .top-right{display:flex;align-items:center;gap:9px;}
 .content{padding:24px;max-width:1450px;}
 
-/* ================= CARDS ================= */
+/* CARDS & STATS */
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;}
-.card{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:17px;
-    padding:18px;
-    box-shadow:0 2px 8px rgba(0,0,0,.025);
-}
+.card{background:white;border:1px solid var(--border);border-radius:17px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.025);}
 .stat-card{display:flex;align-items:center;gap:14px;}
-.stat-icon{
-    width:50px;
-    height:50px;
-    border-radius:15px;
-    background:#fff0f6;
-    color:var(--pink);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:23px;
-}
+.stat-icon{width:50px;height:50px;border-radius:15px;background:#fff0f6;color:var(--pink);display:flex;align-items:center;justify-content:center;font-size:23px;}
 .stat-label{font-size:10px;color:#888;}
 .stat-value{font-size:22px;font-weight:900;margin-top:4px;}
 
-/* ================= SECTION ================= */
+/* SECTION */
 .section{margin-top:20px;}
-.section-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin-bottom:12px;
-}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;}
 .section-title{font-size:16px;font-weight:900;}
 .actions{display:flex;flex-wrap:wrap;gap:8px;}
 
-/* ================= TABLE ================= */
-.table-wrap{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:17px;
-    overflow:auto;
-}
+/* TABLES */
+.table-wrap{background:white;border:1px solid var(--border);border-radius:17px;overflow:auto;}
 table{width:100%;border-collapse:collapse;min-width:700px;}
-th{
-    background:#fafafa;
-    color:#777;
-    font-size:10px;
-    text-align:left;
-    padding:13px;
-    border-bottom:1px solid var(--border);
-}
-td{
-    padding:13px;
-    border-bottom:1px solid #f0f0f0;
-    font-size:11px;
-    vertical-align:middle;
-}
+th{background:#fafafa;color:#777;font-size:10px;text-align:left;padding:13px;border-bottom:1px solid var(--border);}
+td{padding:13px;border-bottom:1px solid #f0f0f0;font-size:11px;vertical-align:middle;}
 tr:last-child td{border-bottom:0;}
 .user-cell{display:flex;align-items:center;gap:9px;}
 .user-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#eee;}
 .user-name{font-weight:800;}
 .user-id{color:#999;font-size:9px;margin-top:2px;}
-.badge{
-    display:inline-flex;
-    align-items:center;
-    padding:5px 8px;
-    border-radius:20px;
-    font-size:9px;
-    font-weight:800;
-}
+.badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:800;}
 .badge-green{color:#087d50;background:#e5f8ef;}
 .badge-red{color:#b91c1c;background:#feecec;}
 .badge-orange{color:#a16207;background:#fff5d9;}
 .badge-blue{color:#1d4ed8;background:#eaf1ff;}
+.thumb{width:50px;height:35px;object-fit:cover;border-radius:6px;}
 
-/* ================= SEARCH ================= */
-.search{
-    width:260px;
-    max-width:100%;
-    height:42px;
-    border:1px solid var(--border);
-    border-radius:11px;
-    padding:0 12px;
-    outline:none;
-}
-
-/* ================= MODAL ================= */
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.5);
-    z-index:500;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
+/* SEARCH & MODAL */
+.search{width:260px;max-width:100%;height:42px;border:1px solid var(--border);border-radius:11px;padding:0 12px;outline:none;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
 .modal.show{display:flex;}
-.modal-box{
-    width:100%;
-    max-width:600px;
-    max-height:90vh;
-    overflow:auto;
-    background:white;
-    border-radius:22px;
-}
-.modal-head{
-    position:sticky;
-    top:0;
-    z-index:2;
-    background:white;
-    border-bottom:1px solid var(--border);
-    padding:17px 19px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+.modal-box{width:100%;max-width:600px;max-height:90vh;overflow:auto;background:white;border-radius:22px;}
+.modal-head{position:sticky;top:0;z-index:2;background:white;border-bottom:1px solid var(--border);padding:17px 19px;display:flex;justify-content:space-between;align-items:center;}
 .modal-title{font-weight:900;font-size:17px;}
 .close{width:35px;height:35px;border-radius:50%;background:#f2f2f4;font-size:18px;}
 .modal-body{padding:19px;}
-
-/* ================= FORM GRID ================= */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .full{grid-column:1/-1;}
 .empty{padding:40px;text-align:center;color:#999;font-size:12px;}
@@ -324,14 +121,7 @@ tr:last-child td{border-bottom:0;}
     .sidebar{transform:translateX(-100%);transition:.25s;}
     .sidebar.open{transform:translateX(0);}
     .main{margin-left:0;}
-    .mobile-menu{
-        display:block;
-        width:40px;
-        height:40px;
-        border-radius:10px;
-        background:#f2f2f4;
-        font-size:19px;
-    }
+    .mobile-menu{display:block;width:40px;height:40px;border-radius:10px;background:#f2f2f4;font-size:19px;}
     .cards{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:600px){
@@ -382,9 +172,6 @@ tr:last-child td{border-bottom:0;}
             <button class="nav-btn" onclick="showPage('methods',this)"><span class="nav-icon">💳</span> Withdraw Methods</button>
             <button class="nav-btn" onclick="showPage('notices',this)"><span class="nav-icon">🔔</span> Notices</button>
             <button class="nav-btn" onclick="showPage('settings',this)"><span class="nav-icon">⚙️</span> Settings</button>
-            <button class="nav-btn" onclick="showPage('mining',this)"><span class="nav-icon">⛏️</span> Mining</button>
-            <button class="nav-btn" onclick="showPage('bonus',this)"><span class="nav-icon">🎁</span> Bonus</button>
-            <button class="nav-btn" onclick="showPage('spin',this)"><span class="nav-icon">🎡</span> Spin</button>
             <button class="nav-btn" onclick="showPage('support',this)"><span class="nav-icon">🆘</span> Support</button>
             <button class="nav-btn" onclick="showPage('tutorial',this)"><span class="nav-icon">🎬</span> Tutorial</button>
             <button class="nav-btn" onclick="logout()" style="margin-top:12px;color:#ff6d6d"><span class="nav-icon">↪</span> Logout</button>
@@ -437,36 +224,23 @@ let currentPage = "dashboard";
 let usersCache = {};
 let settings = {};
 
-/* CHECK SESSION ON LOAD */
 window.addEventListener("DOMContentLoaded", () => {
     if(localStorage.getItem("isAdminLoggedIn") === "true"){
         appLoginSuccess();
     }
 });
 
-/* HELPERS */
 function esc(value){
     if(value === null || value === undefined) return "";
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
 
 function money(value){
     return Number(value || 0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
-function date(value){
-    if(!value) return "-";
-    return new Date(Number(value)).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
-}
-
 function toast(message){ alert(message); }
 
-/* MANUAL AUTH LOGIC */
 function login(){
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
@@ -489,7 +263,6 @@ function login(){
 async function appLoginSuccess(){
     document.getElementById("loginScreen").classList.add("hidden");
     document.getElementById("adminApp").classList.remove("hidden");
-
     try{
         await loadSettings();
         showPage("dashboard");
@@ -505,7 +278,6 @@ function logout(){
     document.getElementById("loginPassword").value = "";
 }
 
-/* NAVIGATION */
 function showPage(page, button){
     currentPage = page;
     document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
@@ -514,8 +286,7 @@ function showPage(page, button){
     const titles = {
         dashboard:"Dashboard", users:"Users", withdrawals:"Withdraw Requests",
         banners:"Banner Manager", tasks:"Task Manager", methods:"Withdraw Methods",
-        notices:"Notice Manager", settings:"Bot Settings", mining:"Mining Settings",
-        bonus:"Bonus Settings", spin:"Spin Settings", support:"Support", tutorial:"Tutorial"
+        notices:"Notice Manager", settings:"Bot Settings", support:"Support Manager", tutorial:"Tutorial Manager"
     };
 
     document.getElementById("pageTitle").innerText = titles[page] || "Admin";
@@ -524,18 +295,14 @@ function showPage(page, button){
     const pages = {
         dashboard:renderDashboard, users:renderUsers, withdrawals:renderWithdrawals,
         banners:renderBanners, tasks:renderTasks, methods:renderMethods,
-        notices:renderNotices, settings:renderSettings, mining:renderMining,
-        bonus:renderBonus, spin:renderSpin, support:renderSupport, tutorial:renderTutorial
+        notices:renderNotices, settings:renderSettings, support:renderSupport, tutorial:renderTutorial
     };
 
     if(pages[page]) pages[page]();
 }
 
-function toggleSidebar(){
-    document.getElementById("sidebar").classList.toggle("open");
-}
+function toggleSidebar(){ document.getElementById("sidebar").classList.toggle("open"); }
 
-/* MODAL */
 function openModal(title, html){
     document.getElementById("modalTitle").innerText = title;
     document.getElementById("modalBody").innerHTML = html;
@@ -544,7 +311,6 @@ function openModal(title, html){
 function closeModal(){ document.getElementById("modal").classList.remove("show"); }
 function outsideModal(e){ if(e.target.id === "modal") closeModal(); }
 
-/* SETTINGS */
 async function loadSettings(){
     const snap = await db.ref("settings").once("value");
     settings = snap.val() || {};
@@ -631,7 +397,7 @@ function renderUsersTable(entries){
             <tr>
                 <td>
                     <div class="user-cell">
-                        <img class="user-avatar" src="${esc(u.photoUrl || "https://ui-avatars.com/api/?name=User")} ">
+                        <img class="user-avatar" src="${esc(u.photoUrl || "https://ui-avatars.com/api/?name=User")}">
                         <div>
                             <div class="user-name">${esc(name)}</div>
                             <div class="user-id">ID: ${esc(id)}</div>
@@ -722,62 +488,230 @@ async function updateWithdraw(id, status){
     renderWithdrawals();
 }
 
-/* PLACEHOLDER PAGES FOR OTHER SECTIONS */
-async function renderGenericSimple(title, path){
+/* BANNERS MANAGER (Image Link + Add/Edit/Delete) */
+async function renderBanners(){
     const content = document.getElementById("content");
     content.innerHTML = `
-        <div class="section-head"><div class="section-title">${title} Manager</div><button class="btn btn-primary" onclick="openAddGeneric('${path}')">Add New</button></div>
-        <div id="genericTable" class="table-wrap"><div class="empty">Loading...</div></div>
+        <div class="section-head"><div class="section-title">Banner Manager</div><button class="btn btn-primary" onclick="openBannerModal()">Add Banner</button></div>
+        <div id="bannerTable" class="table-wrap"><div class="empty">Loading banners...</div></div>
+    `;
+    const snap = await db.ref("banners").once("value");
+    let rows = "";
+    snap.forEach(child => {
+        const b = child.val() || {};
+        const id = child.key;
+        rows += `
+            <tr>
+                <td><img class="thumb" src="${esc(b.imgUrl)}"></td>
+                <td>${esc(b.title || "Banner")}</td>
+                <td><a href="${esc(b.imgUrl)}" target="_blank" style="color:var(--blue);">View Link</a></td>
+                <td>
+                    <div class="actions">
+                        <button class="btn btn-secondary" onclick="openBannerModal('${id}','${esc(b.title)}','${esc(b.imgUrl)}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteItem('banners','${id}')">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    document.getElementById("bannerTable").innerHTML = rows ? `<table><thead><tr><th>Image</th><th>Title</th><th>URL</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">No banners found.</div>`;
+}
+
+function openBannerModal(id = "", title = "", imgUrl = ""){
+    openModal(id ? "Edit Banner" : "Add Banner", `
+        <div class="field"><label>Banner Title</label><input id="bannerTitle" class="input" value="${title}"></div>
+        <div class="field"><label>Banner Image Link (URL)</label><input id="bannerImgUrl" class="input" value="${imgUrl}"></div>
+        <button class="btn btn-primary" style="width:100%" onclick="saveBanner('${id}')">Save Banner</button>
+    `);
+}
+
+async function saveBanner(id){
+    const title = document.getElementById("bannerTitle").value.trim();
+    const imgUrl = document.getElementById("bannerImgUrl").value.trim();
+    if(!imgUrl) return toast("Provide an image link.");
+
+    if(id){
+        await db.ref("banners/" + id).set({ title, imgUrl });
+    } else {
+        await db.ref("banners").push({ title, imgUrl });
+    }
+    closeModal();
+    renderBanners();
+}
+
+/* TASKS MANAGER (Task Title + Task Link + Add/Edit/Delete) */
+async function renderTasks(){
+    const content = document.getElementById("content");
+    content.innerHTML = `
+        <div class="section-head"><div class="section-title">Task Manager</div><button class="btn btn-primary" onclick="openTaskModal()">Add Task</button></div>
+        <div id="taskTable" class="table-wrap"><div class="empty">Loading tasks...</div></div>
+    `;
+    const snap = await db.ref("tasks").once("value");
+    let rows = "";
+    snap.forEach(child => {
+        const t = child.val() || {};
+        const id = child.key;
+        rows += `
+            <tr>
+                <td><b>${esc(t.title)}</b></td>
+                <td><a href="${esc(t.link)}" target="_blank" style="color:var(--blue);">${esc(t.link)}</a></td>
+                <td>৳${t.reward || 0}</td>
+                <td>
+                    <div class="actions">
+                        <button class="btn btn-secondary" onclick="openTaskModal('${id}','${esc(t.title)}','${esc(t.link)}','${t.reward || 0}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteItem('tasks','${id}')">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    document.getElementById("taskTable").innerHTML = rows ? `<table><thead><tr><th>Task Title</th><th>Task Link</th><th>Reward</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">No tasks found.</div>`;
+}
+
+function openTaskModal(id = "", title = "", link = "", reward = 0){
+    openModal(id ? "Edit Task" : "Add Task", `
+        <div class="field"><label>Task Title</label><input id="taskTitle" class="input" value="${title}"></div>
+        <div class="field"><label>Task Link (URL)</label><input id="taskLink" class="input" value="${link}"></div>
+        <div class="field"><label>Reward Amount (৳)</label><input id="taskReward" class="input" type="number" value="${reward}"></div>
+        <button class="btn btn-primary" style="width:100%" onclick="saveTask('${id}')">Save Task</button>
+    `);
+}
+
+async function saveTask(id){
+    const title = document.getElementById("taskTitle").value.trim();
+    const link = document.getElementById("taskLink").value.trim();
+    const reward = Number(document.getElementById("taskReward").value || 0);
+    if(!title || !link) return toast("Fill in all fields.");
+
+    if(id){
+        await db.ref("tasks/" + id).set({ title, link, reward });
+    } else {
+        await db.ref("tasks").push({ title, link, reward });
+    }
+    closeModal();
+    renderTasks();
+}
+
+/* WITHDRAW METHODS MANAGER (Method Name + Image Link + Add/Edit/Delete) */
+async function renderMethods(){
+    const content = document.getElementById("content");
+    content.innerHTML = `
+        <div class="section-head"><div class="section-title">Withdraw Methods</div><button class="btn btn-primary" onclick="openMethodModal()">Add Method</button></div>
+        <div id="methodTable" class="table-wrap"><div class="empty">Loading methods...</div></div>
+    `;
+    const snap = await db.ref("methods").once("value");
+    let rows = "";
+    snap.forEach(child => {
+        const m = child.val() || {};
+        const id = child.key;
+        rows += `
+            <tr>
+                <td><img class="thumb" src="${esc(m.imgUrl)}"></td>
+                <td><b>${esc(m.name)}</b></td>
+                <td>Min: ৳${m.min || 0}</td>
+                <td>
+                    <div class="actions">
+                        <button class="btn btn-secondary" onclick="openMethodModal('${id}','${esc(m.name)}','${esc(m.imgUrl)}','${m.min || 0}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteItem('methods','${id}')">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    document.getElementById("methodTable").innerHTML = rows ? `<table><thead><tr><th>Logo</th><th>Method Name</th><th>Min Amount</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">No methods found.</div>`;
+}
+
+function openMethodModal(id = "", name = "", imgUrl = "", min = 0){
+    openModal(id ? "Edit Method" : "Add Method", `
+        <div class="field"><label>Method Name (e.g. bKash, Nagad)</label><input id="methodName" class="input" value="${name}"></div>
+        <div class="field"><label>Method Logo Image Link (URL)</label><input id="methodImgUrl" class="input" value="${imgUrl}"></div>
+        <div class="field"><label>Minimum Withdraw (৳)</label><input id="methodMin" class="input" type="number" value="${min}"></div>
+        <button class="btn btn-primary" style="width:100%" onclick="saveMethod('${id}')">Save Method</button>
+    `);
+}
+
+async function saveMethod(id){
+    const name = document.getElementById("methodName").value.trim();
+    const imgUrl = document.getElementById("methodImgUrl").value.trim();
+    const min = Number(document.getElementById("methodMin").value || 0);
+    if(!name) return toast("Provide a method name.");
+
+    if(id){
+        await db.ref("methods/" + id).set({ name, imgUrl, min });
+    } else {
+        await db.ref("methods").push({ name, imgUrl, min });
+    }
+    closeModal();
+    renderMethods();
+}
+
+/* GENERIC NOTICE / SUPPORT / TUTORIAL MANAGERS */
+async function renderGenericManager(title, path){
+    const content = document.getElementById("content");
+    content.innerHTML = `
+        <div class="section-head"><div class="section-title">${title}</div><button class="btn btn-primary" onclick="openGenericModal('${path}','${title}')">Add New</button></div>
+        <div id="genTable" class="table-wrap"><div class="empty">Loading...</div></div>
     `;
     const snap = await db.ref(path).once("value");
     let rows = "";
     snap.forEach(child => {
         const item = child.val() || {};
         const id = child.key;
-        rows += `<tr><td>${esc(item.title || item.name || item.text || id)}</td><td><button class="btn btn-danger" onclick="deleteGeneric('${path}','${id}')">Delete</button></td></tr>`;
+        rows += `
+            <tr>
+                <td><b>${esc(item.title || item.text || item.link || id)}</b></td>
+                <td><a href="${esc(item.link || '#')}" target="_blank" style="color:var(--blue);">${esc(item.link || '')}</a></td>
+                <td>
+                    <div class="actions">
+                        <button class="btn btn-danger" onclick="deleteItem('${path}','${id}')">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `;
     });
-    document.getElementById("genericTable").innerHTML = rows ? `<table><thead><tr><th>Details</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">No items found.</div>`;
+    document.getElementById("genTable").innerHTML = rows ? `<table><thead><tr><th>Content / Title</th><th>Link</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">No items found.</div>`;
 }
 
-function openAddGeneric(path){
-    openModal("Add Item", `
+function openGenericModal(path, title){
+    openModal("Add " + title, `
         <div class="field"><label>Title / Text</label><input id="genTitle" class="input"></div>
-        <button class="btn btn-primary" style="width:100%" onclick="saveGeneric('${path}')">Save</button>
+        <div class="field"><label>Link (Optional)</label><input id="genLink" class="input"></div>
+        <button class="btn btn-primary" style="width:100%" onclick="saveGenericItem('${path}')">Save</button>
     `);
 }
 
-async function saveGeneric(path){
+async function saveGenericItem(path){
     const title = document.getElementById("genTitle").value.trim();
+    const link = document.getElementById("genLink").value.trim();
     if(!title) return;
-    await db.ref(path).push({ title });
+    await db.ref(path).push({ title, link });
     closeModal();
     showPage(currentPage);
 }
 
-async function deleteGeneric(path, id){
-    if(confirm("Are you sure?")){
+async function deleteItem(path, id){
+    if(confirm("Are you sure you want to delete this?")){
         await db.ref(path + "/" + id).remove();
         showPage(currentPage);
     }
 }
 
-function renderBanners(){ renderGenericSimple("Banner", "banners"); }
-function renderTasks(){ renderGenericSimple("Task", "tasks"); }
-function renderMethods(){ renderGenericSimple("Withdraw Method", "methods"); }
-function renderNotices(){ renderGenericSimple("Notice", "notices"); }
-function renderSupport(){ renderGenericSimple("Support Ticket", "support"); }
-function renderTutorial(){ renderGenericSimple("Tutorial", "tutorials"); }
+function renderNotices(){ renderGenericManager("Notice Manager", "notices"); }
+function renderSupport(){ renderGenericManager("Support Manager", "support"); }
+function renderTutorial(){ renderGenericManager("Tutorial Manager", "tutorials"); }
 
+/* ADMIN SETTINGS (Bot Name, Username, Min Withdraw, Min Refer) */
 async function renderSettings(){
     const content = document.getElementById("content");
     content.innerHTML = `
         <div class="card">
+            <h3 style="margin-bottom:15px">Bot & Withdraw Settings</h3>
             <div class="form-grid">
                 <div class="field"><label>Bot Name</label><input id="setBotName" class="input" value="${esc(settings.botName)}"></div>
                 <div class="field"><label>Bot Username</label><input id="setBotUsername" class="input" value="${esc(settings.botUsername)}"></div>
-                <div class="field"><label>Min Withdraw</label><input id="setMinWithdraw" class="input" type="number" value="${settings.minWithdraw || 0}"></div>
-                <div class="field"><label>Min Refer</label><input id="setMinRefer" class="input" type="number" value="${settings.minRefer || 0}"></div>
-                <div class="full"><button class="btn btn-primary" onclick="saveSettingsForm()">Save Settings</button></div>
+                <div class="field"><label>Minimum Withdraw Amount (৳)</label><input id="setMinWithdraw" class="input" type="number" value="${settings.minWithdraw || 0}"></div>
+                <div class="field"><label>Minimum Refer Required</label><input id="setMinRefer" class="input" type="number" value="${settings.minRefer || 0}"></div>
+                <div class="full"><button class="btn btn-primary" onclick="saveSettingsForm()">Save All Settings</button></div>
             </div>
         </div>
     `;
@@ -792,29 +726,6 @@ async function saveSettingsForm(){
     await db.ref("settings").set(settings);
     toast("Settings saved successfully!");
     loadSettings();
-}
-
-function renderMining(){ renderSettingsGeneric("Mining Settings", "mining"); }
-function renderBonus(){ renderSettingsGeneric("Bonus Settings", "bonus"); }
-function renderSpin(){ renderSettingsGeneric("Spin Settings", "spin"); }
-
-async function renderSettingsGeneric(title, path){
-    const content = document.getElementById("content");
-    const snap = await db.ref(path).once("value");
-    const val = snap.val() || {};
-    content.innerHTML = `
-        <div class="card">
-            <h3>${title}</h3><br>
-            <div class="field"><label>Reward Amount</label><input id="genVal" class="input" type="number" value="${val.amount || 0}"></div>
-            <button class="btn btn-primary" onclick="saveVal('${path}')">Save</button>
-        </div>
-    `;
-}
-
-async function saveVal(path){
-    const amount = Number(document.getElementById("genVal").value || 0);
-    await db.ref(path).set({ amount });
-    toast("Saved!");
 }
 </script>
 </body>
