@@ -6,7 +6,6 @@
 <title>Admin Panel</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 <style>
@@ -358,11 +357,11 @@ tr:last-child td{border-bottom:0;}
         <p>Secure administrator login</p>
         <div class="field">
             <label>EMAIL</label>
-            <input id="loginEmail" class="input" type="email" placeholder="Admin email" autocomplete="username" value="admin@devgopal.com">
+            <input id="loginEmail" class="input" type="email" placeholder="Admin email" value="admin@devgopal.com">
         </div>
         <div class="field">
             <label>PASSWORD</label>
-            <input id="loginPassword" class="input" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter') login()">
+            <input id="loginPassword" class="input" type="password" placeholder="Password" onkeydown="if(event.key==='Enter') login()">
         </div>
         <button class="btn btn-primary" style="width:100%;height:49px" onclick="login()">LOGIN TO ADMIN</button>
         <div id="loginError" style="color:#ef4444;font-size:11px;text-align:center;margin-top:12px"></div>
@@ -373,7 +372,7 @@ tr:last-child td{border-bottom:0;}
 <div id="adminApp" class="app hidden">
     <aside id="sidebar" class="sidebar">
         <div class="brand"><span>৳</span> Admin Panel</div>
-        <div class="admin-info">ADMINISTRATOR<br><span id="adminEmail"></span></div>
+        <div class="admin-info">ADMINISTRATOR<br><span id="adminEmail">admin@devgopal.com</span></div>
         <nav class="nav">
             <button class="nav-btn active" onclick="showPage('dashboard',this)"><span class="nav-icon">📊</span> Dashboard</button>
             <button class="nav-btn" onclick="showPage('users',this)"><span class="nav-icon">👤</span> Users</button>
@@ -429,15 +428,21 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 const db = firebase.database();
 
 const ADMIN_EMAIL = "admin@devgopal.com";
-const ADMIN_PASS = "732473";
+const ADMIN_PASS = "@DEV_GOPAL";
 
 let currentPage = "dashboard";
 let usersCache = {};
 let settings = {};
+
+/* CHECK SESSION ON LOAD */
+window.addEventListener("DOMContentLoaded", () => {
+    if(localStorage.getItem("isAdminLoggedIn") === "true"){
+        appLoginSuccess();
+    }
+});
 
 /* HELPERS */
 function esc(value){
@@ -461,32 +466,8 @@ function date(value){
 
 function toast(message){ alert(message); }
 
-/* AUTH */
-auth.onAuthStateChanged(async user => {
-    if(!user){
-        showLogin();
-        return;
-    }
-    if(String(user.email || "").toLowerCase() !== ADMIN_EMAIL.toLowerCase()){
-        try{ await auth.signOut(); }catch(e){}
-        showLogin();
-        document.getElementById("loginError").innerText = "This account is not authorized as admin.";
-        return;
-    }
-
-    document.getElementById("loginScreen").classList.add("hidden");
-    document.getElementById("adminApp").classList.remove("hidden");
-    document.getElementById("adminEmail").innerText = user.email || ADMIN_EMAIL;
-
-    try{
-        await loadSettings();
-        showPage("dashboard");
-    }catch(e){
-        console.error("Admin startup:", e);
-    }
-});
-
-async function login(){
+/* MANUAL AUTH LOGIC */
+function login(){
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
     const error = document.getElementById("loginError");
@@ -496,38 +477,32 @@ async function login(){
         error.innerText = "Enter email and password.";
         return;
     }
-    if(email.toLowerCase() !== ADMIN_EMAIL.toLowerCase() || password !== ADMIN_PASS){
+
+    if(email.toLowerCase() === ADMIN_EMAIL.toLowerCase() && password === ADMIN_PASS){
+        localStorage.setItem("isAdminLoggedIn", "true");
+        appLoginSuccess();
+    } else {
         error.innerText = "Invalid admin email or password.";
-        return;
     }
+}
+
+async function appLoginSuccess(){
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("adminApp").classList.remove("hidden");
 
     try{
-        // Try sign in, if user doesn't exist in Firebase Auth, automatically create it for convenience
-        try {
-            await auth.signInWithEmailAndPassword(email, password);
-        } catch(err) {
-            if(err.code === "auth/user-not-found" || err.code === "auth/invalid-credential"){
-                await auth.createUserWithEmailAndPassword(email, password);
-                await auth.signInWithEmailAndPassword(email, password);
-            } else {
-                throw err;
-            }
-        }
+        await loadSettings();
+        showPage("dashboard");
     }catch(e){
-        console.error("Admin login:", e);
-        error.innerText = e.message || "Login failed.";
+        console.error("Admin startup:", e);
     }
 }
 
-async function logout(){
-    try{ await auth.signOut(); }catch(e){}
-}
-
-function showLogin(){
+function logout(){
+    localStorage.removeItem("isAdminLoggedIn");
     document.getElementById("loginScreen").classList.remove("hidden");
     document.getElementById("adminApp").classList.add("hidden");
-    const emailInput = document.getElementById("loginEmail");
-    if(emailInput && !emailInput.value) emailInput.value = ADMIN_EMAIL;
+    document.getElementById("loginPassword").value = "";
 }
 
 /* NAVIGATION */
