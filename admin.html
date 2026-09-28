@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Admin Panel</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -17,7 +15,6 @@ content="width=device-width,initial-scale=1,maximum-scale=1">
     margin:0;
     padding:0;
 }
-
 :root{
     --pink:#e2136e;
     --pink2:#f52f82;
@@ -32,28 +29,23 @@ content="width=device-width,initial-scale=1,maximum-scale=1">
     --blue:#3b82f6;
     --border:#e9e9ed;
 }
-
 body{
     font-family:Arial,Helvetica,sans-serif;
     background:var(--bg);
     color:var(--text);
 }
-
 button,input,select,textarea{
     font-family:inherit;
 }
-
 button{
     cursor:pointer;
     border:0;
 }
-
 .hidden{
     display:none!important;
 }
 
 /* ================= LOGIN ================= */
-
 .login-screen{
     min-height:100vh;
     display:flex;
@@ -65,7 +57,6 @@ button{
         radial-gradient(circle at 90% 90%,#e2136e 0,transparent 30%),
         #f7f7f8;
 }
-
 .login-box{
     width:100%;
     max-width:420px;
@@ -74,7 +65,6 @@ button{
     padding:30px;
     box-shadow:0 20px 60px rgba(0,0,0,.12);
 }
-
 .logo{
     width:65px;
     height:65px;
@@ -88,12 +78,10 @@ button{
     font-size:28px;
     font-weight:900;
 }
-
 .login-box h1{
     text-align:center;
     font-size:24px;
 }
-
 .login-box p{
     text-align:center;
     color:#888;
@@ -101,11 +89,9 @@ button{
     margin-top:7px;
     margin-bottom:22px;
 }
-
 .field{
     margin-bottom:13px;
 }
-
 .field label{
     display:block;
     font-size:11px;
@@ -113,10 +99,7 @@ button{
     color:#555;
     margin-bottom:7px;
 }
-
-.input,
-.select,
-.textarea{
+.input,.select,.textarea{
     width:100%;
     border:1px solid var(--border);
     border-radius:13px;
@@ -126,19 +109,14 @@ button{
     background:#fff;
     font-size:13px;
 }
-
 .textarea{
     height:100px;
     padding:12px;
     resize:vertical;
 }
-
-.input:focus,
-.select:focus,
-.textarea:focus{
+.input:focus,.select:focus,.textarea:focus{
     border-color:var(--pink);
 }
-
 .btn{
     min-height:43px;
     border-radius:12px;
@@ -146,43 +124,15 @@ button{
     font-size:12px;
     font-weight:800;
 }
-
-.btn-primary{
-    background:var(--pink);
-    color:white;
-}
-
-.btn-secondary{
-    background:#f2f3f5;
-    color:#333;
-}
-
-.btn-success{
-    background:var(--green);
-    color:white;
-}
-
-.btn-danger{
-    background:var(--red);
-    color:white;
-}
-
-.btn-warning{
-    background:var(--orange);
-    color:white;
-}
-
-.btn-blue{
-    background:var(--blue);
-    color:white;
-}
+.btn-primary{background:var(--pink);color:white;}
+.btn-secondary{background:#f2f3f5;color:#333;}
+.btn-success{background:var(--green);color:white;}
+.btn-danger{background:var(--red);color:white;}
+.btn-warning{background:var(--orange);color:white;}
+.btn-blue{background:var(--blue);color:white;}
 
 /* ================= APP ================= */
-
-.app{
-    min-height:100vh;
-}
-
+.app{min-height:100vh;}
 .sidebar{
     position:fixed;
     left:0;
@@ -194,29 +144,20 @@ button{
     z-index:100;
     overflow:auto;
 }
-
 .brand{
     padding:22px 20px;
     font-size:20px;
     font-weight:900;
     border-bottom:1px solid rgba(255,255,255,.08);
 }
-
-.brand span{
-    color:#ff4c95;
-}
-
+.brand span{color:#ff4c95;}
 .admin-info{
     padding:15px 20px;
     font-size:10px;
     color:#999;
     border-bottom:1px solid rgba(255,255,255,.08);
 }
-
-.nav{
-    padding:12px;
-}
-
+.nav{padding:12px;}
 .nav-btn{
     width:100%;
     height:44px;
@@ -232,28 +173,10 @@ button{
     font-size:12px;
     font-weight:700;
 }
-
-.nav-btn:hover{
-    background:rgba(255,255,255,.06);
-    color:white;
-}
-
-.nav-btn.active{
-    background:var(--pink);
-    color:white;
-}
-
-.nav-icon{
-    width:23px;
-    text-align:center;
-    font-size:17px;
-}
-
-.main{
-    margin-left:245px;
-    min-height:100vh;
-}
-
+.nav-btn:hover{background:rgba(255,255,255,.06);color:white;}
+.nav-btn.active{background:var(--pink);color:white;}
+.nav-icon{width:23px;text-align:center;font-size:17px;}
+.main{margin-left:245px;min-height:100vh;}
 .topbar{
     height:68px;
     background:white;
@@ -266,31 +189,12 @@ button{
     top:0;
     z-index:50;
 }
-
-.page-title{
-    font-size:19px;
-    font-weight:900;
-}
-
-.top-right{
-    display:flex;
-    align-items:center;
-    gap:9px;
-}
-
-.content{
-    padding:24px;
-    max-width:1450px;
-}
+.page-title{font-size:19px;font-weight:900;}
+.top-right{display:flex;align-items:center;gap:9px;}
+.content{padding:24px;max-width:1450px;}
 
 /* ================= CARDS ================= */
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
-}
-
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;}
 .card{
     background:white;
     border:1px solid var(--border);
@@ -298,13 +202,7 @@ button{
     padding:18px;
     box-shadow:0 2px 8px rgba(0,0,0,.025);
 }
-
-.stat-card{
-    display:flex;
-    align-items:center;
-    gap:14px;
-}
-
+.stat-card{display:flex;align-items:center;gap:14px;}
 .stat-icon{
     width:50px;
     height:50px;
@@ -316,24 +214,11 @@ button{
     justify-content:center;
     font-size:23px;
 }
-
-.stat-label{
-    font-size:10px;
-    color:#888;
-}
-
-.stat-value{
-    font-size:22px;
-    font-weight:900;
-    margin-top:4px;
-}
+.stat-label{font-size:10px;color:#888;}
+.stat-value{font-size:22px;font-weight:900;margin-top:4px;}
 
 /* ================= SECTION ================= */
-
-.section{
-    margin-top:20px;
-}
-
+.section{margin-top:20px;}
 .section-head{
     display:flex;
     justify-content:space-between;
@@ -341,33 +226,17 @@ button{
     gap:10px;
     margin-bottom:12px;
 }
-
-.section-title{
-    font-size:16px;
-    font-weight:900;
-}
-
-.actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-}
+.section-title{font-size:16px;font-weight:900;}
+.actions{display:flex;flex-wrap:wrap;gap:8px;}
 
 /* ================= TABLE ================= */
-
 .table-wrap{
     background:white;
     border:1px solid var(--border);
     border-radius:17px;
     overflow:auto;
 }
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:700px;
-}
-
+table{width:100%;border-collapse:collapse;min-width:700px;}
 th{
     background:#fafafa;
     color:#777;
@@ -376,42 +245,17 @@ th{
     padding:13px;
     border-bottom:1px solid var(--border);
 }
-
 td{
     padding:13px;
     border-bottom:1px solid #f0f0f0;
     font-size:11px;
     vertical-align:middle;
 }
-
-tr:last-child td{
-    border-bottom:0;
-}
-
-.user-cell{
-    display:flex;
-    align-items:center;
-    gap:9px;
-}
-
-.user-avatar{
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    object-fit:cover;
-    background:#eee;
-}
-
-.user-name{
-    font-weight:800;
-}
-
-.user-id{
-    color:#999;
-    font-size:9px;
-    margin-top:2px;
-}
-
+tr:last-child td{border-bottom:0;}
+.user-cell{display:flex;align-items:center;gap:9px;}
+.user-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#eee;}
+.user-name{font-weight:800;}
+.user-id{color:#999;font-size:9px;margin-top:2px;}
 .badge{
     display:inline-flex;
     align-items:center;
@@ -420,29 +264,12 @@ tr:last-child td{
     font-size:9px;
     font-weight:800;
 }
-
-.badge-green{
-    color:#087d50;
-    background:#e5f8ef;
-}
-
-.badge-red{
-    color:#b91c1c;
-    background:#feecec;
-}
-
-.badge-orange{
-    color:#a16207;
-    background:#fff5d9;
-}
-
-.badge-blue{
-    color:#1d4ed8;
-    background:#eaf1ff;
-}
+.badge-green{color:#087d50;background:#e5f8ef;}
+.badge-red{color:#b91c1c;background:#feecec;}
+.badge-orange{color:#a16207;background:#fff5d9;}
+.badge-blue{color:#1d4ed8;background:#eaf1ff;}
 
 /* ================= SEARCH ================= */
-
 .search{
     width:260px;
     max-width:100%;
@@ -454,7 +281,6 @@ tr:last-child td{
 }
 
 /* ================= MODAL ================= */
-
 .modal{
     position:fixed;
     inset:0;
@@ -465,11 +291,7 @@ tr:last-child td{
     justify-content:center;
     padding:20px;
 }
-
-.modal.show{
-    display:flex;
-}
-
+.modal.show{display:flex;}
 .modal-box{
     width:100%;
     max-width:600px;
@@ -478,7 +300,6 @@ tr:last-child td{
     background:white;
     border-radius:22px;
 }
-
 .modal-head{
     position:sticky;
     top:0;
@@ -490,66 +311,20 @@ tr:last-child td{
     justify-content:space-between;
     align-items:center;
 }
-
-.modal-title{
-    font-weight:900;
-    font-size:17px;
-}
-
-.close{
-    width:35px;
-    height:35px;
-    border-radius:50%;
-    background:#f2f2f4;
-    font-size:18px;
-}
-
-.modal-body{
-    padding:19px;
-}
+.modal-title{font-weight:900;font-size:17px;}
+.close{width:35px;height:35px;border-radius:50%;background:#f2f2f4;font-size:18px;}
+.modal-body{padding:19px;}
 
 /* ================= FORM GRID ================= */
-
-.form-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-}
-
-.full{
-    grid-column:1/-1;
-}
-
-/* ================= EMPTY ================= */
-
-.empty{
-    padding:40px;
-    text-align:center;
-    color:#999;
-    font-size:12px;
-}
-
-/* ================= MOBILE ================= */
-
-.mobile-menu{
-    display:none;
-}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.full{grid-column:1/-1;}
+.empty{padding:40px;text-align:center;color:#999;font-size:12px;}
+.mobile-menu{display:none;}
 
 @media(max-width:900px){
-
-    .sidebar{
-        transform:translateX(-100%);
-        transition:.25s;
-    }
-
-    .sidebar.open{
-        transform:translateX(0);
-    }
-
-    .main{
-        margin-left:0;
-    }
-
+    .sidebar{transform:translateX(-100%);transition:.25s;}
+    .sidebar.open{transform:translateX(0);}
+    .main{margin-left:0;}
     .mobile-menu{
         display:block;
         width:40px;
@@ -558,3477 +333,514 @@ tr:last-child td{
         background:#f2f2f4;
         font-size:19px;
     }
-
-    .cards{
-        grid-template-columns:repeat(2,1fr);
-    }
-
+    .cards{grid-template-columns:repeat(2,1fr);}
 }
-
 @media(max-width:600px){
-
-    .content{
-        padding:15px;
-    }
-
-    .topbar{
-        padding:0 15px;
-    }
-
-    .page-title{
-        font-size:16px;
-    }
-
-    .cards{
-        gap:9px;
-    }
-
-    .card{
-        padding:13px;
-    }
-
-    .stat-icon{
-        width:42px;
-        height:42px;
-    }
-
-    .stat-value{
-        font-size:18px;
-    }
-
-    .form-grid{
-        grid-template-columns:1fr;
-    }
-
-    .full{
-        grid-column:auto;
-    }
-
+    .content{padding:15px;}
+    .topbar{padding:0 15px;}
+    .page-title{font-size:16px;}
+    .cards{gap:9px;}
+    .card{padding:13px;}
+    .stat-icon{width:42px;height:42px;}
+    .stat-value{font-size:18px;}
+    .form-grid{grid-template-columns:1fr;}
+    .full{grid-column:auto;}
 }
 </style>
 </head>
-
 <body>
 
-<!-- =========================================================
-     LOGIN
-========================================================= -->
-
+<!-- LOGIN SCREEN -->
 <div id="loginScreen" class="login-screen">
-
     <div class="login-box">
-
         <div class="logo">৳</div>
-
         <h1>Admin Panel</h1>
-
-        <p>
-            Secure administrator login
-        </p>
-
+        <p>Secure administrator login</p>
         <div class="field">
-
             <label>EMAIL</label>
-
-            <input
-                id="loginEmail"
-                class="input"
-                type="email"
-                placeholder="Admin email">
-
+            <input id="loginEmail" class="input" type="email" placeholder="Admin email" autocomplete="username" value="admin@devgopal.com">
         </div>
-
         <div class="field">
-
             <label>PASSWORD</label>
-
-            <input
-                id="loginPassword"
-                class="input"
-                type="password"
-                placeholder="Password">
-
+            <input id="loginPassword" class="input" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter') login()">
         </div>
-
-        <button
-            class="btn btn-primary"
-            style="width:100%;height:49px"
-            onclick="login()">
-
-            LOGIN TO ADMIN
-
-        </button>
-
-        <div id="loginError"
-             style="
-             color:#ef4444;
-             font-size:11px;
-             text-align:center;
-             margin-top:12px">
-        </div>
-
+        <button class="btn btn-primary" style="width:100%;height:49px" onclick="login()">LOGIN TO ADMIN</button>
+        <div id="loginError" style="color:#ef4444;font-size:11px;text-align:center;margin-top:12px"></div>
     </div>
-
 </div>
 
-
-<!-- =========================================================
-     ADMIN APP
-========================================================= -->
-
+<!-- ADMIN APP -->
 <div id="adminApp" class="app hidden">
-
-    <!-- SIDEBAR -->
-
     <aside id="sidebar" class="sidebar">
-
-        <div class="brand">
-            <span>৳</span> Admin Panel
-        </div>
-
-        <div class="admin-info">
-            ADMINISTRATOR
-            <br>
-            <span id="adminEmail"></span>
-        </div>
-
+        <div class="brand"><span>৳</span> Admin Panel</div>
+        <div class="admin-info">ADMINISTRATOR<br><span id="adminEmail"></span></div>
         <nav class="nav">
-
-            <button class="nav-btn active"
-                    onclick="showPage('dashboard',this)">
-                <span class="nav-icon">📊</span>
-                Dashboard
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('users',this)">
-                <span class="nav-icon">👤</span>
-                Users
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('withdrawals',this)">
-                <span class="nav-icon">💸</span>
-                Withdrawals
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('banners',this)">
-                <span class="nav-icon">🖼️</span>
-                Banners
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('tasks',this)">
-                <span class="nav-icon">🎯</span>
-                Tasks
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('methods',this)">
-                <span class="nav-icon">💳</span>
-                Withdraw Methods
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('notices',this)">
-                <span class="nav-icon">🔔</span>
-                Notices
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('settings',this)">
-                <span class="nav-icon">⚙️</span>
-                Settings
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('mining',this)">
-                <span class="nav-icon">⛏️</span>
-                Mining
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('bonus',this)">
-                <span class="nav-icon">🎁</span>
-                Bonus
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('spin',this)">
-                <span class="nav-icon">🎡</span>
-                Spin
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('support',this)">
-                <span class="nav-icon">🆘</span>
-                Support
-            </button>
-
-            <button class="nav-btn"
-                    onclick="showPage('tutorial',this)">
-                <span class="nav-icon">🎬</span>
-                Tutorial
-            </button>
-
-            <button class="nav-btn"
-                    onclick="logout()"
-                    style="margin-top:12px;color:#ff6d6d">
-                <span class="nav-icon">↪</span>
-                Logout
-            </button>
-
+            <button class="nav-btn active" onclick="showPage('dashboard',this)"><span class="nav-icon">📊</span> Dashboard</button>
+            <button class="nav-btn" onclick="showPage('users',this)"><span class="nav-icon">👤</span> Users</button>
+            <button class="nav-btn" onclick="showPage('withdrawals',this)"><span class="nav-icon">💸</span> Withdrawals</button>
+            <button class="nav-btn" onclick="showPage('banners',this)"><span class="nav-icon">🖼️</span> Banners</button>
+            <button class="nav-btn" onclick="showPage('tasks',this)"><span class="nav-icon">🎯</span> Tasks</button>
+            <button class="nav-btn" onclick="showPage('methods',this)"><span class="nav-icon">💳</span> Withdraw Methods</button>
+            <button class="nav-btn" onclick="showPage('notices',this)"><span class="nav-icon">🔔</span> Notices</button>
+            <button class="nav-btn" onclick="showPage('settings',this)"><span class="nav-icon">⚙️</span> Settings</button>
+            <button class="nav-btn" onclick="showPage('mining',this)"><span class="nav-icon">⛏️</span> Mining</button>
+            <button class="nav-btn" onclick="showPage('bonus',this)"><span class="nav-icon">🎁</span> Bonus</button>
+            <button class="nav-btn" onclick="showPage('spin',this)"><span class="nav-icon">🎡</span> Spin</button>
+            <button class="nav-btn" onclick="showPage('support',this)"><span class="nav-icon">🆘</span> Support</button>
+            <button class="nav-btn" onclick="showPage('tutorial',this)"><span class="nav-icon">🎬</span> Tutorial</button>
+            <button class="nav-btn" onclick="logout()" style="margin-top:12px;color:#ff6d6d"><span class="nav-icon">↪</span> Logout</button>
         </nav>
-
     </aside>
 
-
-    <!-- MAIN -->
-
     <main class="main">
-
         <header class="topbar">
-
             <div style="display:flex;align-items:center;gap:10px">
-
-                <button
-                    class="mobile-menu"
-                    onclick="toggleSidebar()">
-
-                    ☰
-
-                </button>
-
-                <div id="pageTitle"
-                     class="page-title">
-
-                    Dashboard
-
-                </div>
-
+                <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+                <div id="pageTitle" class="page-title">Dashboard</div>
             </div>
-
-            <div class="top-right">
-
-                <span id="topBotName"
-                      style="
-                      font-size:11px;
-                      color:#777">
-                    Loading...
-                </span>
-
-            </div>
-
+            <div class="top-right"><span id="topBotName" style="font-size:11px;color:#777">Loading...</span></div>
         </header>
-
-        <div id="content"
-             class="content">
-        </div>
-
+        <div id="content" class="content"></div>
     </main>
-
 </div>
 
-
-<!-- =========================================================
-     MODAL
-========================================================= -->
-
-<div id="modal"
-     class="modal"
-     onclick="outsideModal(event)">
-
+<!-- MODAL -->
+<div id="modal" class="modal" onclick="outsideModal(event)">
     <div class="modal-box">
-
         <div class="modal-head">
-
-            <div id="modalTitle"
-                 class="modal-title">
-                Modal
-            </div>
-
-            <button class="close"
-                    onclick="closeModal()">
-                ×
-            </button>
-
+            <div id="modalTitle" class="modal-title">Modal</div>
+            <button class="close" onclick="closeModal()">×</button>
         </div>
-
-        <div id="modalBody"
-             class="modal-body">
-        </div>
-
+        <div id="modalBody" class="modal-body"></div>
     </div>
-
 </div>
-
 
 <script>
-
-/* =========================================================
-   FIREBASE
-========================================================= */
-
+/* FIREBASE CONFIG */
 const firebaseConfig = {
-
-    apiKey:
-    "AIzaSyDDW-mPGwDxZhETSDWw-we41zy2hHtT1Kc",
-
-    authDomain:
-    "bkash-refer-bot.firebaseapp.com",
-
-    databaseURL:
-    "https://bkash-refer-bot-default-rtdb.firebaseio.com",
-
-    projectId:
-    "bkash-refer-bot",
-
-    storageBucket:
-    "bkash-refer-bot.firebasestorage.app",
-
-    messagingSenderId:
-    "642702342319",
-
-    appId:
-    "1:642702342319:web:2f92be0cf13d77b3773c5a",
-
-    measurementId:
-    "G-ZB8XWS70W4"
-
+    apiKey: "AIzaSyDDW-mPGwDxZhETSDWw-we41zy2hHtT1Kc",
+    authDomain: "bkash-refer-bot.firebaseapp.com",
+    databaseURL: "https://bkash-refer-bot-default-rtdb.firebaseio.com",
+    projectId: "bkash-refer-bot",
+    storageBucket: "bkash-refer-bot.firebasestorage.app",
+    messagingSenderId: "642702342319",
+    appId: "1:642702342319:web:2f92be0cf13d77b3773c5a",
+    measurementId: "G-ZB8XWS70W4"
 };
 
 firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
 
-const auth =
-    firebase.auth();
+const ADMIN_EMAIL = "admin@devgopal.com";
+const ADMIN_PASS = "7324";
 
-const db =
-    firebase.database();
-
-
-/* =========================================================
-   ADMIN UID
-========================================================= */
-
-const ADMIN_UID =
-    "Wh4gSYv40pPEBdO9TbW57px2oyo2";
-
-
-let currentPage =
-    "dashboard";
-
+let currentPage = "dashboard";
 let usersCache = {};
-
 let settings = {};
 
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
+/* HELPERS */
 function esc(value){
-
-    if(value === null || value === undefined)
-        return "";
-
+    if(value === null || value === undefined) return "";
     return String(value)
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
-
 }
-
 
 function money(value){
-
-    return Number(value || 0)
-        .toLocaleString("en-US",{
-            minimumFractionDigits:2,
-            maximumFractionDigits:2
-        });
-
+    return Number(value || 0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
-
 
 function date(value){
-
     if(!value) return "-";
-
-    return new Date(Number(value))
-        .toLocaleString("en-GB",{
-            day:"2-digit",
-            month:"short",
-            year:"numeric",
-            hour:"2-digit",
-            minute:"2-digit"
-        });
-
+    return new Date(Number(value)).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
 }
 
+function toast(message){ alert(message); }
 
-function toast(message){
-
-    alert(message);
-
-}
-
-
-/* =========================================================
-   AUTH
-========================================================= */
-
-auth.onAuthStateChanged(async user=>{
-
+/* AUTH */
+auth.onAuthStateChanged(async user => {
     if(!user){
-
         showLogin();
-
         return;
-
+    }
+    if(String(user.email || "").toLowerCase() !== ADMIN_EMAIL.toLowerCase()){
+        try{ await auth.signOut(); }catch(e){}
+        showLogin();
+        document.getElementById("loginError").innerText = "This account is not authorized as admin.";
+        return;
     }
 
-    /*
-       UID verification
-    */
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("adminApp").classList.remove("hidden");
+    document.getElementById("adminEmail").innerText = user.email || ADMIN_EMAIL;
 
-    if(user.uid !== ADMIN_UID){
-
-        await auth.signOut();
-
-        showLogin();
-
-        document.getElementById("loginError")
-            .innerText =
-            "This account is not authorized as admin.";
-
-        return;
-
+    try{
+        await loadSettings();
+        showPage("dashboard");
+    }catch(e){
+        console.error("Admin startup:", e);
     }
-
-    document.getElementById("loginScreen")
-        .classList.add("hidden");
-
-    document.getElementById("adminApp")
-        .classList.remove("hidden");
-
-    document.getElementById("adminEmail")
-        .innerText =
-        user.email || "";
-
-    await loadSettings();
-
-    showPage("dashboard");
-
 });
 
-
 async function login(){
-
-    const email =
-        document.getElementById("loginEmail")
-        .value.trim();
-
-    const password =
-        document.getElementById("loginPassword")
-        .value;
-
-    const error =
-        document.getElementById("loginError");
-
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const error = document.getElementById("loginError");
     error.innerText = "";
 
     if(!email || !password){
-
-        error.innerText =
-            "Enter email and password.";
-
+        error.innerText = "Enter email and password.";
         return;
-
+    }
+    if(email.toLowerCase() !== ADMIN_EMAIL.toLowerCase() || password !== ADMIN_PASS){
+        error.innerText = "Invalid admin email or password.";
+        return;
     }
 
     try{
-
-        await auth.signInWithEmailAndPassword(
-            email,
-            password
-        );
-
+        // Try sign in, if user doesn't exist in Firebase Auth, automatically create it for convenience
+        try {
+            await auth.signInWithEmailAndPassword(email, password);
+        } catch(err) {
+            if(err.code === "auth/user-not-found" || err.code === "auth/invalid-credential"){
+                await auth.createUserWithEmailAndPassword(email, password);
+                await auth.signInWithEmailAndPassword(email, password);
+            } else {
+                throw err;
+            }
+        }
     }catch(e){
-
-        console.error(e);
-
-        error.innerText =
-            e.message || "Login failed.";
-
+        console.error("Admin login:", e);
+        error.innerText = e.message || "Login failed.";
     }
-
 }
-
 
 async function logout(){
-
-    await auth.signOut();
-
+    try{ await auth.signOut(); }catch(e){}
 }
-
 
 function showLogin(){
-
-    document.getElementById("loginScreen")
-        .classList.remove("hidden");
-
-    document.getElementById("adminApp")
-        .classList.add("hidden");
-
+    document.getElementById("loginScreen").classList.remove("hidden");
+    document.getElementById("adminApp").classList.add("hidden");
+    const emailInput = document.getElementById("loginEmail");
+    if(emailInput && !emailInput.value) emailInput.value = ADMIN_EMAIL;
 }
 
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function showPage(page,button){
-
+/* NAVIGATION */
+function showPage(page, button){
     currentPage = page;
-
-    document
-        .querySelectorAll(".nav-btn")
-        .forEach(btn=>{
-            btn.classList.remove("active");
-        });
-
-    if(button){
-        button.classList.add("active");
-    }
+    document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+    if(button) button.classList.add("active");
 
     const titles = {
-
-        dashboard:"Dashboard",
-
-        users:"Users",
-
-        withdrawals:"Withdraw Requests",
-
-        banners:"Banner Manager",
-
-        tasks:"Task Manager",
-
-        methods:"Withdraw Methods",
-
-        notices:"Notice Manager",
-
-        settings:"Bot Settings",
-
-        mining:"Mining Settings",
-
-        bonus:"Bonus Settings",
-
-        spin:"Spin Settings",
-
-        support:"Support",
-
-        tutorial:"Tutorial"
-
+        dashboard:"Dashboard", users:"Users", withdrawals:"Withdraw Requests",
+        banners:"Banner Manager", tasks:"Task Manager", methods:"Withdraw Methods",
+        notices:"Notice Manager", settings:"Bot Settings", mining:"Mining Settings",
+        bonus:"Bonus Settings", spin:"Spin Settings", support:"Support", tutorial:"Tutorial"
     };
 
-    document.getElementById("pageTitle")
-        .innerText =
-        titles[page] || "Admin";
-
-    document.getElementById("sidebar")
-        .classList.remove("open");
+    document.getElementById("pageTitle").innerText = titles[page] || "Admin";
+    document.getElementById("sidebar").classList.remove("open");
 
     const pages = {
-
-        dashboard:renderDashboard,
-
-        users:renderUsers,
-
-        withdrawals:renderWithdrawals,
-
-        banners:renderBanners,
-
-        tasks:renderTasks,
-
-        methods:renderMethods,
-
-        notices:renderNotices,
-
-        settings:renderSettings,
-
-        mining:renderMining,
-
-        bonus:renderBonus,
-
-        spin:renderSpin,
-
-        support:renderSupport,
-
-        tutorial:renderTutorial
-
+        dashboard:renderDashboard, users:renderUsers, withdrawals:renderWithdrawals,
+        banners:renderBanners, tasks:renderTasks, methods:renderMethods,
+        notices:renderNotices, settings:renderSettings, mining:renderMining,
+        bonus:renderBonus, spin:renderSpin, support:renderSupport, tutorial:renderTutorial
     };
 
-    if(pages[page]){
-
-        pages[page]();
-
-    }
-
+    if(pages[page]) pages[page]();
 }
-
 
 function toggleSidebar(){
-
-    document.getElementById("sidebar")
-        .classList.toggle("open");
-
+    document.getElementById("sidebar").classList.toggle("open");
 }
 
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-function openModal(title,html){
-
-    document.getElementById("modalTitle")
-        .innerText = title;
-
-    document.getElementById("modalBody")
-        .innerHTML = html;
-
-    document.getElementById("modal")
-        .classList.add("show");
-
+/* MODAL */
+function openModal(title, html){
+    document.getElementById("modalTitle").innerText = title;
+    document.getElementById("modalBody").innerHTML = html;
+    document.getElementById("modal").classList.add("show");
 }
+function closeModal(){ document.getElementById("modal").classList.remove("show"); }
+function outsideModal(e){ if(e.target.id === "modal") closeModal(); }
 
-
-function closeModal(){
-
-    document.getElementById("modal")
-        .classList.remove("show");
-
-}
-
-
-function outsideModal(e){
-
-    if(e.target.id === "modal"){
-
-        closeModal();
-
-    }
-
-}
-
-
-/* =========================================================
-   SETTINGS
-========================================================= */
-
+/* SETTINGS */
 async function loadSettings(){
-
-    const snap =
-        await db.ref("settings")
-        .once("value");
-
-    settings =
-        snap.val() || {};
-
-    document.getElementById("topBotName")
-        .innerText =
-        settings.botName ||
-        "Bot";
-
+    const snap = await db.ref("settings").once("value");
+    settings = snap.val() || {};
+    document.getElementById("topBotName").innerText = settings.botName || "Bot";
 }
 
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
+/* DASHBOARD */
 async function renderDashboard(){
-
-    const content =
-        document.getElementById("content");
-
+    const content = document.getElementById("content");
     content.innerHTML = `
         <div class="cards">
-
-            <div class="card stat-card">
-                <div class="stat-icon">👤</div>
-                <div>
-                    <div class="stat-label">TOTAL USERS</div>
-                    <div id="statUsers"
-                         class="stat-value">
-                        ...
-                    </div>
-                </div>
-            </div>
-
-            <div class="card stat-card">
-                <div class="stat-icon">💰</div>
-                <div>
-                    <div class="stat-label">TOTAL BALANCE</div>
-                    <div id="statBalance"
-                         class="stat-value">
-                        ...
-                    </div>
-                </div>
-            </div>
-
-            <div class="card stat-card">
-                <div class="stat-icon">💸</div>
-                <div>
-                    <div class="stat-label">PENDING WITHDRAW</div>
-                    <div id="statWithdraw"
-                         class="stat-value">
-                        ...
-                    </div>
-                </div>
-            </div>
-
-            <div class="card stat-card">
-                <div class="stat-icon">👥</div>
-                <div>
-                    <div class="stat-label">TOTAL REFERRALS</div>
-                    <div id="statRefer"
-                         class="stat-value">
-                        ...
-                    </div>
-                </div>
-            </div>
-
+            <div class="card stat-card"><div class="stat-icon">👤</div><div><div class="stat-label">TOTAL USERS</div><div id="statUsers" class="stat-value">...</div></div></div>
+            <div class="card stat-card"><div class="stat-icon">💰</div><div><div class="stat-label">TOTAL BALANCE</div><div id="statBalance" class="stat-value">...</div></div></div>
+            <div class="card stat-card"><div class="stat-icon">💸</div><div><div class="stat-label">PENDING WITHDRAW</div><div id="statWithdraw" class="stat-value">...</div></div></div>
+            <div class="card stat-card"><div class="stat-icon">👥</div><div><div class="stat-label">TOTAL REFERRALS</div><div id="statRefer" class="stat-value">...</div></div></div>
         </div>
-
         <div class="section">
-
-            <div class="section-head">
-
-                <div class="section-title">
-                    Quick Actions
-                </div>
-
-            </div>
-
-            <div class="card">
-
-                <div class="actions">
-
-                    <button
-                        class="btn btn-primary"
-                        onclick="showPage('users')">
-                        👤 Manage Users
-                    </button>
-
-                    <button
-                        class="btn btn-success"
-                        onclick="showPage('withdrawals')">
-                        💸 Withdrawals
-                    </button>
-
-                    <button
-                        class="btn btn-blue"
-                        onclick="showPage('tasks')">
-                        🎯 Manage Tasks
-                    </button>
-
-                    <button
-                        class="btn btn-warning"
-                        onclick="showPage('banners')">
-                        🖼️ Manage Banners
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="section">
-
-            <div class="section-head">
-                <div class="section-title">
-                    Current Settings
-                </div>
-            </div>
-
-            <div class="card">
-
-                <div class="form-grid">
-
-                    <div>
-                        <small>Bot Name</small>
-                        <h3 id="dashBotName">-</h3>
-                    </div>
-
-                    <div>
-                        <small>Bot Username</small>
-                        <h3 id="dashBotUsername">-</h3>
-                    </div>
-
-                    <div>
-                        <small>Minimum Withdraw</small>
-                        <h3 id="dashMinWithdraw">-</h3>
-                    </div>
-
-                    <div>
-                        <small>Minimum Refer</small>
-                        <h3 id="dashMinRefer">-</h3>
-                    </div>
-
-                </div>
-
-            </div>
-
+            <div class="section-head"><div class="section-title">Quick Actions</div></div>
+            <div class="card"><div class="actions">
+                <button class="btn btn-primary" onclick="showPage('users')">👤 Manage Users</button>
+                <button class="btn btn-success" onclick="showPage('withdrawals')">💸 Withdrawals</button>
+                <button class="btn btn-blue" onclick="showPage('tasks')">🎯 Manage Tasks</button>
+                <button class="btn btn-warning" onclick="showPage('banners')">🖼️ Manage Banners</button>
+            </div></div>
         </div>
     `;
-
     await loadDashboardStats();
-
-    document.getElementById("dashBotName")
-        .innerText =
-        settings.botName || "-";
-
-    document.getElementById("dashBotUsername")
-        .innerText =
-        settings.botUsername
-        ? "@"+settings.botUsername.replace("@","")
-        : "-";
-
-    document.getElementById("dashMinWithdraw")
-        .innerText =
-        "৳"+money(settings.minWithdraw || 0);
-
-    document.getElementById("dashMinRefer")
-        .innerText =
-        settings.minRefer || 0;
-
 }
-
 
 async function loadDashboardStats(){
-
-    const usersSnap =
-        await db.ref("users")
-        .once("value");
-
-    let users = 0;
-    let balance = 0;
-    let referrals = 0;
-
-    usersSnap.forEach(child=>{
-
-        const u =
-            child.val() || {};
-
+    const usersSnap = await db.ref("users").once("value");
+    let users = 0, balance = 0, referrals = 0;
+    usersSnap.forEach(child => {
+        const u = child.val() || {};
         users++;
-
-        balance +=
-            Number(u.balance || 0);
-
-        referrals +=
-            Number(u.totalReferrals || 0);
-
+        balance += Number(u.balance || 0);
+        referrals += Number(u.totalReferrals || 0);
     });
+    document.getElementById("statUsers").innerText = users;
+    document.getElementById("statBalance").innerText = "৳" + money(balance);
+    document.getElementById("statRefer").innerText = referrals;
 
-    document.getElementById("statUsers")
-        .innerText = users;
-
-    document.getElementById("statBalance")
-        .innerText =
-        "৳"+money(balance);
-
-    document.getElementById("statRefer")
-        .innerText = referrals;
-
-    const withdrawSnap =
-        await db.ref("withdrawals")
-        .orderByChild("status")
-        .equalTo("pending")
-        .once("value");
-
+    const withdrawSnap = await db.ref("withdrawals").orderByChild("status").equalTo("pending").once("value");
     let pending = 0;
-
-    withdrawSnap.forEach(()=>{
-        pending++;
-    });
-
-    document.getElementById("statWithdraw")
-        .innerText = pending;
-
+    withdrawSnap.forEach(() => { pending++; });
+    document.getElementById("statWithdraw").innerText = pending;
 }
 
-
-/* =========================================================
-   USERS
-========================================================= */
-
+/* USERS */
 async function renderUsers(){
-
-    const content =
-        document.getElementById("content");
-
+    const content = document.getElementById("content");
     content.innerHTML = `
-
         <div class="section-head">
-
-            <div class="section-title">
-                All Users
-            </div>
-
-            <input
-                id="userSearch"
-                class="search"
-                placeholder="Search name, username or ID..."
-                oninput="filterUsers()">
-
+            <div class="section-title">All Users</div>
+            <input id="userSearch" class="search" placeholder="Search name, username or ID..." oninput="filterUsers()">
         </div>
-
-        <div id="usersTable"
-             class="table-wrap">
-
-            <div class="empty">
-                Loading users...
-            </div>
-
-        </div>
-
+        <div id="usersTable" class="table-wrap"><div class="empty">Loading users...</div></div>
     `;
-
-    const snap =
-        await db.ref("users")
-        .once("value");
-
+    const snap = await db.ref("users").once("value");
     usersCache = {};
-
-    snap.forEach(child=>{
-
-        usersCache[child.key] =
-            child.val() || {};
-
-    });
-
-    renderUsersTable(
-        Object.entries(usersCache)
-    );
-
+    snap.forEach(child => { usersCache[child.key] = child.val() || {}; });
+    renderUsersTable(Object.entries(usersCache));
 }
-
-
-function renderUsersTable(entries){
-
-    if(!entries.length){
-
-        document.getElementById("usersTable")
-            .innerHTML =
-            `<div class="empty">
-                No users found.
-            </div>`;
-
-        return;
-
-    }
-
-    let rows = "";
-
-    entries.forEach(([id,u])=>{
-
-        const name =
-            [
-                u.firstName || "",
-                u.lastName || ""
-            ].join(" ").trim()
-            || "Telegram User";
-
-        rows += `
-
-            <tr>
-
-                <td>
-
-                    <div class="user-cell">
-
-                        <img
-                            class="user-avatar"
-                            src="${esc(
-                                u.photoUrl ||
-                                "https://ui-avatars.com/api/?name=User"
-                            )}">
-
-                        <div>
-
-                            <div class="user-name">
-                                ${esc(name)}
-                            </div>
-
-                            <div class="user-id">
-                                ID: ${esc(id)}
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </td>
-
-                <td>
-                    ${
-                        u.username
-                        ? "@"+esc(u.username)
-                        : "-"
-                    }
-                </td>
-
-                <td>
-                    <b>৳${money(u.balance)}</b>
-                </td>
-
-                <td>
-                    ${u.totalReferrals || 0}
-                </td>
-
-                <td>
-
-                    ${
-                        u.status === "banned"
-                        ? `<span class="badge badge-red">BANNED</span>`
-                        : `<span class="badge badge-green">ACTIVE</span>`
-                    }
-
-                </td>
-
-                <td>
-
-                    <div class="actions">
-
-                        <button
-                            class="btn btn-primary"
-                            onclick="viewUser('${esc(id)}')">
-                            View
-                        </button>
-
-                        <button
-                            class="btn btn-success"
-                            onclick="balanceModal('${esc(id)}')">
-                            Balance
-                        </button>
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-    document.getElementById("usersTable")
-        .innerHTML = `
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>USER</th>
-                    <th>USERNAME</th>
-                    <th>BALANCE</th>
-                    <th>REFER</th>
-                    <th>STATUS</th>
-                    <th>ACTION</th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-                ${rows}
-            </tbody>
-
-        </table>
-
-    `;
-
-}
-
 
 function filterUsers(){
-
-    const q =
-        document.getElementById("userSearch")
-        .value
-        .toLowerCase()
-        .trim();
-
-    const entries =
-        Object.entries(usersCache)
-        .filter(([id,u])=>{
-
-            const text = (
-
-                id+" "+
-                (u.username || "")+" "+
-                (u.firstName || "")+" "+
-                (u.lastName || "")
-
-            ).toLowerCase();
-
-            return text.includes(q);
-
-        });
-
-    renderUsersTable(entries);
-
-}
-
-
-/* =========================================================
-   VIEW USER
-========================================================= */
-
-async function viewUser(id){
-
-    const snap =
-        await db.ref("users/"+id)
-        .once("value");
-
-    const u =
-        snap.val() || {};
-
-    const referralsSnap =
-        await db.ref("referrals/"+id)
-        .once("value");
-
-    let refCount = 0;
-
-    referralsSnap.forEach(()=>{
-        refCount++;
+    const q = document.getElementById("userSearch").value.toLowerCase();
+    const filtered = Object.entries(usersCache).filter(([id, u]) => {
+        const name = (u.firstName + " " + u.lastName).toLowerCase();
+        const username = (u.username || "").toLowerCase();
+        return id.toLowerCase().includes(q) || name.includes(q) || username.includes(q);
     });
-
-    openModal(
-        "User Details",
-        `
-
-        <div class="card"
-             style="margin-bottom:12px">
-
-            <div class="user-cell">
-
-                <img
-                    class="user-avatar"
-                    style="width:55px;height:55px"
-                    src="${esc(
-                        u.photoUrl ||
-                        "https://ui-avatars.com/api/?name=User"
-                    )}">
-
-                <div>
-
-                    <div class="user-name"
-                         style="font-size:16px">
-
-                        ${esc(
-                            [
-                                u.firstName || "",
-                                u.lastName || ""
-                            ].join(" ").trim()
-                            || "Telegram User"
-                        )}
-
-                    </div>
-
-                    <div class="user-id">
-                        Telegram ID: ${esc(id)}
-                    </div>
-
-                    <div class="user-id">
-                        ${
-                            u.username
-                            ? "@"+esc(u.username)
-                            : ""
-                        }
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="form-grid">
-
-            <div class="card">
-                <small>Balance</small>
-                <h2>৳${money(u.balance)}</h2>
-            </div>
-
-            <div class="card">
-                <small>Referrals</small>
-                <h2>${refCount}</h2>
-            </div>
-
-            <div class="card">
-                <small>Referral Earnings</small>
-                <h2>৳${money(u.referralEarnings)}</h2>
-            </div>
-
-            <div class="card">
-                <small>Total Withdraw</small>
-                <h2>৳${money(u.totalWithdraw)}</h2>
-            </div>
-
-        </div>
-
-        <div class="actions"
-             style="margin-top:15px">
-
-            <button
-                class="btn btn-success"
-                onclick="balanceModal('${esc(id)}')">
-                Add/Deduct Balance
-            </button>
-
-            <button
-                class="btn ${
-                    u.status === "banned"
-                    ? "btn-success"
-                    : "btn-danger"
-                }"
-                onclick="toggleBan('${esc(id)}')">
-
-                ${
-                    u.status === "banned"
-                    ? "Unban User"
-                    : "Ban User"
-                }
-
-            </button>
-
-        </div>
-
-        `
-    );
-
+    renderUsersTable(filtered);
 }
 
-
-/* =========================================================
-   BALANCE
-========================================================= */
-
-function balanceModal(id){
-
-    openModal(
-        "Manage Balance",
-        `
-
-        <div class="field">
-
-            <label>AMOUNT</label>
-
-            <input
-                id="balanceAmount"
-                class="input"
-                type="number"
-                placeholder="Enter amount">
-
-        </div>
-
-        <div class="actions">
-
-            <button
-                class="btn btn-success"
-                onclick="changeBalance(
-                    '${esc(id)}',
-                    'add'
-                )">
-
-                + Add Balance
-
-            </button>
-
-            <button
-                class="btn btn-danger"
-                onclick="changeBalance(
-                    '${esc(id)}',
-                    'deduct'
-                )">
-
-                - Deduct Balance
-
-            </button>
-
-        </div>
-
-        `
-    );
-
-}
-
-
-async function changeBalance(id,type){
-
-    const amount =
-        Number(
-            document.getElementById("balanceAmount")
-            .value
-        );
-
-    if(!amount || amount <= 0){
-
-        toast("Enter valid amount");
-
+function renderUsersTable(entries){
+    if(!entries.length){
+        document.getElementById("usersTable").innerHTML = `<div class="empty">No users found.</div>`;
         return;
-
     }
-
-    const ref =
-        db.ref("users/"+id);
-
-    const snap =
-        await ref.once("value");
-
-    const user =
-        snap.val() || {};
-
-    let balance =
-        Number(user.balance || 0);
-
-    if(type === "add"){
-
-        balance += amount;
-
-    }else{
-
-        if(amount > balance){
-
-            toast("Insufficient balance");
-
-            return;
-
-        }
-
-        balance -= amount;
-
-    }
-
-    await ref.update({
-        balance:balance
-    });
-
-    await db.ref("transactions").push({
-
-        userId:id,
-
-        type:
-            type === "add"
-            ? "admin_add"
-            : "admin_deduct",
-
-        amount:amount,
-
-        adminUid:auth.currentUser.uid,
-
-        status:"completed",
-
-        createdAt:
-            firebase.database.ServerValue.TIMESTAMP
-
-    });
-
-    toast("Balance updated");
-
-    closeModal();
-
-    renderUsers();
-
-}
-
-
-/* =========================================================
-   BAN
-========================================================= */
-
-async function toggleBan(id){
-
-    const ref =
-        db.ref("users/"+id);
-
-    const snap =
-        await ref.once("value");
-
-    const u =
-        snap.val() || {};
-
-    const newStatus =
-        u.status === "banned"
-        ? "active"
-        : "banned";
-
-    await ref.update({
-        status:newStatus
-    });
-
-    toast(
-        newStatus === "banned"
-        ? "User banned"
-        : "User unbanned"
-    );
-
-    closeModal();
-
-    renderUsers();
-
-}
-
-
-/* =========================================================
-   WITHDRAWALS
-========================================================= */
-
-async function renderWithdrawals(){
-
-    const content =
-        document.getElementById("content");
-
-    content.innerHTML = `
-
-        <div class="section-head">
-
-            <div class="section-title">
-                Withdrawal Requests
-            </div>
-
-            <button
-                class="btn btn-secondary"
-                onclick="renderWithdrawals()">
-                ↻ Refresh
-            </button>
-
-        </div>
-
-        <div id="withdrawTable"
-             class="table-wrap">
-
-            <div class="empty">
-                Loading...
-            </div>
-
-        </div>
-
-    `;
-
-    const snap =
-        await db.ref("withdrawals")
-        .once("value");
-
-    let data = [];
-
-    snap.forEach(child=>{
-
-        data.push({
-            id:child.key,
-            ...child.val()
-        });
-
-    });
-
-    data.reverse();
-
     let rows = "";
-
-    data.forEach(w=>{
-
-        const status =
-            String(w.status || "pending");
-
+    entries.forEach(([id, u]) => {
+        const name = [u.firstName || "", u.lastName || ""].join(" ").trim() || "User";
         rows += `
-
             <tr>
-
                 <td>
-                    <b>${esc(w.userName || "User")}</b>
-                    <br>
-                    <small>${esc(w.userId)}</small>
-                </td>
-
-                <td>
-                    <b>৳${money(w.amount)}</b>
-                </td>
-
-                <td>
-                    ${esc(w.methodId || "-")}
-                </td>
-
-                <td>
-                    ${esc(w.accountNumber || "-")}
-                </td>
-
-                <td>
-
-                    <span class="
-                    badge
-                    ${
-                        status === "approved"
-                        ? "badge-green"
-                        : status === "rejected"
-                        ? "badge-red"
-                        : "badge-orange"
-                    }">
-
-                        ${esc(status.toUpperCase())}
-
-                    </span>
-
-                </td>
-
-                <td>
-
-                    ${
-                        status === "pending"
-                        ? `
-
-                        <div class="actions">
-
-                            <button
-                                class="btn btn-success"
-                                onclick="approveWithdraw('${esc(w.id)}')">
-                                Approve
-                            </button>
-
-                            <button
-                                class="btn btn-danger"
-                                onclick="rejectWithdraw('${esc(w.id)}')">
-                                Reject
-                            </button>
-
-                        </div>
-
-                        `
-                        :
-                        "-"
-                    }
-
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-    if(!rows){
-
-        rows = `
-            <tr>
-                <td colspan="6">
-                    <div class="empty">
-                        No withdrawal requests.
-                    </div>
-                </td>
-            </tr>
-        `;
-
-    }
-
-    document.getElementById("withdrawTable")
-        .innerHTML = `
-
-        <table>
-
-            <thead>
-                <tr>
-                    <th>USER</th>
-                    <th>AMOUNT</th>
-                    <th>METHOD</th>
-                    <th>ACCOUNT</th>
-                    <th>STATUS</th>
-                    <th>ACTION</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                ${rows}
-            </tbody>
-
-        </table>
-
-    `;
-
-}
-
-
-/* =========================================================
-   APPROVE WITHDRAW
-========================================================= */
-
-async function approveWithdraw(id){
-
-    if(!confirm("Approve this withdrawal?"))
-        return;
-
-    const ref =
-        db.ref("withdrawals/"+id);
-
-    const snap =
-        await ref.once("value");
-
-    const w =
-        snap.val();
-
-    if(!w){
-
-        toast("Request not found");
-
-        return;
-
-    }
-
-    if(w.status !== "pending"){
-
-        toast("Already processed");
-
-        return;
-
-    }
-
-    const userRef =
-        db.ref("users/"+w.userId);
-
-    const userSnap =
-        await userRef.once("value");
-
-    const user =
-        userSnap.val() || {};
-
-    const balance =
-        Number(user.balance || 0);
-
-    const amount =
-        Number(w.amount || 0);
-
-    if(amount > balance){
-
-        await ref.update({
-            status:"rejected",
-            adminNote:"Insufficient user balance"
-        });
-
-        toast("Insufficient user balance");
-
-        renderWithdrawals();
-
-        return;
-
-    }
-
-    /*
-       NOTE:
-       For production money handling, this operation
-       should be moved to a trusted backend transaction.
-    */
-
-    await userRef.update({
-
-        balance:
-            balance-amount,
-
-        totalWithdraw:
-            Number(user.totalWithdraw || 0)+amount
-
-    });
-
-    await ref.update({
-
-        status:"approved",
-
-        processedAt:
-            firebase.database.ServerValue.TIMESTAMP,
-
-        processedBy:
-            auth.currentUser.uid
-
-    });
-
-    await db.ref("transactions").push({
-
-        userId:w.userId,
-
-        type:"withdraw",
-
-        amount:amount,
-
-        withdrawalId:id,
-
-        status:"completed",
-
-        createdAt:
-            firebase.database.ServerValue.TIMESTAMP
-
-    });
-
-    toast("Withdrawal approved");
-
-    renderWithdrawals();
-
-}
-
-
-/* =========================================================
-   REJECT WITHDRAW
-========================================================= */
-
-async function rejectWithdraw(id){
-
-    const note =
-        prompt("Rejection reason:");
-
-    const ref =
-        db.ref("withdrawals/"+id);
-
-    const snap =
-        await ref.once("value");
-
-    const w =
-        snap.val();
-
-    if(!w) return;
-
-    if(w.status !== "pending"){
-
-        toast("Already processed");
-
-        return;
-
-    }
-
-    await ref.update({
-
-        status:"rejected",
-
-        adminNote:
-            note || "Rejected",
-
-        processedAt:
-            firebase.database.ServerValue.TIMESTAMP,
-
-        processedBy:
-            auth.currentUser.uid
-
-    });
-
-    toast("Withdrawal rejected");
-
-    renderWithdrawals();
-
-}
-
-
-/* =========================================================
-   BANNERS
-========================================================= */
-
-async function renderBanners(){
-
-    const snap =
-        await db.ref("banners")
-        .once("value");
-
-    let html = "";
-
-    snap.forEach(child=>{
-
-        const b =
-            child.val() || {};
-
-        html += `
-
-            <div class="card"
-                 style="margin-bottom:10px">
-
-                <div style="
-                    display:flex;
-                    gap:14px;
-                    align-items:center">
-
-                    ${
-                        b.image
-                        ?
-                        `<img
-                        src="${esc(b.image)}"
-                        style="
-                        width:120px;
-                        height:65px;
-                        border-radius:10px;
-                        object-fit:cover">`
-                        :
-                        `<div
-                        style="
-                        width:120px;
-                        height:65px;
-                        border-radius:10px;
-                        background:#eee;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center">
-                        🖼️
-                        </div>`
-                    }
-
-                    <div style="flex:1">
-
-                        <b>
-                            ${esc(b.title || "Banner")}
-                        </b>
-
-                        <div style="
-                            color:#999;
-                            font-size:10px;
-                            margin-top:4px">
-
-                            ${esc(b.url || "")}
-
-                        </div>
-
-                        <div style="
-                            margin-top:5px">
-
-                            <span class="
-                            badge
-                            ${
-                                b.status === false ||
-                                b.status === "inactive"
-                                ? "badge-red"
-                                : "badge-green"
-                            }">
-
-                            ${
-                                b.status === false ||
-                                b.status === "inactive"
-                                ? "INACTIVE"
-                                : "ACTIVE"
-                            }
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                    <div class="actions">
-
-                        <button
-                            class="btn btn-blue"
-                            onclick="editBanner('${esc(child.key)}')">
-                            Edit
-                        </button>
-
-                        <button
-                            class="btn btn-danger"
-                            onclick="deleteItem('banners','${esc(child.key)}')">
-                            Delete
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        `;
-
-    });
-
-    if(!html){
-
-        html =
-            `<div class="empty">
-                No banners.
-            </div>`;
-
-    }
-
-    document.getElementById("content")
-        .innerHTML = `
-
-        <div class="section-head">
-
-            <div class="section-title">
-                Banner Manager
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="editBanner()">
-
-                + Add Banner
-
-            </button>
-
-        </div>
-
-        ${html}
-
-    `;
-
-}
-
-
-function editBanner(id=""){
-
-    if(id){
-
-        db.ref("banners/"+id)
-        .once("value")
-        .then(snap=>{
-
-            const b =
-                snap.val() || {};
-
-            bannerForm(id,b);
-
-        });
-
-    }else{
-
-        bannerForm("",{});
-
-    }
-
-}
-
-
-function bannerForm(id,b){
-
-    openModal(
-        id ? "Edit Banner" : "Add Banner",
-        `
-
-        <div class="field">
-
-            <label>TITLE</label>
-
-            <input
-                id="bannerTitle"
-                class="input"
-                value="${esc(b.title || "")}"
-                placeholder="Banner title">
-
-        </div>
-
-        <div class="field">
-
-            <label>IMAGE URL</label>
-
-            <input
-                id="bannerImage"
-                class="input"
-                value="${esc(b.image || "")}"
-                placeholder="https://...">
-
-        </div>
-
-        <div class="field">
-
-            <label>CLICK URL</label>
-
-            <input
-                id="bannerUrl"
-                class="input"
-                value="${esc(b.url || "")}"
-                placeholder="https://t.me/...">
-
-        </div>
-
-        <div class="field">
-
-            <label>ORDER</label>
-
-            <input
-                id="bannerOrder"
-                class="input"
-                type="number"
-                value="${Number(b.order || 0)}">
-
-        </div>
-
-        <button
-            class="btn btn-primary"
-            style="width:100%;height:47px"
-            onclick="saveBanner('${esc(id)}')">
-
-            SAVE BANNER
-
-        </button>
-
-        `
-    );
-
-}
-
-
-async function saveBanner(id){
-
-    const data = {
-
-        title:
-            document.getElementById("bannerTitle").value.trim(),
-
-        image:
-            document.getElementById("bannerImage").value.trim(),
-
-        url:
-            document.getElementById("bannerUrl").value.trim(),
-
-        order:
-            Number(
-                document.getElementById("bannerOrder").value
-            ),
-
-        status:true,
-
-        updatedAt:
-            firebase.database.ServerValue.TIMESTAMP
-
-    };
-
-    const ref =
-        id
-        ? db.ref("banners/"+id)
-        : db.ref("banners").push();
-
-    await ref.update(data);
-
-    toast("Banner saved");
-
-    closeModal();
-
-    renderBanners();
-
-}
-
-
-/* =========================================================
-   TASKS
-========================================================= */
-
-async function renderTasks(){
-
-    const snap =
-        await db.ref("tasks")
-        .once("value");
-
-    let html = "";
-
-    snap.forEach(child=>{
-
-        const t =
-            child.val() || {};
-
-        html += `
-
-            <div class="card"
-                 style="margin-bottom:10px">
-
-                <div class="section-head">
-
-                    <div>
-
-                        <b>
-                            ${esc(t.name || "Task")}
-                        </b>
-
-                        <div style="
-                            color:#888;
-                            font-size:10px;
-                            margin-top:5px">
-
-                            Reward:
-                            ৳${money(t.reward)}
-
-                            <br>
-
-                            ${esc(t.link || "")}
-
-                        </div>
-
-                    </div>
-
-                    <div class="actions">
-
-                        <button
-                            class="btn btn-blue"
-                            onclick="editTask('${esc(child.key)}')">
-                            Edit
-                        </button>
-
-                        <button
-                            class="btn btn-danger"
-                            onclick="deleteItem('tasks','${esc(child.key)}')">
-                            Delete
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        `;
-
-    });
-
-    if(!html){
-
-        html =
-            `<div class="empty">
-                No tasks.
-            </div>`;
-
-    }
-
-    document.getElementById("content")
-        .innerHTML = `
-
-        <div class="section-head">
-
-            <div class="section-title">
-                Task Manager
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="editTask()">
-                + Add Task
-            </button>
-
-        </div>
-
-        ${html}
-
-    `;
-
-}
-
-
-function editTask(id=""){
-
-    if(id){
-
-        db.ref("tasks/"+id)
-        .once("value")
-        .then(snap=>{
-
-            taskForm(id,snap.val() || {});
-
-        });
-
-    }else{
-
-        taskForm("",{});
-
-    }
-
-}
-
-
-function taskForm(id,t){
-
-    openModal(
-        id ? "Edit Task" : "Add Task",
-        `
-
-        <div class="field">
-
-            <label>TASK NAME</label>
-
-            <input
-                id="taskName"
-                class="input"
-                value="${esc(t.name || "")}"
-                placeholder="Join Telegram Channel">
-
-        </div>
-
-        <div class="field">
-
-            <label>TASK LINK</label>
-
-            <input
-                id="taskLink"
-                class="input"
-                value="${esc(t.link || "")}"
-                placeholder="https://t.me/...">
-
-        </div>
-
-        <div class="field">
-
-            <label>REWARD</label>
-
-            <input
-                id="taskReward"
-                class="input"
-                type="number"
-                value="${Number(t.reward || 0)}">
-
-        </div>
-
-        <button
-            class="btn btn-primary"
-            style="width:100%;height:47px"
-            onclick="saveTask('${esc(id)}')">
-
-            SAVE TASK
-
-        </button>
-
-        `
-    );
-
-}
-
-
-async function saveTask(id){
-
-    const data = {
-
-        name:
-            document.getElementById("taskName").value.trim(),
-
-        link:
-            document.getElementById("taskLink").value.trim(),
-
-        reward:
-            Number(
-                document.getElementById("taskReward").value
-            ),
-
-        status:true,
-
-        updatedAt:
-            firebase.database.ServerValue.TIMESTAMP
-
-    };
-
-    const ref =
-        id
-        ? db.ref("tasks/"+id)
-        : db.ref("tasks").push();
-
-    await ref.update(data);
-
-    toast("Task saved");
-
-    closeModal();
-
-    renderTasks();
-
-}
-
-
-/* =========================================================
-   WITHDRAW METHODS
-========================================================= */
-
-async function renderMethods(){
-
-    const snap =
-        await db.ref("withdrawMethods")
-        .once("value");
-
-    let html = "";
-
-    snap.forEach(child=>{
-
-        const m =
-            child.val() || {};
-
-        html += `
-
-            <div class="card"
-                 style="margin-bottom:10px">
-
-                <div class="section-head">
-
-                    <div style="
-                        display:flex;
-                        align-items:center;
-                        gap:12px">
-
-                        ${
-                            m.image
-                            ?
-                            `<img
-                            src="${esc(m.image)}"
-                            style="
-                            width:45px;
-                            height:45px;
-                            border-radius:12px;
-                            object-fit:cover">`
-                            :
-                            `<div style="
-                            width:45px;
-                            height:45px;
-                            border-radius:12px;
-                            background:#fff0f6;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center">
-                            💳
-                            </div>`
-                        }
-
+                    <div class="user-cell">
+                        <img class="user-avatar" src="${esc(u.photoUrl || "https://ui-avatars.com/api/?name=User")} ">
                         <div>
-
-                            <b>
-                                ${esc(m.name || "Method")}
-                            </b>
-
-                            <div style="
-                                color:#888;
-                                font-size:10px;
-                                margin-top:4px">
-
-                                Min:
-                                ৳${money(m.min)}
-
-                                &nbsp; Max:
-                                ৳${money(m.max)}
-
-                            </div>
-
+                            <div class="user-name">${esc(name)}</div>
+                            <div class="user-id">ID: ${esc(id)}</div>
                         </div>
-
                     </div>
-
+                </td>
+                <td>${u.username ? "@"+esc(u.username) : "-"}</td>
+                <td><b>৳${money(u.balance)}</b></td>
+                <td>${u.totalReferrals || 0}</td>
+                <td>${u.status === "banned" ? `<span class="badge badge-red">BANNED</span>` : `<span class="badge badge-green">ACTIVE</span>`}</td>
+                <td>
                     <div class="actions">
-
-                        <button
-                            class="btn btn-blue"
-                            onclick="editMethod('${esc(child.key)}')">
-                            Edit
-                        </button>
-
-                        <button
-                            class="btn btn-danger"
-                            onclick="deleteItem('withdrawMethods','${esc(child.key)}')">
-                            Delete
-                        </button>
-
+                        <button class="btn btn-secondary" onclick="editUser('${esc(id)}')">Edit</button>
+                        <button class="btn ${u.status === 'banned' ? 'btn-success' : 'btn-danger'}" onclick="toggleBanUser('${esc(id)}')">${u.status === 'banned' ? 'Unban' : 'Ban'}</button>
                     </div>
-
-                </div>
-
-            </div>
-
+                </td>
+            </tr>
         `;
-
     });
-
-    if(!html){
-
-        html =
-            `<div class="empty">
-                No withdraw methods.
-            </div>`;
-
-    }
-
-    document.getElementById("content")
-        .innerHTML = `
-
-        <div class="section-head">
-
-            <div class="section-title">
-                Withdraw Methods
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="editMethod()">
-
-                + Add Method
-
-            </button>
-
-        </div>
-
-        ${html}
-
-    `;
-
+    document.getElementById("usersTable").innerHTML = `<table><thead><tr><th>User</th><th>Username</th><th>Balance</th><th>Referrals</th><th>Status</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
-
-function editMethod(id=""){
-
-    if(id){
-
-        db.ref("withdrawMethods/"+id)
-        .once("value")
-        .then(snap=>{
-
-            methodForm(id,snap.val() || {});
-
-        });
-
-    }else{
-
-        methodForm("",{});
-
-    }
-
-}
-
-
-function methodForm(id,m){
-
-    openModal(
-        id ? "Edit Withdraw Method" : "Add Withdraw Method",
-        `
-
-        <div class="field">
-
-            <label>METHOD NAME</label>
-
-            <input
-                id="methodName"
-                class="input"
-                value="${esc(m.name || "")}"
-                placeholder="bKash">
-
-        </div>
-
-        <div class="field">
-
-            <label>IMAGE URL</label>
-
-            <input
-                id="methodImage"
-                class="input"
-                value="${esc(m.image || "")}"
-                placeholder="https://...">
-
-        </div>
-
+function editUser(id){
+    const u = usersCache[id] || {};
+    openModal("Edit User", `
         <div class="form-grid">
-
-            <div class="field">
-
-                <label>MINIMUM</label>
-
-                <input
-                    id="methodMin"
-                    class="input"
-                    type="number"
-                    value="${Number(m.min || 0)}">
-
-            </div>
-
-            <div class="field">
-
-                <label>MAXIMUM</label>
-
-                <input
-                    id="methodMax"
-                    class="input"
-                    type="number"
-                    value="${Number(m.max || 0)}">
-
-            </div>
-
+            <div class="field"><label>First Name</label><input id="editFirstName" class="input" value="${esc(u.firstName)}"></div>
+            <div class="field"><label>Last Name</label><input id="editLastName" class="input" value="${esc(u.lastName)}"></div>
+            <div class="field"><label>Balance (৳)</label><input id="editBalance" class="input" type="number" value="${u.balance || 0}"></div>
+            <div class="field"><label>Total Referrals</label><input id="editReferrals" class="input" type="number" value="${u.totalReferrals || 0}"></div>
+            <div class="full"><button class="btn btn-primary" style="width:100%" onclick="saveUser('${esc(id)}')">Save Changes</button></div>
         </div>
-
-        <button
-            class="btn btn-primary"
-            style="width:100%;height:47px"
-            onclick="saveMethod('${esc(id)}')">
-
-            SAVE METHOD
-
-        </button>
-
-        `
-    );
-
+    `);
 }
 
+async function saveUser(id){
+    const firstName = document.getElementById("editFirstName").value.trim();
+    const lastName = document.getElementById("editLastName").value.trim();
+    const balance = Number(document.getElementById("editBalance").value || 0);
+    const totalReferrals = Number(document.getElementById("editReferrals").value || 0);
 
-async function saveMethod(id){
-
-    const data = {
-
-        name:
-            document.getElementById("methodName")
-            .value.trim(),
-
-        image:
-            document.getElementById("methodImage")
-            .value.trim(),
-
-        min:
-            Number(
-                document.getElementById("methodMin").value
-            ),
-
-        max:
-            Number(
-                document.getElementById("methodMax").value
-            ),
-
-        status:true,
-
-        updatedAt:
-            firebase.database.ServerValue.TIMESTAMP
-
-    };
-
-    const ref =
-        id
-        ? db.ref("withdrawMethods/"+id)
-        : db.ref("withdrawMethods").push();
-
-    await ref.update(data);
-
-    toast("Withdraw method saved");
-
+    await db.ref("users/" + id).update({ firstName, lastName, balance, totalReferrals });
+    toast("User updated successfully!");
     closeModal();
-
-    renderMethods();
-
+    renderUsers();
 }
 
+async function toggleBanUser(id){
+    const u = usersCache[id] || {};
+    const newStatus = u.status === "banned" ? "active" : "banned";
+    await db.ref("users/" + id).update({ status: newStatus });
+    toast("User status updated!");
+    renderUsers();
+}
 
-/* =========================================================
-   NOTICES
-========================================================= */
-
-async function renderNotices(){
-
-    const snap =
-        await db.ref("notices")
-        .once("value");
-
-    let html = "";
-
-    snap.forEach(child=>{
-
-        const n =
-            child.val() || {};
-
-        html += `
-
-            <div class="card"
-                 style="margin-bottom:10px">
-
-                <div class="section-head">
-
-                    <div>
-
-                        <b>
-                            ${esc(n.title || "Notice")}
-                        </b>
-
-                        <p style="
-                            font-size:11px;
-                            color:#777;
-                            margin-top:5px">
-
-                            ${esc(n.text || "")}
-
-                        </p>
-
-                    </div>
-
-                    <div class="actions">
-
-                        <button
-                            class="btn btn-blue"
-                            onclick="editNotice('${esc(child.key)}')">
-                            Edit
-                        </button>
-
-                        <button
-                            class="btn btn-danger"
-                            onclick="deleteItem('notices','${esc(child.key)}')">
-                            Delete
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+/* WITHDRAWALS */
+async function renderWithdrawals(){
+    const content = document.getElementById("content");
+    content.innerHTML = `<div class="section-head"><div class="section-title">Withdraw Requests</div></div><div id="withdrawTable" class="table-wrap"><div class="empty">Loading withdrawals...</div></div>`;
+    const snap = await db.ref("withdrawals").once("value");
+    let rows = "";
+    snap.forEach(child => {
+        const w = child.val() || {};
+        const id = child.key;
+        rows += `
+            <tr>
+                <td>${esc(w.userId)}</td>
+                <td><b>৳${money(w.amount)}</b></td>
+                <td>${esc(w.method)}<br><small>${esc(w.account)}</small></td>
+                <td><span class="badge ${w.status==='approved'?'badge-green':w.status==='rejected'?'badge-red':'badge-orange'}">${esc(w.status || 'pending').toUpperCase()}</span></td>
+                <td>
+                    ${w.status === 'pending' ? `
+                        <div class="actions">
+                            <button class="btn btn-success" onclick="updateWithdraw('${id}','approved')">Approve</button>
+                            <button class="btn btn-danger" onclick="updateWithdraw('${id}','rejected')">Reject</button>
+                        </div>
+                    ` : '-'}
+                </td>
+            </tr>
         `;
-
     });
+    document.getElementById("withdrawTable").innerHTML = rows ? `<table><thead><tr><th>User ID</th><th>Amount</th><th>Method / Account</th><th>Status</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">No withdrawals found.</div>`;
+}
 
-    if(!html){
+async function updateWithdraw(id, status){
+    await db.ref("withdrawals/" + id).update({ status });
+    toast("Withdrawal " + status);
+    renderWithdrawals();
+}
 
-        html =
-            `<div class="empty">
-                No notices.
-            </div>`;
-
-    }
-
-    document.getElementById("content")
-        .innerHTML = `
-
-        <div class="section-head">
-
-            <div class="section-title">
-                Notice Manager
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="editNotice()">
-                + Add Notice
-            </button>
-
-        </div>
-
-        ${html}
-
+/* PLACEHOLDER PAGES FOR OTHER SECTIONS */
+async function renderGenericSimple(title, path){
+    const content = document.getElementById("content");
+    content.innerHTML = `
+        <div class="section-head"><div class="section-title">${title} Manager</div><button class="btn btn-primary" onclick="openAddGeneric('${path}')">Add New</button></div>
+        <div id="genericTable" class="table-wrap"><div class="empty">Loading...</div></div>
     `;
-
+    const snap = await db.ref(path).once("value");
+    let rows = "";
+    snap.forEach(child => {
+        const item = child.val() || {};
+        const id = child.key;
+        rows += `<tr><td>${esc(item.title || item.name || item.text || id)}</td><td><button class="btn btn-danger" onclick="deleteGeneric('${path}','${id}')">Delete</button></td></tr>`;
+    });
+    document.getElementById("genericTable").innerHTML = rows ? `<table><thead><tr><th>Details</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table>` : `<div class="empty">No items found.</div>`;
 }
 
-
-function editNotice(id=""){
-
-    if(id){
-
-        db.ref("notices/"+id)
-        .once("value")
-        .then(snap=>{
-
-            noticeForm(id,snap.val() || {});
-
-        });
-
-    }else{
-
-        noticeForm("",{});
-
-    }
-
+function openAddGeneric(path){
+    openModal("Add Item", `
+        <div class="field"><label>Title / Text</label><input id="genTitle" class="input"></div>
+        <button class="btn btn-primary" style="width:100%" onclick="saveGeneric('${path}')">Save</button>
+    `);
 }
 
-
-function noticeForm(id,n){
-
-    openModal(
-        id ? "Edit Notice" : "Add Notice",
-        `
-
-        <div class="field">
-
-            <label>TITLE</label>
-
-            <input
-                id="noticeTitle"
-                class="input"
-                value="${esc(n.title || "")}">
-
-        </div>
-
-        <div class="field">
-
-            <label>NOTICE</label>
-
-            <textarea
-                id="noticeText"
-                class="textarea">${esc(n.text || "")}</textarea>
-
-        </div>
-
-        <button
-            class="btn btn-primary"
-            style="width:100%;height:47px"
-            onclick="saveNotice('${esc(id)}')">
-
-            SAVE NOTICE
-
-        </button>
-
-        `
-    );
-
-}
-
-
-async function saveNotice(id){
-
-    const data = {
-
-        title:
-            document.getElementById("noticeTitle")
-            .value.trim(),
-
-        text:
-            document.getElementById("noticeText")
-            .value.trim(),
-
-        status:true,
-
-        date:
-            firebase.database.ServerValue.TIMESTAMP
-
-    };
-
-    const ref =
-        id
-        ? db.ref("notices/"+id)
-        : db.ref("notices").push();
-
-    await ref.update(data);
-
-    toast("Notice saved");
-
+async function saveGeneric(path){
+    const title = document.getElementById("genTitle").value.trim();
+    if(!title) return;
+    await db.ref(path).push({ title });
     closeModal();
-
-    renderNotices();
-
+    showPage(currentPage);
 }
 
+async function deleteGeneric(path, id){
+    if(confirm("Are you sure?")){
+        await db.ref(path + "/" + id).remove();
+        showPage(currentPage);
+    }
+}
 
-/* =========================================================
-   SETTINGS
-========================================================= */
+function renderBanners(){ renderGenericSimple("Banner", "banners"); }
+function renderTasks(){ renderGenericSimple("Task", "tasks"); }
+function renderMethods(){ renderGenericSimple("Withdraw Method", "methods"); }
+function renderNotices(){ renderGenericSimple("Notice", "notices"); }
+function renderSupport(){ renderGenericSimple("Support Ticket", "support"); }
+function renderTutorial(){ renderGenericSimple("Tutorial", "tutorials"); }
 
 async function renderSettings(){
-
-    await loadSettings();
-
-    document.getElementById("content")
-        .innerHTML = `
-
+    const content = document.getElementById("content");
+    content.innerHTML = `
         <div class="card">
-
-            <div class="section-title"
-                 style="margin-bottom:17px">
-
-                General Bot Settings
-
-            </div>
-
             <div class="form-grid">
-
-                <div class="field">
-
-                    <label>BOT / APP NAME</label>
-
-                    <input
-                        id="setBotName"
-                        class="input"
-                        value="${esc(settings.botName || "")}">
-
-                </div>
-
-                <div class="field">
-
-                    <label>BOT USERNAME</label>
-
-                    <input
-                        id="setBotUsername"
-                        class="input"
-                        value="${esc(settings.botUsername || "")}"
-                        placeholder="YourBot">
-
-                </div>
-
-                <div class="field">
-
-                    <label>MINIMUM WITHDRAW</label>
-
-                    <input
-                        id="setMinWithdraw"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.minWithdraw || 0)}">
-
-                </div>
-
-                <div class="field">
-
-                    <label>MINIMUM REFERRAL</label>
-
-                    <input
-                        id="setMinRefer"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.minRefer || 0)}">
-
-                </div>
-
-                <div class="field full">
-
-                    <label>APP LOGO URL</label>
-
-                    <input
-                        id="setLogo"
-                        class="input"
-                        value="${esc(settings.logo || "")}">
-
-                </div>
-
+                <div class="field"><label>Bot Name</label><input id="setBotName" class="input" value="${esc(settings.botName)}"></div>
+                <div class="field"><label>Bot Username</label><input id="setBotUsername" class="input" value="${esc(settings.botUsername)}"></div>
+                <div class="field"><label>Min Withdraw</label><input id="setMinWithdraw" class="input" type="number" value="${settings.minWithdraw || 0}"></div>
+                <div class="field"><label>Min Refer</label><input id="setMinRefer" class="input" type="number" value="${settings.minRefer || 0}"></div>
+                <div class="full"><button class="btn btn-primary" onclick="saveSettingsForm()">Save Settings</button></div>
             </div>
-
-            <button
-                class="btn btn-primary"
-                style="margin-top:10px"
-                onclick="saveSettings()">
-
-                SAVE GENERAL SETTINGS
-
-            </button>
-
         </div>
-
-        <div class="card"
-             style="margin-top:15px">
-
-            <div class="section-title"
-                 style="margin-bottom:17px">
-
-                Referral Settings
-
-            </div>
-
-            <div class="form-grid">
-
-                <div class="field">
-
-                    <label>REFERRAL REWARD</label>
-
-                    <input
-                        id="setReferralReward"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.referralReward || 0)}">
-
-                </div>
-
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="saveReferralSettings()">
-
-                SAVE REFERRAL SETTINGS
-
-            </button>
-
-        </div>
-
     `;
-
 }
 
+async function saveSettingsForm(){
+    settings.botName = document.getElementById("setBotName").value.trim();
+    settings.botUsername = document.getElementById("setBotUsername").value.trim();
+    settings.minWithdraw = Number(document.getElementById("setMinWithdraw").value || 0);
+    settings.minRefer = Number(document.getElementById("setMinRefer").value || 0);
 
-async function saveSettings(){
-
-    const data = {
-
-        botName:
-            document.getElementById("setBotName")
-            .value.trim(),
-
-        botUsername:
-            document.getElementById("setBotUsername")
-            .value.trim()
-            .replace("@",""),
-
-        minWithdraw:
-            Number(
-                document.getElementById("setMinWithdraw").value
-            ),
-
-        minRefer:
-            Number(
-                document.getElementById("setMinRefer").value
-            ),
-
-        logo:
-            document.getElementById("setLogo")
-            .value.trim()
-
-    };
-
-    await db.ref("settings")
-        .update(data);
-
-    await loadSettings();
-
-    toast("Settings saved");
-
+    await db.ref("settings").set(settings);
+    toast("Settings saved successfully!");
+    loadSettings();
 }
 
+function renderMining(){ renderSettingsGeneric("Mining Settings", "mining"); }
+function renderBonus(){ renderSettingsGeneric("Bonus Settings", "bonus"); }
+function renderSpin(){ renderSettingsGeneric("Spin Settings", "spin"); }
 
-async function saveReferralSettings(){
-
-    await db.ref("settings")
-        .update({
-
-            referralReward:
-                Number(
-                    document.getElementById("setReferralReward")
-                    .value
-                )
-
-        });
-
-    await loadSettings();
-
-    toast("Referral settings saved");
-
-}
-
-
-/* =========================================================
-   MINING
-========================================================= */
-
-async function renderMining(){
-
-    await loadSettings();
-
-    document.getElementById("content")
-        .innerHTML = `
-
+async function renderSettingsGeneric(title, path){
+    const content = document.getElementById("content");
+    const snap = await db.ref(path).once("value");
+    const val = snap.val() || {};
+    content.innerHTML = `
         <div class="card">
-
-            <div class="section-title">
-                Mining Configuration
-            </div>
-
-            <p style="
-                color:#888;
-                font-size:11px;
-                margin:6px 0 18px">
-
-                Configure daily mining reward
-                according to referrals.
-
-            </p>
-
-            <div class="form-grid">
-
-                <div class="field">
-
-                    <label>BASE MINIMUM</label>
-
-                    <input
-                        id="mineBaseMin"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.miningBaseMin || 30)}">
-
-                </div>
-
-                <div class="field">
-
-                    <label>BASE MAXIMUM</label>
-
-                    <input
-                        id="mineBaseMax"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.miningBaseMax || 40)}">
-
-                </div>
-
-                <div class="field">
-
-                    <label>3 REFER REWARD</label>
-
-                    <input
-                        id="mine3"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.mining3 || 50)}">
-
-                </div>
-
-                <div class="field">
-
-                    <label>6 REFER REWARD</label>
-
-                    <input
-                        id="mine6"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.mining6 || 70)}">
-
-                </div>
-
-                <div class="field">
-
-                    <label>10 REFER MIN</label>
-
-                    <input
-                        id="mine10Min"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.mining10Min || 100)}">
-
-                </div>
-
-                <div class="field">
-
-                    <label>10 REFER MAX</label>
-
-                    <input
-                        id="mine10Max"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.mining10Max || 120)}">
-
-                </div>
-
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="saveMining()">
-
-                SAVE MINING SETTINGS
-
-            </button>
-
+            <h3>${title}</h3><br>
+            <div class="field"><label>Reward Amount</label><input id="genVal" class="input" type="number" value="${val.amount || 0}"></div>
+            <button class="btn btn-primary" onclick="saveVal('${path}')">Save</button>
         </div>
-
     `;
-
 }
 
-
-async function saveMining(){
-
-    await db.ref("settings")
-        .update({
-
-            miningBaseMin:
-                Number(
-                    document.getElementById("mineBaseMin").value
-                ),
-
-            miningBaseMax:
-                Number(
-                    document.getElementById("mineBaseMax").value
-                ),
-
-            mining3:
-                Number(
-                    document.getElementById("mine3").value
-                ),
-
-            mining6:
-                Number(
-                    document.getElementById("mine6").value
-                ),
-
-            mining10Min:
-                Number(
-                    document.getElementById("mine10Min").value
-                ),
-
-            mining10Max:
-                Number(
-                    document.getElementById("mine10Max").value
-                )
-
-        });
-
-    await loadSettings();
-
-    toast("Mining settings saved");
-
+async function saveVal(path){
+    const amount = Number(document.getElementById("genVal").value || 0);
+    await db.ref(path).set({ amount });
+    toast("Saved!");
 }
-
-
-/* =========================================================
-   BONUS
-========================================================= */
-
-async function renderBonus(){
-
-    await loadSettings();
-
-    document.getElementById("content")
-        .innerHTML = `
-
-        <div class="card">
-
-            <div class="section-title">
-                Daily Bonus
-            </div>
-
-            <div class="field"
-                 style="margin-top:17px">
-
-                <label>DAILY BONUS AMOUNT</label>
-
-                <input
-                    id="dailyBonus"
-                    class="input"
-                    type="number"
-                    value="${Number(settings.dailyBonus || 0)}">
-
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="saveBonus()">
-
-                SAVE BONUS
-
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-async function saveBonus(){
-
-    await db.ref("settings")
-        .update({
-
-            dailyBonus:
-                Number(
-                    document.getElementById("dailyBonus").value
-                )
-
-        });
-
-    await loadSettings();
-
-    toast("Bonus settings saved");
-
-}
-
-
-/* =========================================================
-   SPIN
-========================================================= */
-
-async function renderSpin(){
-
-    await loadSettings();
-
-    document.getElementById("content")
-        .innerHTML = `
-
-        <div class="card">
-
-            <div class="section-title">
-                Spin Settings
-            </div>
-
-            <p style="
-                font-size:11px;
-                color:#888;
-                margin:7px 0 18px">
-
-                Set minimum and maximum daily spin reward.
-
-            </p>
-
-            <div class="form-grid">
-
-                <div class="field">
-
-                    <label>MIN REWARD</label>
-
-                    <input
-                        id="spinMin"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.spinMin || 50)}">
-
-                </div>
-
-                <div class="field">
-
-                    <label>MAX REWARD</label>
-
-                    <input
-                        id="spinMax"
-                        class="input"
-                        type="number"
-                        value="${Number(settings.spinMax || 150)}">
-
-                </div>
-
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="saveSpin()">
-
-                SAVE SPIN SETTINGS
-
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-async function saveSpin(){
-
-    await db.ref("settings")
-        .update({
-
-            spinMin:
-                Number(
-                    document.getElementById("spinMin").value
-                ),
-
-            spinMax:
-                Number(
-                    document.getElementById("spinMax").value
-                )
-
-        });
-
-    await loadSettings();
-
-    toast("Spin settings saved");
-
-}
-
-
-/* =========================================================
-   SUPPORT
-========================================================= */
-
-async function renderSupport(){
-
-    await loadSettings();
-
-    document.getElementById("content")
-        .innerHTML = `
-
-        <div class="card">
-
-            <div class="section-title">
-                Support Configuration
-            </div>
-
-            <div class="field"
-                 style="margin-top:17px">
-
-                <label>TELEGRAM SUPPORT USERNAME</label>
-
-                <input
-                    id="supportTelegram"
-                    class="input"
-                    value="${esc(settings.supportTelegram || "")}"
-                    placeholder="@YourSupport">
-
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="saveSupport()">
-
-                SAVE SUPPORT
-
-            </button>
-
-        </div>
-
-        <div class="card"
-             style="margin-top:15px">
-
-            <div class="section-title">
-                Official Channel
-            </div>
-
-            <div class="field"
-                 style="margin-top:17px">
-
-                <label>TELEGRAM CHANNEL</label>
-
-                <input
-                    id="officialChannel"
-                    class="input"
-                    value="${esc(settings.officialChannel || "")}"
-                    placeholder="https://t.me/YourChannel">
-
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="saveOfficial()">
-
-                SAVE OFFICIAL CHANNEL
-
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-async function saveSupport(){
-
-    await db.ref("settings")
-        .update({
-
-            supportTelegram:
-                document.getElementById("supportTelegram")
-                .value.trim()
-                .replace("@","")
-
-        });
-
-    await loadSettings();
-
-    toast("Support saved");
-
-}
-
-
-async function saveOfficial(){
-
-    await db.ref("settings")
-        .update({
-
-            officialChannel:
-                document.getElementById("officialChannel")
-                .value.trim()
-
-        });
-
-    await loadSettings();
-
-    toast("Official channel saved");
-
-}
-
-
-/* =========================================================
-   TUTORIAL
-========================================================= */
-
-async function renderTutorial(){
-
-    await loadSettings();
-
-    document.getElementById("content")
-        .innerHTML = `
-
-        <div class="card">
-
-            <div class="section-title">
-                Tutorial Video
-            </div>
-
-            <p style="
-                color:#888;
-                font-size:11px;
-                margin:7px 0 18px">
-
-                User Tutorial button will open this link.
-
-            </p>
-
-            <div class="field">
-
-                <label>VIDEO / TUTORIAL URL</label>
-
-                <input
-                    id="tutorialUrl"
-                    class="input"
-                    value="${esc(settings.tutorialUrl || "")}"
-                    placeholder="https://youtube.com/...">
-
-            </div>
-
-            <button
-                class="btn btn-primary"
-                onclick="saveTutorial()">
-
-                SAVE TUTORIAL
-
-            </button>
-
-        </div>
-
-    `;
-
-}
-
-
-async function saveTutorial(){
-
-    await db.ref("settings")
-        .update({
-
-            tutorialUrl:
-                document.getElementById("tutorialUrl")
-                .value.trim()
-
-        });
-
-    await loadSettings();
-
-    toast("Tutorial saved");
-
-}
-
-
-/* =========================================================
-   DELETE
-========================================================= */
-
-async function deleteItem(path,id){
-
-    if(!confirm("Delete this item?"))
-        return;
-
-    await db.ref(path+"/"+id)
-        .remove();
-
-    toast("Deleted");
-
-    if(path === "banners")
-        renderBanners();
-
-    if(path === "tasks")
-        renderTasks();
-
-    if(path === "withdrawMethods")
-        renderMethods();
-
-    if(path === "notices")
-        renderNotices();
-
-}
-
-
-/* =========================================================
-   START
-========================================================= */
-
 </script>
-
 </body>
 </html>
