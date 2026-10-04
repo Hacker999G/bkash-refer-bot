@@ -35,8 +35,8 @@ button,input,select{font-family:inherit}button{border:0;cursor:pointer;backgroun
 .svc{text-align:center;padding:6px 2px;transition:.15s}.svc:active{transform:scale(.9)}
 .sic{width:46px;height:46px;margin:auto;border-radius:14px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:23px;border:1.5px solid #fbd0e2}
 .snm{font-size:11px;font-weight:700;margin-top:7px;color:#444}
-.banner-box{margin:16px 0;border-radius:18px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,.07)}
-.banner{width:100%;height:140px;object-fit:cover;display:block;cursor:pointer}.banner-info{background:#fff;padding:12px 13px}.banner-title{font-size:14px;font-weight:900}.banner-link{display:block;margin-top:7px;color:var(--p);font-size:11px;font-weight:800;word-break:break-all;text-decoration:none}.banner-open{display:inline-flex;margin-top:9px;background:var(--p);color:#fff;padding:8px 12px;border-radius:10px;font-size:10px;font-weight:900}
+.banner-box{margin:16px 0;border-radius:18px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,.07);background:#fff;line-height:0}
+.banner{width:100%;height:auto;max-height:none;object-fit:contain;display:block;cursor:pointer;background:#fff}.banner-info{background:#fff;padding:12px 13px}.banner-title{font-size:14px;font-weight:900}.banner-link{display:block;margin-top:7px;color:var(--p);font-size:11px;font-weight:800;word-break:break-all;text-decoration:none}.banner-open{display:inline-flex;margin-top:9px;background:var(--p);color:#fff;padding:8px 12px;border-radius:10px;font-size:10px;font-weight:900}
 .bph{height:140px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e2136e,#ff5899);color:#fff;font-size:20px;font-weight:900}
 .row{width:100%;background:#fff;border-radius:16px;padding:13px;display:flex;align-items:center;gap:12px;margin-top:9px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.04)}
 .row b{display:block;font-size:13px}.row span.s{display:block;font-size:10px;color:#888;margin-top:3px}
@@ -398,36 +398,49 @@ async function loadRecentWithdrawActivity(){
   if(!rows.length)return;let i=0;const show=()=>{const d=rows[i++%rows.length],name=String(d.userName||d.name||"Telegram User").trim()||"Telegram User",amount=Number(d.amount||0),el=document.getElementById("activityPopup");if(!el)return;el.classList.remove("out");el.innerHTML=`<div class="activity-avatar">💸</div><div class="activity-txt"><b>${esc(name)}</b><span>recently withdrew</span></div><div class="activity-amt">৳${money(amount)}</div>`;el.classList.add("show");clearTimeout(activityTimer);activityTimer=setTimeout(()=>{el.classList.add("out");setTimeout(()=>el.classList.remove("show","out"),300)},1000)};show();setInterval(show,60000)}catch(e){console.error("activity",e)}}
 
 /* ===== MONETAG REWARDED INTERSTITIAL ===== */
-async function loadMonetag(){
-  const zone=String(sv("monetagZoneId","monetagZone","zoneId")||"11951511").trim();
-  const fnName=String(sv("monetagRewardFunction")||("show_"+zone)).trim();
-  const scriptUrl=String(sv("monetagScriptUrl")||"").trim();
-  if(scriptUrl&&!document.querySelector('script[data-monetag="dynamic"]')){await new Promise(resolve=>{const sc=document.createElement("script");sc.src=scriptUrl;sc.async=true;sc.dataset.monetag="dynamic";sc.onload=resolve;sc.onerror=resolve;document.head.appendChild(sc)})}
-  monetagLoaded=true;return fnName}
+function loadMonetag(){
+  const zone=String(sv("monetagZoneId")||"8449094").replace(/[^0-9]/g,"")||"8449094";
+  const fnName="show_"+zone;
+  const old=document.getElementById("tkpayMonetagSDK"); if(old)old.remove();
+  document.querySelectorAll("script[data-tkpay-monetag]").forEach(x=>x.remove());
+  const sc=document.createElement("script");
+  sc.id="tkpayMonetagSDK"; sc.src="//libtl.com/sdk.js"; sc.async=true;
+  sc.setAttribute("data-zone",zone); sc.setAttribute("data-sdk",fnName); sc.setAttribute("data-tkpay-monetag","1");
+  document.head.appendChild(sc);
+  monetagLoaded=true;
+  return fnName;
+}
 async function showMonetagReward(){
-  const fnName=await loadMonetag();const fn=window[fnName];
-  if(typeof fn!=="function")return {ok:false,error:"Monetag zone is not loaded. Set the correct Monetag script/tag for zone "+String(sv("monetagZoneId")||"11951511")};
-  try{await Promise.resolve(fn());return {ok:true}}catch(e){console.error(e);return {ok:false,error:"The ad could not be shown. Please try again."}}
+  const zone=String(sv("monetagZoneId")||"8449094").replace(/[^0-9]/g,"")||"8449094";
+  const fnName="show_"+zone;
+  if(typeof window[fnName]!=="function") loadMonetag();
+  for(let i=0;i<12;i++){
+    if(typeof window[fnName]==="function"){
+      try{await Promise.resolve(window[fnName]());return {ok:true}}catch(e){console.error("Monetag",e);return {ok:false,error:"Ad could not be shown. Please try again."}}
+    }
+    await new Promise(r=>setTimeout(r,500));
+  }
+  return {ok:false,error:"Monetag ad is not ready. Check the Zone ID and try again."};
 }
 
 /* ===== ADS ===== */
-const AD_MAX=10,AD_WAIT=15;
+const AD_MAX_DEFAULT=10,AD_WAIT_DEFAULT=15;
 async function openAds(){
   const cnt=(await db.ref("adClaims/"+currentUser.id+"/"+todayKey()).once("value")).val()||{};
   const bn=["১","২","৩","৪"];let cards="";
   for(let i=1;i<=4;i++){const c=Number(cnt["ad"+i]||0);
-    cards+=`<button class="ad" onclick="startAd(${i})"><div class="adtag">এখানে চাপ দিন</div><div class="adplay">▶</div><b>বিজ্ঞাপন দেখুন ${bn[i-1]}</b><small>শর্ট অ্যাড দেখে টাকা নিন</small><div class="adcnt">▶ অ্যাড ${bn[i-1]}: ${c} /${AD_MAX}</div></button>`}
+    cards+=`<button class="ad" onclick="startAd(${i})"><div class="adtag">এখানে চাপ দিন</div><div class="adplay">▶</div><b>বিজ্ঞাপন দেখুন ${bn[i-1]}</b><small>শর্ট অ্যাড দেখে টাকা নিন</small><div class="adcnt">▶ অ্যাড ${bn[i-1]}: ${c} /${Number(sv("adMax")||AD_MAX_DEFAULT)}</div></button>`}
   openModal("Premium Income",`<div class="premium"><div class="ptitle">👑 প্রিমিয়াম ইনকাম</div><div class="psub">Monetag Rewarded Interstitial দেখুন এবং ad complete হলে reward claim হবে না</div><div class="ads">${cards}</div></div>`);
 }
 async function startAd(n){
   const key="ad"+n,ref=db.ref("adClaims/"+currentUser.id+"/"+todayKey());
   const c=Number(((await ref.once("value")).val()||{})[key]||0);
-  if(c>=AD_MAX)return showPopup("Limit Reached","Today's limit for this ad is finished.",null,true);
+  if(c>=Number(sv("adMax")||AD_MAX_DEFAULT))return showPopup("Limit Reached","Today's limit for this ad is finished.",null,true);
   const adResult=await showMonetagReward();
   if(!adResult.ok)return showPopup("Ad Unavailable",adResult.error,null,true);
   const reward=Number(sv("adReward")||1),k=db.ref("rewardClaims").push().key;
   await ref.child(key).set(c+1);
-  await db.ref("rewardClaims/"+k).set({type:"monetag_rewarded_interstitial",zoneId:String(sv("monetagZoneId")||"11951511"),userId:String(currentUser.id),amount:reward,source:key,status:"pending",createdAt:TS});
+  await db.ref("rewardClaims/"+k).set({type:"monetag_rewarded_interstitial",zoneId:String(sv("monetagZoneId")||"8449094"),userId:String(currentUser.id),amount:reward,source:key,status:"pending",createdAt:TS});
   showPopup("Reward Earned!","Rewarded ad completed successfully. Your reward is pending processing.",reward);
   if(document.getElementById("modalTitle").innerText==="Premium Income")openAds();
 }
@@ -523,10 +536,9 @@ function openTelegram(u){if(!u)return showPopup("Not Available","Support is not 
 function openExternal(u){if(!u)return showPopup("Not Available","Link not configured.",null,true);if(tg&&tg.openLink)tg.openLink(u);else window.open(u,"_blank")}
 
 function loadBanner(){
-  const box=document.getElementById("bannerBox");
-  if(!box)return;
+  const box=document.getElementById("bannerBox"); if(!box)return;
   const bannerUrl="https://i.ibb.co/GfL8xMpN/Tkpay-Free-Earning-Bot-Banner.png";
-  box.innerHTML=`<img class="banner" src="${bannerUrl}" alt="TK Pay Free Earning Bot Banner">`;
+  box.innerHTML=`<a href="${bannerUrl}" target="_blank" rel="noopener" style="display:block;line-height:0"><img class="banner" src="${bannerUrl}" alt="TK Pay Free Earning Bot Banner"></a>`;
 }
 
 async function startApp(){
