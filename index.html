@@ -522,17 +522,11 @@ async function openPage(p){
 function openTelegram(u){if(!u)return showPopup("Not Available","Support is not configured.",null,true);const url=/^https?:\/\//i.test(u)?u:"https://t.me/"+u;if(tg&&tg.openTelegramLink&&url.includes("t.me/"))tg.openTelegramLink(url);else window.open(url,"_blank")}
 function openExternal(u){if(!u)return showPopup("Not Available","Link not configured.",null,true);if(tg&&tg.openLink)tg.openLink(u);else window.open(u,"_blank")}
 
-async function loadBanner(){
-  try{const snap=await db.ref("banners").once("value");let bs=[];
-    snap.forEach(c=>{const b=c.val()||{};if(b.status===false||b.status==="inactive")return;bs.push(b)});
-    bs.sort((a,b)=>Number(a.order||0)-Number(b.order||0));
-    const box=document.getElementById("bannerBox");
-    if(!bs.length){box.innerHTML=`<div class="bph">${esc(getBotName())}</div>`;return}
-    let i=0;const render=()=>{const b=bs[i],img=b.image||b.imageUrl||b.bannerImage||"",title=b.title||b.name||getBotName(),url=b.url||b.link||b.bannerUrl||b.bannerLink||"";
-      const click= url ? `openExternal(${JSON.stringify(String(url))})` : "";
-      box.innerHTML=`${img?`<img class="banner" src="${esc(img)}" ${click?`onclick="${click}"`:""}>`:``}<div class="banner-info"><div class="banner-title">${esc(title)}</div>${url?`<a class="banner-link" href="${esc(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(url)}</a><button class="banner-open" onclick="openExternal(${JSON.stringify(String(url))})">🔗 Open Banner Link</button>`:`<span class="banner-link" style="color:#aaa">No banner link configured</span>`}</div>`};
-    render();if(bs.length>1)setInterval(()=>{i=(i+1)%bs.length;render()},5000);
-  }catch(e){console.error("banner",e)}
+function loadBanner(){
+  const box=document.getElementById("bannerBox");
+  if(!box)return;
+  const bannerUrl="https://i.ibb.co/GfL8xMpN/Tkpay-Free-Earning-Bot-Banner.png";
+  box.innerHTML=`<img class="banner" src="${bannerUrl}" alt="TK Pay Free Earning Bot Banner">`;
 }
 
 async function startApp(){
