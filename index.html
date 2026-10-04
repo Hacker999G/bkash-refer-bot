@@ -36,7 +36,7 @@ button,input,select{font-family:inherit}button{border:0;cursor:pointer;backgroun
 .sic{width:46px;height:46px;margin:auto;border-radius:14px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:23px;border:1.5px solid #fbd0e2}
 .snm{font-size:11px;font-weight:700;margin-top:7px;color:#444}
 .banner-box{margin:16px 0;border-radius:18px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,.07)}
-.banner{width:100%;height:140px;object-fit:cover;display:block}
+.banner{width:100%;height:140px;object-fit:cover;display:block;cursor:pointer}.banner-info{background:#fff;padding:12px 13px}.banner-title{font-size:14px;font-weight:900}.banner-link{display:block;margin-top:7px;color:var(--p);font-size:11px;font-weight:800;word-break:break-all;text-decoration:none}.banner-open{display:inline-flex;margin-top:9px;background:var(--p);color:#fff;padding:8px 12px;border-radius:10px;font-size:10px;font-weight:900}
 .bph{height:140px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e2136e,#ff5899);color:#fff;font-size:20px;font-weight:900}
 .row{width:100%;background:#fff;border-radius:16px;padding:13px;display:flex;align-items:center;gap:12px;margin-top:9px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.04)}
 .row b{display:block;font-size:13px}.row span.s{display:block;font-size:10px;color:#888;margin-top:3px}
@@ -221,25 +221,34 @@ const getTutorialUrl=()=>String(sv("tutorialUrl","tutorial","tutorialLink","vide
 async function loadSettings(){try{settings=(await db.ref("settings").once("value")).val()||{};document.title=getBotName();const l=getLogoUrl();if(l)document.getElementById("loaderLogo").src=l}catch(e){console.error(e)}}
 
 /* ===== USER ===== */
-const createReferralCode=id=>"REF"+String(id).replace(/\D/g,"").slice(-8);
+const createReferralCode=id=>String(id);
 async function initializeUser(){
   currentUser=getTelegramUser();userRef=db.ref("users/"+currentUser.id);
   const snap=await userRef.once("value");
   if(snap.exists()){userData=snap.val()||{}}else{
-    userData={telegramId:String(currentUser.id),firstName:currentUser.first_name||"",lastName:currentUser.last_name||"",username:currentUser.username||"",photoUrl:currentUser.photo_url||"",balance:0,referralCode:createReferralCode(currentUser.id),referredBy:"",totalReferrals:0,referralEarnings:0,totalWithdraw:0,createdAt:TS,lastActive:TS};
-    await userRef.set(userData);await processReferral();
+    userData={telegramId:String(currentUser.id),firstName:currentUser.first_name||"",lastName:currentUser.last_name||"",username:currentUser.username||"",photoUrl:currentUser.photo_url||"",balance:0,referralCode:String(currentUser.id),referredBy:"",totalReferrals:0,referralEarnings:0,totalWithdraw:0,createdAt:TS,lastActive:TS};
+    await userRef.set(userData);
   }
-  await userRef.update({firstName:currentUser.first_name||userData.firstName||"",lastName:currentUser.last_name||userData.lastName||"",username:currentUser.username||userData.username||"",photoUrl:currentUser.photo_url||userData.photoUrl||"",lastActive:TS});
+  await userRef.update({firstName:currentUser.first_name||userData.firstName||"",lastName:currentUser.last_name||userData.lastName||"",username:currentUser.username||userData.username||"",photoUrl:currentUser.photo_url||userData.photoUrl||"",lastActive:TS,referralCode:String(currentUser.id)});
+  userData=(await userRef.once("value")).val()||userData;
+  await processReferral();
   updateProfileUI();
 }
 function getStartParam(){try{if(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)return tg.initDataUnsafe.start_param}catch(e){}return new URLSearchParams(location.search).get("ref")||""}
 async function processReferral(){
-  let c=getStartParam();if(!c)return;if(c.startsWith("ref_"))c=c.substring(4);if(!c||userData.referredBy)return;
-  const us=await db.ref("users").orderByChild("referralCode").equalTo(c).once("value");if(!us.exists())return;
-  let rid=null;us.forEach(ch=>{rid=ch.key});if(!rid||String(rid)===String(currentUser.id))return;
-  await db.ref("referrals/"+rid+"/"+currentUser.id).set({referrerId:String(rid),referredId:String(currentUser.id),referredName:currentUser.first_name||"",referredUsername:currentUser.username||"",createdAt:TS});
-  await userRef.update({referredBy:String(rid)});
-  const rr=db.ref("users/"+rid),ru=(await rr.once("value")).val()||{};
+  let c=String(getStartParam()||"").trim();
+  if(!c||userData.referredBy)return;
+  if(c.startsWith("ref_"))c=c.substring(4);
+  if(c.startsWith("REF"))c=c.substring(3);
+  const rid=String(c);
+  if(!/^\d+$/.test(rid)||rid===String(currentUser.id))return;
+  const refSnap=await db.ref("users/"+rid).once("value");
+  if(!refSnap.exists())return;
+  const oldRef=await db.ref("referrals/"+rid+"/"+currentUser.id).once("value");
+  if(oldRef.exists()){await userRef.update({referredBy:rid});return;}
+  await db.ref("referrals/"+rid+"/"+currentUser.id).set({referrerId:rid,referredId:String(currentUser.id),referredName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),referredUsername:currentUser.username||"",createdAt:TS});
+  await userRef.update({referredBy:rid});
+  const rr=db.ref("users/"+rid),ru=refSnap.val()||{};
   await rr.update({totalReferrals:Number(ru.totalReferrals||0)+1});
   const reward=Number(settings.referralReward||0);
   if(reward>0)await db.ref("referralRewards/"+rid+"/"+currentUser.id).set({amount:reward,createdAt:TS,status:"pending"});
@@ -265,7 +274,9 @@ async function openWithdrawMethod(preferred){await openWithdraw(preferred)}
 async function openWithdraw(preferred){
   const all=await db.ref("withdrawMethods").once("value");wMethods=[];
   all.forEach(c=>{const d=c.val()||{};if(d.status===true||d.status==="active"||d.status===1)wMethods.push({id:c.key,...d})});
-  wSel=(preferred&&wMethods.find(x=>String(x.id).toLowerCase().includes(preferred)))?.id||(wMethods[0]?wMethods[0].id:"");
+  const findMethod=t=>{const q=String(t||"").toLowerCase();return wMethods.find(x=>String(x.id).toLowerCase()===q)||wMethods.find(x=>String(x.id).toLowerCase().includes(q))||wMethods.find(x=>String(x.name||"").toLowerCase().includes(q))};
+  const preferredMethod=findMethod(preferred);
+  wSel=preferredMethod?preferredMethod.id:(wMethods[0]?wMethods[0].id:"");
   const logoFor=m=>{const n=String(m.name||"").toLowerCase();return m.logo||m.image||(n.includes("bkash")||n.includes("বিকাশ")?LOGOS.bkash:n.includes("nagad")||n.includes("নগদ")?LOGOS.nagad:"")};
   const mh=wMethods.map(m=>{const l=logoFor(m);return `<button class="method ${m.id===wSel?"sel":""}" data-id="${esc(m.id)}" onclick="pickMethod('${esc(m.id)}')">${l?`<img src="${esc(l)}" alt="">`:`<div style="font-size:24px">💳</div>`}${esc(m.name||"Withdraw")}</button>`}).join("")||`<div class="empty">No withdraw method available</div>`;
   openModal("Withdraw",`
@@ -288,19 +299,20 @@ async function submitWithdraw(){
   if(amount>bal)return err("Insufficient balance");
   if(!number)return err("Enter account number");
   const id=db.ref("withdrawals").push().key;
-  await db.ref("withdrawals/"+id).set({id,userId:String(currentUser.id),userName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),username:currentUser.username||"",amount,methodId:wSel,accountNumber:number,status:"pending",createdAt:TS});
+  const selected=wMethods.find(x=>String(x.id)===String(wSel))||{};
+  await db.ref("withdrawals/"+id).set({id,userId:String(currentUser.id),userName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),username:currentUser.username||"",amount,methodId:wSel,methodName:selected.name||wSel,accountNumber:number,status:"pending",createdAt:TS});
   closeModal();showPopup("Request Submitted!","Your withdraw request is pending. It will be processed soon.",amount);
 }
 
 async function openWithdrawHistory(){
   const snap=await db.ref("withdrawals").orderByChild("userId").equalTo(String(currentUser.id)).once("value");let arr=[];snap.forEach(c=>arr.push({id:c.key,...c.val()}));arr.sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
-  const h=arr.map(w=>{const st=String(w.status||"pending"),label=st.charAt(0).toUpperCase()+st.slice(1),cls=["approved","completed","paid","success","successful"].includes(st.toLowerCase())?"color:#16a56b":st.toLowerCase()==="rejected"?"color:#e53935":"color:#f59e0b";return `<div class="li"><div class="ric">${String(w.methodId||"").toLowerCase().includes("nagad")?"🟠":"💗"}</div><div class="in"><b>${esc(String(w.methodId||"Withdraw").toUpperCase())} • ৳${money(w.amount)}</b><span>${esc(String(w.accountNumber||"").replace(/.(?=.{4})/g,"•"))} • ${formatDate(w.createdAt)}</span></div><div style="font-size:10px;font-weight:900;${cls}">${esc(label)}</div></div>`}).join("");
+  const h=arr.map(w=>{const st=String(w.status||"pending"),label=st.charAt(0).toUpperCase()+st.slice(1),cls=["approved","completed","paid","success","successful"].includes(st.toLowerCase())?"color:#16a56b":st.toLowerCase()==="rejected"?"color:#e53935":"color:#f59e0b",mn=String(w.methodName||w.methodId||"Withdraw");return `<div class="li"><div class="ric">${mn.toLowerCase().includes("nagad")||mn.includes("নগদ")?"🟠":"💗"}</div><div class="in"><b>${esc(mn)} • ৳${money(w.amount)}</b><span>${esc(String(w.accountNumber||"").replace(/.(?=.{4})/g,"•"))} • ${formatDate(w.createdAt)}</span></div><div style="font-size:10px;font-weight:900;${cls}">${esc(label)}</div></div>`}).join("");
   openModal("Withdraw History",`<div class="list">${h||'<div class="empty">No withdrawal history found.</div>'}</div>`);
 }
 
 /* ===== REFER ===== */
 async function openRefer(){
-  const bu=getBotUsername(),code=userData.referralCode||createReferralCode(currentUser.id);
+  const bu=getBotUsername(),code=String(currentUser.id);
   const link=bu?"https://t.me/"+bu+"?startapp=ref_"+encodeURIComponent(code):(location.origin+location.pathname+"?ref="+encodeURIComponent(code));
   const rs=await db.ref("referrals/"+currentUser.id).once("value");let arr=[];rs.forEach(c=>{arr.push({id:c.key,...c.val()})});
   const lh=arr.reverse().map(i=>`<div class="li"><div class="ric">👤</div><div class="in"><b>${esc(i.referredName||"Telegram User")}</b><span>${i.referredUsername?"@"+esc(i.referredUsername):"Telegram user"}</span></div><div style="font-size:10px;color:#16a56b;font-weight:800">Joined</div></div>`).join("")||`<div class="empty">No referrals yet.<br>Share your referral link.</div>`;
@@ -477,10 +489,11 @@ async function loadBanner(){
     bs.sort((a,b)=>Number(a.order||0)-Number(b.order||0));
     const box=document.getElementById("bannerBox");
     if(!bs.length){box.innerHTML=`<div class="bph">${esc(getBotName())}</div>`;return}
-    let i=0;const render=()=>{const b=bs[i],img=b.image||b.imageUrl||"";
-      box.innerHTML=img?`<img class="banner" src="${esc(img)}" onclick="${b.url?`openExternal('${esc(b.url)}')`:""}">`:`<div class="bph">${esc(b.title||getBotName())}</div>`};
+    let i=0;const render=()=>{const b=bs[i],img=b.image||b.imageUrl||b.bannerImage||"",title=b.title||b.name||getBotName(),url=b.url||b.link||b.bannerUrl||b.bannerLink||"";
+      const click= url ? `openExternal(${JSON.stringify(String(url))})` : "";
+      box.innerHTML=`${img?`<img class="banner" src="${esc(img)}" ${click?`onclick="${click}"`:""}>`:``}<div class="banner-info"><div class="banner-title">${esc(title)}</div>${url?`<a class="banner-link" href="${esc(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(url)}</a><button class="banner-open" onclick="openExternal(${JSON.stringify(String(url))})">🔗 Open Banner Link</button>`:`<span class="banner-link" style="color:#aaa">No banner link configured</span>`}</div>`};
     render();if(bs.length>1)setInterval(()=>{i=(i+1)%bs.length;render()},5000);
-  }catch(e){console.error(e)}
+  }catch(e){console.error("banner",e)}
 }
 
 async function startApp(){
