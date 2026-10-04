@@ -213,7 +213,7 @@ function closePopup(){document.getElementById("pop").classList.remove("show")}
 /* ===== SETTINGS ===== */
 function sv(){for(const k of arguments){const v=settings?settings[k]:"";if(v!==undefined&&v!==null&&String(v).trim()!=="")return v}return""}
 const getBotName=()=>String(sv("botName","name","siteName","appName")||"Mini App");
-const getBotUsername=()=>String(sv("botUsername","username","telegramBotUsername")||"").replace(/^@/,"");
+const getBotUsername=()=>"DarazMarketingBd_Bot";
 const getLogoUrl=()=>String(sv("logoUrl","logo","siteLogo","adminLogo","logoURL","logo_url")||"");
 const getSupportTelegram=()=>String(sv("supportTelegram","support","supportUsername","supportId")||"").replace(/^@/,"");
 const getOfficialChannel=()=>String(sv("officialChannel","channelUrl","officialChannelUrl","channel")||"");
@@ -269,51 +269,90 @@ function closeModal(){clearInterval(tickT);document.getElementById("modal").clas
 function goHome(){closeModal();window.scrollTo({top:0,behavior:"smooth"})}
 
 /* ===== WITHDRAW ===== */
-let wMethods=[],wSel="";
+/* Fixed withdraw methods: these do NOT depend on admin/Firebase withdrawMethods */
+const FIXED_WITHDRAW_METHODS=[
+  {id:"bkash",name:"bKash",logo:LOGOS.bkash},
+  {id:"nagad",name:"Nagad",logo:LOGOS.nagad}
+];
+let wMethods=[...FIXED_WITHDRAW_METHODS],wSel="bkash";
+
 async function openWithdrawMethod(preferred){await openWithdraw(preferred)}
+
 async function openWithdraw(preferred){
-  const all=await db.ref("withdrawMethods").once("value");wMethods=[];
-  all.forEach(c=>{const d=c.val()||{};if(d.status===true||d.status==="active"||d.status===1)wMethods.push({id:c.key,...d})});
-  const findMethod=t=>{const q=String(t||"").toLowerCase();return wMethods.find(x=>String(x.id).toLowerCase()===q)||wMethods.find(x=>String(x.id).toLowerCase().includes(q))||wMethods.find(x=>String(x.name||"").toLowerCase().includes(q))};
-  const preferredMethod=findMethod(preferred);
-  wSel=preferredMethod?preferredMethod.id:(wMethods[0]?wMethods[0].id:"");
-  const logoFor=m=>{const n=String(m.name||"").toLowerCase();return m.logo||m.image||(n.includes("bkash")||n.includes("বিকাশ")?LOGOS.bkash:n.includes("nagad")||n.includes("নগদ")?LOGOS.nagad:"")};
-  const mh=wMethods.map(m=>{const l=logoFor(m);return `<button class="method ${m.id===wSel?"sel":""}" data-id="${esc(m.id)}" onclick="pickMethod('${esc(m.id)}')">${l?`<img src="${esc(l)}" alt="">`:`<div style="font-size:24px">💳</div>`}${esc(m.name||"Withdraw")}</button>`}).join("")||`<div class="empty">No withdraw method available</div>`;
+  /* Always use fixed bKash/Nagad methods */
+  wMethods=[...FIXED_WITHDRAW_METHODS];
+  const q=String(preferred||"").toLowerCase();
+  wSel=(q==="bkash"||q.includes("bkash")||q.includes("বিকাশ"))?"bkash":
+       (q==="nagad"||q.includes("nagad")||q.includes("নগদ"))?"nagad":"bkash";
+
+  const mh=wMethods.map(m=>`<button class="method ${m.id===wSel?"sel":""}" data-id="${m.id}" onclick="pickMethod('${m.id}')"><img src="${m.logo}" alt="${m.name}"><b>${m.name}</b><small style="display:block;color:#888;margin-top:4px">Direct withdraw</small></button>`).join("");
+
   openModal("Withdraw",`
   <div class="card" style="display:flex;gap:12px;align-items:center"><div class="ric">💰</div><div><b style="font-size:12px;color:#888">Available Balance</b><div style="font-size:22px;font-weight:900;color:var(--p)">৳ ${money(userData.balance||0)}</div></div></div>
   <div class="info">Minimum Withdraw: <b>৳${money(settings.minWithdraw||0)}</b><br>Minimum Referral: <b>${Number(settings.minRefer||0)}</b><br>Your Referral: <b>${Number(userData.totalReferrals||0)}</b></div>
   <label class="label">Withdraw Method</label><div class="methods">${mh}</div>
   <label class="label">Amount</label><input id="withdrawAmount" class="input" type="number" placeholder="Enter amount">
-  <label class="label">Account Number</label><input id="withdrawNumber" class="input" type="text" placeholder="01XXXXXXXXX">
+  <label class="label">Account Number</label><input id="withdrawNumber" class="input" type="text" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX">
   <button class="pbtn" onclick="submitWithdraw()">Submit Withdraw</button>`);
 }
-function pickMethod(id){wSel=id;document.querySelectorAll(".method").forEach(b=>b.classList.toggle("sel",b.dataset.id===id))}
+
+function pickMethod(id){
+  id=String(id||"").toLowerCase();
+  if(id!=="bkash"&&id!=="nagad")return;
+  wSel=id;
+  document.querySelectorAll(".method").forEach(b=>b.classList.toggle("sel",b.dataset.id===id));
+}
+
 async function submitWithdraw(){
-  const amount=Number(document.getElementById("withdrawAmount").value),number=document.getElementById("withdrawNumber").value.trim();
-  const minW=Number(settings.minWithdraw||0),minR=Number(settings.minRefer||0),bal=Number(userData.balance||0),refs=Number(userData.totalReferrals||0);
+  const amount=Number(document.getElementById("withdrawAmount").value);
+  const number=document.getElementById("withdrawNumber").value.trim();
+  const minW=Number(settings.minWithdraw||0),minR=Number(settings.minRefer||0);
+  const bal=Number(userData.balance||0),refs=Number(userData.totalReferrals||0);
   const err=m=>showPopup("Failed",m,null,true);
-  if(!wSel)return err("Select withdraw method");
+  if(wSel!=="bkash"&&wSel!=="nagad")return err("Select withdraw method");
   if(!amount||amount<=0)return err("Enter valid amount");
   if(amount<minW)return err("Minimum withdraw ৳"+minW);
   if(refs<minR)return err("You need at least "+minR+" referrals");
   if(amount>bal)return err("Insufficient balance");
   if(!number)return err("Enter account number");
+  if(!/^01\d{9}$/.test(number))return err("Enter a valid 11 digit account number");
+
+  const method=wMethods.find(x=>x.id===wSel);
   const id=db.ref("withdrawals").push().key;
-  const selected=wMethods.find(x=>String(x.id)===String(wSel))||{};
-  await db.ref("withdrawals/"+id).set({id,userId:String(currentUser.id),userName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),username:currentUser.username||"",amount,methodId:wSel,methodName:selected.name||wSel,accountNumber:number,status:"pending",createdAt:TS});
-  closeModal();showPopup("Request Submitted!","Your withdraw request is pending. It will be processed soon.",amount);
+  await db.ref("withdrawals/"+id).set({
+    id,
+    userId:String(currentUser.id),
+    userName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),
+    username:currentUser.username||"",
+    amount,
+    methodId:method.id,
+    methodName:method.name,
+    accountNumber:number,
+    status:"pending",
+    createdAt:TS
+  });
+  closeModal();
+  showPopup("Request Submitted!",method.name+" withdraw request submitted successfully. It is pending processing.",amount);
 }
 
 async function openWithdrawHistory(){
-  const snap=await db.ref("withdrawals").orderByChild("userId").equalTo(String(currentUser.id)).once("value");let arr=[];snap.forEach(c=>arr.push({id:c.key,...c.val()}));arr.sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
-  const h=arr.map(w=>{const st=String(w.status||"pending"),label=st.charAt(0).toUpperCase()+st.slice(1),cls=["approved","completed","paid","success","successful"].includes(st.toLowerCase())?"color:#16a56b":st.toLowerCase()==="rejected"?"color:#e53935":"color:#f59e0b",mn=String(w.methodName||w.methodId||"Withdraw");return `<div class="li"><div class="ric">${mn.toLowerCase().includes("nagad")||mn.includes("নগদ")?"🟠":"💗"}</div><div class="in"><b>${esc(mn)} • ৳${money(w.amount)}</b><span>${esc(String(w.accountNumber||"").replace(/.(?=.{4})/g,"•"))} • ${formatDate(w.createdAt)}</span></div><div style="font-size:10px;font-weight:900;${cls}">${esc(label)}</div></div>`}).join("");
+  const snap=await db.ref("withdrawals").orderByChild("userId").equalTo(String(currentUser.id)).once("value");
+  let arr=[];snap.forEach(c=>arr.push({id:c.key,...c.val()}));
+  arr.sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
+  const h=arr.map(w=>{
+    const st=String(w.status||"pending"),label=st.charAt(0).toUpperCase()+st.slice(1);
+    const cls=["approved","completed","paid","success","successful"].includes(st.toLowerCase())?"color:#16a56b":st.toLowerCase()==="rejected"?"color:#e53935":"color:#f59e0b";
+    const mn=String(w.methodName||w.methodId||"Withdraw");
+    const icon=mn.toLowerCase().includes("nagad")||mn.includes("নগদ")?"🟠":"💗";
+    return `<div class="li"><div class="ric">${icon}</div><div class="in"><b>${esc(mn)} • ৳${money(w.amount)}</b><span>${esc(String(w.accountNumber||"").replace(/.(?=.{4})/g,"•"))} • ${formatDate(w.createdAt)}</span></div><div style="font-size:10px;font-weight:900;${cls}">${esc(label)}</div></div>`;
+  }).join("");
   openModal("Withdraw History",`<div class="list">${h||'<div class="empty">No withdrawal history found.</div>'}</div>`);
 }
 
 /* ===== REFER ===== */
 async function openRefer(){
   const bu=getBotUsername(),code=String(currentUser.id);
-  const link=bu?"https://t.me/"+bu+"?startapp=ref_"+encodeURIComponent(code):(location.origin+location.pathname+"?ref="+encodeURIComponent(code));
+  const link=bu?"https://t.me/"+bu+"/app?startapp="+encodeURIComponent(code):(location.origin+location.pathname+"?ref="+encodeURIComponent(code));
   const rs=await db.ref("referrals/"+currentUser.id).once("value");let arr=[];rs.forEach(c=>{arr.push({id:c.key,...c.val()})});
   const lh=arr.reverse().map(i=>`<div class="li"><div class="ric">👤</div><div class="in"><b>${esc(i.referredName||"Telegram User")}</b><span>${i.referredUsername?"@"+esc(i.referredUsername):"Telegram user"}</span></div><div style="font-size:10px;color:#16a56b;font-weight:800">Joined</div></div>`).join("")||`<div class="empty">No referrals yet.<br>Share your referral link.</div>`;
   openModal("Refer & Earn",`<div class="refc"><div style="font-size:13px;font-weight:800;opacity:.9">YOUR REFERRAL CODE</div><div class="refcode">${esc(code)}</div><div class="reflink">${esc(link)}</div>
