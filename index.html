@@ -213,7 +213,7 @@ function closePopup(){document.getElementById("pop").classList.remove("show")}
 /* ===== SETTINGS ===== */
 function sv(){for(const k of arguments){const v=settings?settings[k]:"";if(v!==undefined&&v!==null&&String(v).trim()!=="")return v}return""}
 const getBotName=()=>String(sv("botName","name","siteName","appName")||"Mini App");
-const getBotUsername=()=>"DarazMarketingBd_Bot";
+const getBotUsername=()=>"TK_PAY_BOT";
 const getLogoUrl=()=>String(sv("logoUrl","logo","siteLogo","adminLogo","logoURL","logo_url")||"");
 const getSupportTelegram=()=>String(sv("supportTelegram","support","supportUsername","supportId")||"").replace(/^@/,"");
 const getOfficialChannel=()=>String(sv("officialChannel","channelUrl","officialChannelUrl","channel")||"");
