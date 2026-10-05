@@ -440,6 +440,14 @@ button{
   white-space:nowrap
 }
 
+.activity-demo{
+  display:block;
+  margin-top:2px;
+  color:#999;
+  font-size:8px;
+  font-weight:700
+}
+
 /* BANNER */
 .banner-box{
   margin:16px 0;
@@ -1556,6 +1564,17 @@ button{
         loading="eager">
     </div>
     <div class="snm">Support</div>
+  </button>
+
+  <!-- TUTORIAL -->
+  <button class="svc" onclick="openPage('tutorial')">
+    <div class="sic">
+      <img
+        src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg"
+        alt="Tutorial"
+        loading="eager">
+    </div>
+    <div class="snm">Tutorial</div>
   </button>
 
 </div>
@@ -3478,136 +3497,153 @@ async function claimBonus(){
 
 async function loadRecentWithdrawActivity(){
 
-  try{
+  /*
+    Real withdrawals are shown only when they actually exist in Firebase.
+    Sample entries are clearly labeled "Sample Activity" so they are not
+    presented as real customer withdrawals.
+  */
 
+  const sampleNames=[
+    "Arif Hasan","Nusrat Jahan","Sakib Ahmed","Mim Akter",
+    "Rakib Hossain","Jannatul Ferdous","Tanvir Islam","Sumaiya Rahman",
+    "Shakil Khan","Tania Sultana","Fahim Rahman","Nabila Islam",
+    "Riad Hossain","Sadia Afrin","Imran Ahmed","Mahiya Akter",
+    "Sohel Rana","Tasnim Jahan","Mehedi Hasan","Raisa Rahman",
+    "Arafat Hossain","Jui Akter","Shuvo Islam","Mousumi Sultana",
+    "Nahid Hasan","Rima Akter","Foysal Ahmed","Priya Das",
+    "Rahat Khan","Sanjida Islam","Abdullah Al Mamun","Sumon Mia",
+    "Sabbir Hossain","Sathi Akter","Rony Ahmed","Mariya Islam",
+    "Emon Hasan","Labiba Rahman","Shahin Alam","Puja Saha",
+    "Hasan Mahmud","Mitu Akter","Nayeem Islam","Fariha Jahan",
+    "Jahid Hasan","Anika Rahman","Rubel Hossain","Oishi Akter",
+    "Rasel Ahmed","Tumpa Sultana"
+  ];
+
+  let realRows=[];
+
+  try{
     const snap=
       await db
         .ref("withdrawals")
         .orderByChild("createdAt")
-        .limitToLast(30)
+        .limitToLast(50)
         .once("value");
 
-    const rows=[];
+    snap.forEach(c=>{
+      const d=c.val()||{};
+      const st=String(d.status||"").toLowerCase();
 
-    snap.forEach(
-      c=>{
-
-        const d=
-          c.val()||{};
-
-        const st=
-          String(
-            d.status||""
-          ).toLowerCase();
-
-        if(
-          [
-            "approved",
-            "completed",
-            "paid",
-            "success",
-            "successful"
-          ].includes(st)&&
-          Number(d.amount)>0
-        ){
-          rows.push(d);
-        }
-
+      if(
+        [
+          "approved",
+          "completed",
+          "paid",
+          "success",
+          "successful"
+        ].includes(st) &&
+        Number(d.amount)>0
+      ){
+        realRows.push(d);
       }
-    );
+    });
 
-    rows.sort(
+    realRows.sort(
       (a,b)=>
         Number(b.createdAt||0)-
         Number(a.createdAt||0)
     );
-
-    if(!rows.length)return;
-
-    let i=0;
-
-    const show=()=>{
-
-      const d=
-        rows[i++%rows.length];
-
-      const name=
-        String(
-          d.userName||
-          d.name||
-          "Telegram User"
-        ).trim()
-        ||"Telegram User";
-
-      const amount=
-        Number(d.amount||0);
-
-      const el=
-        document.getElementById(
-          "activityPopup"
-        );
-
-      if(!el)return;
-
-      el.classList.remove("out");
-
-      el.innerHTML=
-        `<div class="activity-avatar">
-          💸
-        </div>
-
-        <div class="activity-txt">
-          <b>${esc(name)}</b>
-          <span>recently withdrew</span>
-        </div>
-
-        <div class="activity-amt">
-          ৳${money(amount)}
-        </div>`;
-
-      el.classList.add("show");
-
-      clearTimeout(activityTimer);
-
-      activityTimer=
-        setTimeout(
-          ()=>{
-            el.classList.add("out");
-
-            setTimeout(
-              ()=>{
-                el.classList.remove(
-                  "show",
-                  "out"
-                );
-              },
-              300
-            );
-
-          },
-          1000
-        );
-
-    };
-
-    show();
-
-    setInterval(
-      show,
-      60000
-    );
-
   }catch(e){
-
-    console.error(
-      "activity",
-      e
-    );
-
+    console.error("Activity load error:",e);
   }
 
-}
+  let realIndex=0;
+  let sampleIndex=Math.floor(Math.random()*sampleNames.length);
 
+  const showActivity=(item,isSample=false)=>{
+    const el=document.getElementById("activityPopup");
+    if(!el)return;
+
+    const name=String(item.name||"User").trim()||"User";
+    const amount=Number(item.amount||0);
+
+    el.classList.remove("out");
+
+    el.innerHTML=`
+      <div class="activity-avatar">
+        ${isSample?"✨":"💸"}
+      </div>
+
+      <div class="activity-txt">
+        <b>${esc(name)}</b>
+        <span>${isSample
+          ?"Sample activity • not a real withdrawal"
+          :"Verified withdrawal completed"}</span>
+        ${isSample
+          ?'<small class="activity-demo">Demo preview</small>'
+          :''}
+      </div>
+
+      <div class="activity-amt">
+        ৳${money(amount)}
+      </div>`;
+
+    el.classList.add("show");
+
+    clearTimeout(activityTimer);
+
+    activityTimer=setTimeout(()=>{
+      el.classList.add("out");
+
+      setTimeout(()=>{
+        el.classList.remove("show","out");
+      },300);
+
+    },5200);
+  };
+
+  const showNext=()=>{
+    /*
+      Prefer a real approved withdrawal if one exists.
+      Otherwise (or after the real list is exhausted), show a
+      clearly-labeled sample entry.
+    */
+    if(realRows.length && realIndex<realRows.length){
+      const d=realRows[realIndex++];
+
+      showActivity({
+        name:
+          String(
+            d.userName||
+            d.name||
+            "Telegram User"
+          ).trim() || "Telegram User",
+        amount:Number(d.amount||0)
+      },false);
+
+    }else{
+      const name=sampleNames[sampleIndex++%sampleNames.length];
+
+      // Demo amount only; it is explicitly labeled as sample activity.
+      const amounts=[50,80,100,120,150,200,250,300,350,500];
+      const amount=
+        amounts[
+          Math.floor(Math.random()*amounts.length)
+        ];
+
+      showActivity({name,amount},true);
+    }
+  };
+
+  // First popup after a short delay.
+  setTimeout(showNext,7000);
+
+  // Exactly one popup per minute.
+  clearInterval(window.__activityInterval);
+  window.__activityInterval=setInterval(
+    showNext,
+    60000
+  );
+}
 
 /* =========================================================
    MONETAG
