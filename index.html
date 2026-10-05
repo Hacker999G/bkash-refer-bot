@@ -207,9 +207,10 @@ button{
 }
 
 .stitle{
-  font-size:16px;
+  font-size:18px;
   font-weight:900;
-  margin:4px 3px 12px
+  margin:6px 3px 13px;
+  letter-spacing:.1px
 }
 
 /* QUICK SERVICE GRID */
@@ -235,8 +236,8 @@ button{
 
 /* UPDATED IMAGE ICON */
 .sic{
-  width:46px;
-  height:46px;
+  width:54px;
+  height:54px;
   margin:auto;
   border-radius:14px;
   background:var(--soft);
@@ -258,8 +259,8 @@ button{
 }
 
 .snm{
-  font-size:11px;
-  font-weight:700;
+  font-size:13px;
+  font-weight:900;
   margin-top:7px;
   color:#444
 }
@@ -307,12 +308,13 @@ button{
 }
 
 .payname{
-  font-size:13px;
+  font-size:15px;
   font-weight:900
 }
 
 .paysub{
-  font-size:9px;
+  font-size:10px;
+  font-weight:700;
   color:#888;
   margin-top:3px
 }
@@ -473,25 +475,28 @@ button{
 
 .row b{
   display:block;
-  font-size:13px
+  font-size:15px;
+  font-weight:900
 }
 
 .row span.s{
   display:block;
-  font-size:10px;
+  font-size:11px;
+  font-weight:700;
   color:#888;
   margin-top:3px
 }
 
 .ric{
-  width:40px;
-  height:40px;
-  border-radius:12px;
+  width:48px;
+  height:48px;
+  border-radius:14px;
   background:var(--soft);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:19px;
+  font-size:25px;
+  border:1.5px solid #fbd0e2;
   flex-shrink:0;
   object-fit:cover
 }
@@ -500,6 +505,43 @@ button{
   margin-left:auto;
   font-size:21px;
   color:var(--p)
+}
+
+/* TUTORIAL / VISUAL ICON */
+.tutorial-logo{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  object-fit:cover;
+  flex-shrink:0;
+  border:1.5px solid #f7c3da;
+  background:#fff;
+  box-shadow:0 3px 10px rgba(226,19,110,.12)
+}
+
+.ref-rate{
+  margin-top:12px;
+  background:#fff;
+  border:1.5px solid #f7c3da;
+  border-radius:16px;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+
+.ref-rate .label{
+  margin:0;
+  font-size:12px;
+  color:#777;
+  font-weight:800
+}
+
+.ref-rate .amount{
+  font-size:22px;
+  color:var(--p);
+  font-weight:900
 }
 
 /* BOTTOM NAV */
@@ -523,15 +565,35 @@ button{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:3px;
+  gap:4px;
   color:#888;
-  font-size:10px;
-  font-weight:800
+  font-size:11px;
+  font-weight:900
+}
+
+
+.tg-nav-icon{
+  width:24px;
+  height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:auto;
+  overflow:hidden;
+  border-radius:50%;
+}
+.tg-nav-icon img{
+  width:24px;
+  height:24px;
+  display:block;
+  object-fit:cover;
+  border-radius:50%;
 }
 
 .ni i{
   font-style:normal;
-  font-size:20px
+  font-size:24px;
+  line-height:1
 }
 
 .ni.active{
@@ -1444,7 +1506,12 @@ button{
 
   <!-- SUPPORT -->
   <button class="svc" onclick="openPage('support')">
-    <div class="sic">🎧</div>
+    <div class="sic">
+      <img
+        src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png"
+        alt="Telegram Support"
+        loading="eager">
+    </div>
     <div class="snm">Support</div>
   </button>
 
@@ -1532,7 +1599,10 @@ button{
 
 <button class="row" onclick="openTutorial()">
 
-  <div class="ric">🎬</div>
+  <img
+    class="tutorial-logo"
+    src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg"
+    alt="Tutorial">
 
   <div>
     <b>Tutorial</b>
@@ -1565,7 +1635,11 @@ button{
   </button>
 
   <button class="ni" onclick="openPage('support')">
-    <i>🎧</i>
+    <i class="tg-nav-icon">
+      <img
+        src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png"
+        alt="Telegram">
+    </i>
     Support
   </button>
 
@@ -2938,31 +3012,35 @@ async function openRefer(){
 
     </div>
 
-    <div class="stats">
+    <div class="stats" style="grid-template-columns:repeat(3,1fr)">
 
       <div class="stat">
-        <b>
-          ${userData.totalReferrals||0}
-        </b>
-        <span>Total Refer</span>
+        <b>${userData.totalReferrals||0}</b>
+        <span>Total Referrals</span>
       </div>
 
       <div class="stat">
-        <b>
-          ৳${money(
-            userData.referralEarnings||0
-          )}
-        </b>
-        <span>Earned</span>
+        <b>৳${money(userData.referralEarnings||0)}</b>
+        <span>Total Earned</span>
       </div>
 
       <div class="stat">
-        <b>
-          ${settings.minRefer||0}
-        </b>
-        <span>Required</span>
+        <b>৳${money(settings.referralReward||0)}</b>
+        <span>Per Referral</span>
       </div>
 
+    </div>
+
+    <div class="ref-rate">
+      <div>
+        <div class="label">💰 Referral Reward</div>
+        <div style="font-size:11px;color:#999;margin-top:4px;font-weight:700">
+          You earn for each successful referral
+        </div>
+      </div>
+      <div class="amount">
+        ৳${money(settings.referralReward||0)}
+      </div>
     </div>
 
     <div
@@ -4635,12 +4713,12 @@ function infoCard(
 
       </div>
 
-      <h2 style="margin-top:10px">
+      <h2 style="margin-top:10px;font-size:21px;font-weight:900">
         ${t}
       </h2>
 
       <p
-        style="color:#888;font-size:12px;margin-top:8px;line-height:1.6">
+        style="color:#777;font-size:14px;font-weight:700;margin-top:10px;line-height:1.7">
 
         ${p}
 
@@ -4665,7 +4743,7 @@ function openSupport(){
     "Support",
 
     infoCard(
-      "🎧",
+      `<img src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png" alt="Telegram Support" style="width:54px;height:54px;object-fit:cover;border-radius:14px;">`,
       "Need Help?",
       "If you have any problem, contact our official support.",
       "💬 Contact Support",
@@ -4786,7 +4864,33 @@ function openTutorial(){
       true
     );
 
-  openExternal(u);
+  openModal(
+    "Tutorial",
+    `
+      <div class="card" style="text-align:center;padding:20px">
+
+        <img
+          src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg"
+          alt="Tutorial"
+          style="width:96px;height:96px;border-radius:22px;object-fit:cover;border:2px solid #f7c3da;box-shadow:0 8px 20px rgba(226,19,110,.15)">
+
+        <h2 style="font-size:21px;font-weight:900;margin-top:14px">
+          Tutorial
+        </h2>
+
+        <p style="font-size:14px;font-weight:700;color:#777;line-height:1.7;margin-top:8px">
+          Watch the tutorial video to learn how to use the app.
+        </p>
+
+        <button
+          class="pbtn"
+          onclick="openExternal('${esc(u)}')">
+          🎬 Watch Tutorial
+        </button>
+
+      </div>
+    `
+  );
 
 }
 
@@ -4831,7 +4935,7 @@ function openSettingsMenu(){
 
       ${
         it(
-          "🎬",
+          `<img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial">`,
           "Tutorial",
           "Learn how to use the app",
           "openTutorial()"
