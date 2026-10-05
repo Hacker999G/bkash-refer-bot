@@ -18,7 +18,7 @@
 }
 
 :root{
-  --p:#e2136e;
+  --p:#e0136c;
   --p2:#f43b87;
   --soft:#fff0f6;
   --dark:#222;
@@ -146,24 +146,44 @@ button{
 
 .balance-card.tap{
   cursor:pointer;
-  min-height:92px
+  min-height:92px;
+  overflow:hidden;
+  position:relative;
+  transition:transform .18s ease,box-shadow .25s ease;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none
 }
 
 .balance-card.tap:active{
-  transform:scale(.985)
+  transform:scale(.975);
+  box-shadow:0 5px 18px rgba(226,19,110,.22)
+}
+
+.balance-card.tap::after{
+  content:"";
+  position:absolute;
+  width:95px;
+  height:95px;
+  right:-30px;
+  top:-38px;
+  border-radius:50%;
+  background:rgba(226,19,110,.06);
+  pointer-events:none
 }
 
 .tap-label{
   font-size:12px;
   color:#777;
   font-weight:900;
-  letter-spacing:.2px
+  letter-spacing:.35px;
+  transition:color .25s ease
 }
 
 .tap-hint{
   font-size:10px;
   color:#aaa;
-  margin-top:4px
+  margin-top:4px;
+  font-weight:600
 }
 
 .balance-hidden{
@@ -183,7 +203,30 @@ button{
   font-size:26px;
   font-weight:900;
   color:var(--p);
-  margin-top:3px
+  margin-top:3px;
+  min-height:31px;
+  display:flex;
+  align-items:center
+}
+
+.balance-reveal{
+  animation:balanceReveal .42s cubic-bezier(.2,.8,.2,1);
+}
+
+.balance-eye-pop{
+  animation:balanceEyePop .38s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes balanceReveal{
+  0%{opacity:0;transform:translateY(10px) scale(.94);filter:blur(5px)}
+  60%{opacity:1;transform:translateY(-2px) scale(1.03);filter:blur(0)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+
+@keyframes balanceEyePop{
+  0%{transform:scale(.85) rotate(-8deg)}
+  55%{transform:scale(1.12) rotate(4deg)}
+  100%{transform:scale(1) rotate(0)}
 }
 
 .wbtn{
@@ -1408,7 +1451,7 @@ button{
   </div>
 </header>
 
-<div class="balance-card tap" onclick="toggleBalance">
+<div class="balance-card tap" onclick="toggleBalance()">
 
   <div>
     <div class="tap-label" id="balanceLabel">
@@ -2338,7 +2381,11 @@ function updateBalance(){
   if(balanceVisible){
 
     e.innerHTML=
-      `<span>৳ ${money(userData.balance||0)}</span>`;
+      `<span class="balance-reveal">৳ ${money(userData.balance||0)}</span>`;
+
+    e.classList.remove("balance-reveal");
+    void e.offsetWidth;
+    e.classList.add("balance-reveal");
 
     if(h)
       h.innerText=
@@ -2371,6 +2418,13 @@ function toggleBalance(){
   balanceVisible=!balanceVisible;
 
   updateBalance();
+
+  const eye=document.getElementById("balanceEye");
+  if(eye){
+    eye.classList.remove("balance-eye-pop");
+    void eye.offsetWidth;
+    eye.classList.add("balance-eye-pop");
+  }
 
   if(
     tg &&
