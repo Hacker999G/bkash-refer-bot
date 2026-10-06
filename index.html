@@ -1423,6 +1423,18 @@ button{
   opacity:1;
   transform:translateX(-50%)
 }
+/* BOLD TEXT + BUTTONS */
+body{font-weight:600}
+button{font-weight:800}
+.pbtn,.sbtn,.mbtn,.pok,.wbtn,.refb button,.svc .snm,.paybtn .payname{font-weight:900}
+.info{font-weight:700;color:#555}
+.pm,.psub,.paysub,.tap-hint,.row span.s,.li span,.stat span{font-weight:700}
+.label{font-weight:900}
+/* RULES BOX */
+.rules{background:#fff;border:1.5px dashed #f7c3da;border-radius:14px;padding:12px 14px;margin-top:14px;font-size:12px;font-weight:700;line-height:1.8;color:#444}
+.rules .rt{display:block;color:var(--p);font-size:14px;font-weight:900;margin-bottom:4px}
+.rules ol{padding-left:18px}
+.rules li{margin-top:2px}
 </style>
 </head>
 
@@ -2529,6 +2541,13 @@ function goHome(){
    WITHDRAW
 ========================================================= */
 
+function rulesBox(title,arr){
+  return `<div class="rules">
+    <b class="rt">📌 ${title}</b>
+    <ol>${arr.map(x=>`<li>${x}</li>`).join("")}</ol>
+  </div>`;
+}
+
 const FIXED_WITHDRAW_METHODS=[
   {
     id:"bkash",
@@ -2677,7 +2696,9 @@ async function openWithdraw(preferred){
       class="pbtn"
       onclick="submitWithdraw()">
       Submit Withdraw
-    </button>`
+    </button>
+
+    ${rulesBox("উইথড্র নিয়ম",["সর্বনিম্ন উইথড্র <b>৳"+money(settings.minWithdraw||0)+"</b>।","কমপক্ষে <b>"+Number(settings.minRefer||0)+" জন</b> রেফার থাকতে হবে।","নাম্বার অবশ্যই <b>01 দিয়ে শুরু ১১ ডিজিট</b> হতে হবে।","রিকোয়েস্ট দেওয়ার পর <b>পেন্ডিং</b> থাকবে, যাচাইয়ের পর পেমেন্ট হবে।"])}`
   );
 
 }
@@ -3115,6 +3136,8 @@ async function openRefer(){
         ৳${money(settings.referralReward||0)}
       </div>
     </div>
+
+    ${rulesBox("রেফার নিয়ম",["আপনার রেফার লিংক শেয়ার করুন, লিংকে ঢুকে নতুন ইউজার জয়েন করলে রেফার গণনা হবে।","প্রতি সফল রেফারে পাবেন <b>৳"+money(settings.referralReward||0)+"</b>।","নিজের লিংকে নিজে জয়েন করা যাবে না।","ভুয়া বা একাধিক অ্যাকাউন্ট খুললে রেফার বাতিল হতে পারে।"])}
 
     <div
       class="stitle"
@@ -3866,14 +3889,16 @@ async function openAds(){
 
       <div class="psub">
         Monetag Rewarded Interstitial দেখুন
-        এবং ad complete হলে reward claim হবে না
+        এবং ad complete হলে reward claim হবে
       </div>
 
       <div class="ads">
         ${cards}
       </div>
 
-    </div>`
+    </div>
+
+    ${rulesBox("অ্যাড নিয়ম",["প্রতিটি অ্যাড দিনে সর্বোচ্চ <b>"+Number(sv("adMax")||AD_MAX_DEFAULT)+" বার</b> দেখা যাবে।","অ্যাড <b>পুরোটা শেষ পর্যন্ত</b> দেখলে তবেই রিওয়ার্ড পাবেন।","মাঝপথে বন্ধ করলে বা ফেইল হলে রিওয়ার্ড যুক্ত হবে না।","রিওয়ার্ড প্রথমে <b>পেন্ডিং</b> থাকবে, যাচাইয়ের পর ব্যালেন্সে আসবে।"])}`
   );
 
 }
@@ -4580,7 +4605,9 @@ async function openMining(){
       then claim your reward.
       More referrals increase your daily rate.
 
-    </div>`
+    </div>
+
+    ${rulesBox("মাইনিং নিয়ম",["একবার <b>স্টার্ট</b> করলে ২৪ ঘণ্টা পর ক্লেইম করা যাবে।","রেফার যত বেশি, দৈনিক রেট তত বেশি (০-২ জনে ৳৩০-৪০, ১০+ জনে ৳১০০-১২০)।","২৪ ঘণ্টা শেষ না হলে ক্লেইম বাটন কাজ করবে না।","ক্লেইমের পর রিওয়ার্ড <b>পেন্ডিং</b> থাকবে, যাচাইয়ের পর ব্যালেন্সে যুক্ত হবে।"])}`
   );
 
   if(active){
