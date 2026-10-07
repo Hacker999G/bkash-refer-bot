@@ -10,1419 +10,218 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  -webkit-tap-highlight-color:transparent
-}
-
-:root{
-  --p:#e0136c;
-  --p2:#f43b87;
-  --soft:#fff0f6;
-  --dark:#222;
-  --g:#16a56b
-}
-
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f4f4f6;
-  color:var(--dark);
-  min-height:100vh
-}
-
-button,input,select{
-  font-family:inherit
-}
-
-button{
-  border:0;
-  cursor:pointer;
-  background:none
-}
-
-.app{
-  max-width:520px;
-  margin:auto;
-  min-height:100vh;
-  background:#f4f4f6;
-  overflow:hidden;
-  padding-bottom:80px
-}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--p:#e0136c;--p2:#f43b87;--soft:#fff0f6;--dark:#222;--g:#16a56b}
+body{font-family:Arial,Helvetica,sans-serif;background:#f4f4f6;color:var(--dark);min-height:100vh}
+button,input,select{font-family:inherit}
+button{border:0;cursor:pointer;background:none}
+.app{max-width:520px;margin:auto;min-height:100vh;background:#f4f4f6;overflow:hidden;padding-bottom:80px}
 
 /* HEADER */
-.header{
-  background:linear-gradient(160deg,#e2136e,#f53a8a);
-  padding:20px 18px 46px;
-  color:#fff;
-  position:relative;
-  overflow:hidden;
-  border-radius:0 0 28px 28px
-}
-
-.header:before{
-  content:"";
-  position:absolute;
-  width:220px;
-  height:220px;
-  border-radius:50%;
-  background:rgba(255,255,255,.1);
-  right:-80px;
-  top:-110px
-}
-
-.header:after{
-  content:"";
-  position:absolute;
-  width:140px;
-  height:140px;
-  border-radius:50%;
-  background:rgba(255,255,255,.08);
-  left:-60px;
-  bottom:-80px
-}
-
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  position:relative;
-  z-index:2
-}
-
-.profile{
-  display:flex;
-  align-items:center;
-  gap:11px
-}
-
-.avatar{
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background:#fff;
-  padding:2px;
-  object-fit:cover
-}
-
-.pname{
-  font-weight:800;
-  font-size:16px;
-  max-width:190px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis
-}
-
-.puser{
-  font-size:11px;
-  opacity:.85;
-  margin-top:2px
-}
-
-.hbtn{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:rgba(255,255,255,.2);
-  color:#fff;
-  font-size:19px
-}
+.header{background:linear-gradient(160deg,#e2136e,#f53a8a);padding:20px 18px 46px;color:#fff;position:relative;overflow:hidden;border-radius:0 0 28px 28px}
+.header:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.1);right:-80px;top:-110px}
+.header:after{content:"";position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08);left:-60px;bottom:-80px}
+.topbar{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.profile{display:flex;align-items:center;gap:11px}
+.avatar{width:50px;height:50px;border-radius:50%;background:#fff;padding:2px;object-fit:cover}
+.pname{font-weight:800;font-size:16px;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.puser{font-size:11px;opacity:.85;margin-top:2px}
+.hbtn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:19px}
 
 /* BALANCE */
-.balance-card{
-  margin:-28px 16px 0;
-  position:relative;
-  z-index:3;
-  background:#fff;
-  border-radius:20px;
-  padding:16px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 8px 28px rgba(226,19,110,.18)
-}
-
-.balance-card.tap{
-  cursor:pointer;
-  min-height:92px;
-  overflow:hidden;
-  position:relative;
-  transition:transform .18s ease,box-shadow .25s ease;
-  -webkit-tap-highlight-color:transparent;
-  user-select:none
-}
-
-.balance-card.tap:active{
-  transform:scale(.975);
-  box-shadow:0 5px 18px rgba(226,19,110,.22)
-}
-
-.balance-card.tap::after{
-  content:"";
-  position:absolute;
-  width:95px;
-  height:95px;
-  right:-30px;
-  top:-38px;
-  border-radius:50%;
-  background:rgba(226,19,110,.06);
-  pointer-events:none
-}
-
-.tap-label{
-  font-size:12px;
-  color:#777;
-  font-weight:900;
-  letter-spacing:.35px;
-  transition:color .25s ease
-}
-
-.tap-hint{
-  font-size:10px;
-  color:#aaa;
-  margin-top:4px;
-  font-weight:600
-}
-
-.balance-hidden{
-  font-size:26px;
-  font-weight:900;
-  color:var(--p);
-  letter-spacing:3px
-}
-
-.bl{
-  font-size:11px;
-  color:#888;
-  font-weight:700
-}
-
-.bv{
-  font-size:26px;
-  font-weight:900;
-  color:var(--p);
-  margin-top:3px;
-  min-height:31px;
-  display:flex;
-  align-items:center
-}
-
-.balance-reveal{
-  animation:balanceReveal .42s cubic-bezier(.2,.8,.2,1);
-}
-
-.balance-eye-pop{
-  animation:balanceEyePop .38s cubic-bezier(.2,.8,.2,1);
-}
-
-@keyframes balanceReveal{
-  0%{opacity:0;transform:translateY(10px) scale(.94);filter:blur(5px)}
-  60%{opacity:1;transform:translateY(-2px) scale(1.03);filter:blur(0)}
-  100%{opacity:1;transform:translateY(0) scale(1)}
-}
-
-@keyframes balanceEyePop{
-  0%{transform:scale(.85) rotate(-8deg)}
-  55%{transform:scale(1.12) rotate(4deg)}
-  100%{transform:scale(1) rotate(0)}
-}
-
-.wbtn{
-  background:linear-gradient(135deg,var(--p),var(--p2));
-  color:#fff;
-  padding:11px 16px;
-  border-radius:13px;
-  font-size:12px;
-  font-weight:800;
-  animation:pulse 2s infinite
-}
-
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(226,19,110,.4)}
-  50%{box-shadow:0 0 0 9px rgba(226,19,110,0)}
-}
+.balance-card{margin:-28px 16px 0;position:relative;z-index:3;background:#fff;border-radius:20px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 28px rgba(226,19,110,.18)}
+.balance-card.tap{cursor:pointer;min-height:92px;overflow:hidden;position:relative;transition:transform .18s ease,box-shadow .25s ease;user-select:none}
+.balance-card.tap:active{transform:scale(.975);box-shadow:0 5px 18px rgba(226,19,110,.22)}
+.balance-card.tap::after{content:"";position:absolute;width:95px;height:95px;right:-30px;top:-38px;border-radius:50%;background:rgba(226,19,110,.06);pointer-events:none}
+.tap-label{font-size:12px;color:#777;font-weight:900;letter-spacing:.35px;transition:color .25s ease}
+.tap-hint{font-size:10px;color:#aaa;margin-top:4px;font-weight:600}
+.balance-hidden{font-size:26px;font-weight:900;color:var(--p);letter-spacing:3px}
+.bl{font-size:11px;color:#888;font-weight:700}
+.bv{font-size:26px;font-weight:900;color:var(--p);margin-top:3px;min-height:31px;display:flex;align-items:center}
+.balance-reveal{animation:balanceReveal .42s cubic-bezier(.2,.8,.2,1)}
+.balance-eye-pop{animation:balanceEyePop .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes balanceReveal{0%{opacity:0;transform:translateY(10px) scale(.94);filter:blur(5px)}60%{opacity:1;transform:translateY(-2px) scale(1.03);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes balanceEyePop{0%{transform:scale(.85) rotate(-8deg)}55%{transform:scale(1.12) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
+.wbtn{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:11px 16px;border-radius:13px;font-size:12px;font-weight:800;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(226,19,110,.4)}50%{box-shadow:0 0 0 9px rgba(226,19,110,0)}}
 
 /* CONTENT */
-.content{
-  padding:18px 14px
-}
-
-.stitle{
-  font-size:18px;
-  font-weight:900;
-  margin:6px 3px 13px;
-  letter-spacing:.1px
-}
+.content{padding:18px 14px}
+.stitle{font-size:18px;font-weight:900;margin:6px 3px 13px;letter-spacing:.1px}
 
 /* QUICK SERVICE GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-  background:#fff;
-  border-radius:20px;
-  padding:14px 6px;
-  box-shadow:0 2px 12px rgba(0,0,0,.05)
-}
-
-.svc{
-  text-align:center;
-  padding:6px 2px;
-  transition:.15s
-}
-
-.svc:active{
-  transform:scale(.9)
-}
-
-/* UPDATED IMAGE ICON */
-.sic{
-  width:54px;
-  height:54px;
-  margin:auto;
-  border-radius:14px;
-  background:var(--soft);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:23px;
-  border:1.5px solid #fbd0e2;
-  overflow:hidden;
-  position:relative
-}
-
-.sic img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
-  border-radius:12px
-}
-
-.snm{
-  font-size:13px;
-  font-weight:900;
-  margin-top:7px;
-  color:#444
-}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#fff;border-radius:20px;padding:14px 6px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.svc{text-align:center;padding:6px 2px;transition:.15s}
+.svc:active{transform:scale(.9)}
+.sic{width:54px;height:54px;margin:auto;border-radius:14px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:23px;border:1.5px solid #fbd0e2;overflow:hidden;position:relative}
+.sic img{width:100%;height:100%;display:block;object-fit:cover;border-radius:12px}
+.snm{font-size:13px;font-weight:900;margin-top:7px;color:#444}
 
 /* PAYMENT */
-.payments{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
-  margin:14px 0
-}
-
-.paybtn{
-  background:#fff;
-  border-radius:18px;
-  padding:12px 10px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  box-shadow:0 3px 14px rgba(0,0,0,.06);
-  border:1.5px solid #f3dbe6;
-  text-align:left
-}
-
-.paybtn:active{
-  transform:scale(.97)
-}
-
-.paylogo{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  background:#fff0f6;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  border:1px solid #f7c3da
-}
-
-.paylogo img{
-  max-width:38px;
-  max-height:38px;
-  object-fit:contain
-}
-
-.payname{
-  font-size:15px;
-  font-weight:900
-}
-
-.paysub{
-  font-size:10px;
-  font-weight:700;
-  color:#888;
-  margin-top:3px
-}
+.payments{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.paybtn{background:#fff;border-radius:18px;padding:12px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 3px 14px rgba(0,0,0,.06);border:1.5px solid #f3dbe6;text-align:left}
+.paybtn:active{transform:scale(.97)}
+.paylogo{width:48px;height:48px;border-radius:14px;background:#fff0f6;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #f7c3da}
+.paylogo img{max-width:38px;max-height:38px;object-fit:contain}
+.payname{font-size:15px;font-weight:900}
+.paysub{font-size:10px;font-weight:700;color:#888;margin-top:3px}
 
 /* ACTIVITY */
-.activity{
-  position:fixed;
-  left:50%;
-  top:16px;
-  transform:translate(-50%,-18px);
-  z-index:3000;
-  width:min(330px,calc(100% - 24px));
-  background:#fff;
-  border:1px solid #f6d5e4;
-  border-radius:15px;
-  box-shadow:0 12px 30px rgba(0,0,0,.16);
-  padding:10px 12px;
-  display:none;
-  align-items:center;
-  gap:10px;
-  opacity:0
-}
-
-.activity.show{
-  display:flex;
-  animation:actIn 1s ease forwards
-}
-
-.activity.out{
-  animation:actOut .25s ease forwards
-}
-
-@keyframes actIn{
-  to{
-    opacity:1;
-    transform:translate(-50%,0)
-  }
-}
-
-@keyframes actOut{
-  to{
-    opacity:0;
-    transform:translate(-50%,-18px)
-  }
-}
-
-.activity-avatar{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:var(--soft);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:17px;
-  flex-shrink:0
-}
-
-.activity-txt{
-  min-width:0;
-  font-size:11px;
-  line-height:1.35
-}
-
-.activity-txt b{
-  font-size:11px
-}
-
-.activity-txt span{
-  display:block;
-  color:#777;
-  font-size:10px
-}
-
-.activity-amt{
-  margin-left:auto;
-  color:#16a56b;
-  font-size:12px;
-  font-weight:900;
-  white-space:nowrap
-}
-
-.activity-demo{
-  display:block;
-  margin-top:2px;
-  color:#999;
-  font-size:8px;
-  font-weight:700
-}
+.activity{position:fixed;left:50%;top:16px;transform:translate(-50%,-18px);z-index:3000;width:min(330px,calc(100% - 24px));background:#fff;border:1px solid #f6d5e4;border-radius:15px;box-shadow:0 12px 30px rgba(0,0,0,.16);padding:10px 12px;display:none;align-items:center;gap:10px;opacity:0}
+.activity.show{display:flex;animation:actIn 1s ease forwards}
+.activity.out{animation:actOut .25s ease forwards}
+@keyframes actIn{to{opacity:1;transform:translate(-50%,0)}}
+@keyframes actOut{to{opacity:0;transform:translate(-50%,-18px)}}
+.activity-avatar{width:34px;height:34px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.activity-txt{min-width:0;font-size:11px;line-height:1.35}
+.activity-txt b{font-size:11px}
+.activity-txt span{display:block;color:#777;font-size:10px}
+.activity-amt{margin-left:auto;color:#16a56b;font-size:12px;font-weight:900;white-space:nowrap}
+.activity-demo{display:block;margin-top:2px;color:#999;font-size:8px;font-weight:700}
 
 /* BANNER */
-.banner-box{
-  margin:16px 0;
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 3px 15px rgba(0,0,0,.07);
-  background:#fff;
-  line-height:0
-}
-
-.banner{
-  width:100%;
-  height:auto;
-  max-height:none;
-  object-fit:contain;
-  display:block;
-  cursor:pointer;
-  background:#fff
-}
-
-.banner-info{
-  background:#fff;
-  padding:12px 13px
-}
-
-.banner-title{
-  font-size:14px;
-  font-weight:900
-}
-
-.banner-link{
-  display:block;
-  margin-top:7px;
-  color:var(--p);
-  font-size:11px;
-  font-weight:800;
-  word-break:break-all;
-  text-decoration:none
-}
-
-.banner-open{
-  display:inline-flex;
-  margin-top:9px;
-  background:var(--p);
-  color:#fff;
-  padding:8px 12px;
-  border-radius:10px;
-  font-size:10px;
-  font-weight:900
-}
-
-.bph{
-  height:140px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#e2136e,#ff5899);
-  color:#fff;
-  font-size:20px;
-  font-weight:900
-}
+.banner-box{margin:16px 0;border-radius:18px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,.07);background:#fff;line-height:0}
+.banner{width:100%;height:auto;max-height:none;object-fit:contain;display:block;cursor:pointer;background:#fff}
+.banner-info{background:#fff;padding:12px 13px}
+.banner-title{font-size:14px;font-weight:900}
+.banner-link{display:block;margin-top:7px;color:var(--p);font-size:11px;font-weight:800;word-break:break-all;text-decoration:none}
+.banner-open{display:inline-flex;margin-top:9px;background:var(--p);color:#fff;padding:8px 12px;border-radius:10px;font-size:10px;font-weight:900}
+.bph{height:140px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e2136e,#ff5899);color:#fff;font-size:20px;font-weight:900}
 
 /* ROW */
-.row{
-  width:100%;
-  background:#fff;
-  border-radius:16px;
-  padding:13px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-top:9px;
-  text-align:left;
-  box-shadow:0 2px 10px rgba(0,0,0,.04)
-}
-
-.row b{
-  display:block;
-  font-size:15px;
-  font-weight:900
-}
-
-.row span.s{
-  display:block;
-  font-size:11px;
-  font-weight:700;
-  color:#888;
-  margin-top:3px
-}
-
-.ric{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  background:var(--soft);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:25px;
-  border:1.5px solid #fbd0e2;
-  flex-shrink:0;
-  object-fit:cover
-}
-
-.arrow{
-  margin-left:auto;
-  font-size:21px;
-  color:var(--p)
-}
-
-/* TUTORIAL / VISUAL ICON */
-.tutorial-logo{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  object-fit:cover;
-  flex-shrink:0;
-  border:1.5px solid #f7c3da;
-  background:#fff;
-  box-shadow:0 3px 10px rgba(226,19,110,.12)
-}
-
-.ref-rate{
-  margin-top:12px;
-  background:#fff;
-  border:1.5px solid #f7c3da;
-  border-radius:16px;
-  padding:14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px
-}
-
-.ref-rate .label{
-  margin:0;
-  font-size:12px;
-  color:#777;
-  font-weight:800
-}
-
-.ref-rate .amount{
-  font-size:22px;
-  color:var(--p);
-  font-weight:900
-}
+.row{width:100%;background:#fff;border-radius:16px;padding:13px;display:flex;align-items:center;gap:12px;margin-top:9px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.row b{display:block;font-size:15px;font-weight:900}
+.row span.s{display:block;font-size:11px;font-weight:700;color:#888;margin-top:3px}
+.ric{width:48px;height:48px;border-radius:14px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:25px;border:1.5px solid #fbd0e2;flex-shrink:0;object-fit:cover}
+.arrow{margin-left:auto;font-size:21px;color:var(--p)}
+.tutorial-logo{width:48px;height:48px;border-radius:14px;object-fit:cover;flex-shrink:0;border:1.5px solid #f7c3da;background:#fff;box-shadow:0 3px 10px rgba(226,19,110,.12)}
+.ref-rate{margin-top:12px;background:#fff;border:1.5px solid #f7c3da;border-radius:16px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ref-rate .label{margin:0;font-size:12px;color:#777;font-weight:800}
+.ref-rate .amount{font-size:22px;color:var(--p);font-weight:900}
 
 /* BOTTOM NAV */
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(520px,100%);
-  height:66px;
-  background:#fff;
-  border-top:1px solid #eee;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  z-index:50;
-  box-shadow:0 -5px 20px rgba(0,0,0,.06)
-}
-
-.ni{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  color:#888;
-  font-size:11px;
-  font-weight:900
-}
-
-
-.tg-nav-icon{
-  width:24px;
-  height:24px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:auto;
-  overflow:hidden;
-  border-radius:50%;
-}
-.tg-nav-icon img{
-  width:24px;
-  height:24px;
-  display:block;
-  object-fit:cover;
-  border-radius:50%;
-}
-
-.ni i{
-  font-style:normal;
-  font-size:24px;
-  line-height:1
-}
-
-.ni.active{
-  color:var(--p)
-}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);height:66px;background:#fff;border-top:1px solid #eee;display:grid;grid-template-columns:repeat(4,1fr);z-index:50;box-shadow:0 -5px 20px rgba(0,0,0,.06)}
+.ni{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#888;font-size:11px;font-weight:900}
+.tg-nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;margin:auto;overflow:hidden;border-radius:50%}
+.tg-nav-icon img{width:24px;height:24px;display:block;object-fit:cover;border-radius:50%}
+.ni i{font-style:normal;font-size:24px;line-height:1}
+.ni.active{color:var(--p)}
 
 /* MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:100;
-  display:none;
-  align-items:flex-end;
-  background:rgba(0,0,0,.5)
-}
-
-.modal.show{
-  display:flex
-}
-
-.mbox{
-  width:min(520px,100%);
-  margin:auto;
-  max-height:92vh;
-  overflow:auto;
-  background:#f4f4f6;
-  border-radius:26px 26px 0 0;
-  animation:up .28s cubic-bezier(.2,.9,.3,1.1)
-}
-
-@keyframes up{
-  from{transform:translateY(100%)}
-  to{transform:none}
-}
-
-.mhead{
-  position:sticky;
-  top:0;
-  z-index:3;
-  background:linear-gradient(135deg,#e2136e,#f53a8a);
-  color:#fff;
-  padding:16px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center
-}
-
-.mtitle{
-  font-size:17px;
-  font-weight:900
-}
-
-.close{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:rgba(255,255,255,.22);
-  color:#fff;
-  font-size:20px
-}
-
-.mc{
-  padding:16px 15px 32px
-}
-
-.label{
-  display:block;
-  font-size:12px;
-  font-weight:800;
-  margin:14px 0 7px;
-  color:#555
-}
-
-.input{
-  width:100%;
-  height:49px;
-  background:#fff;
-  border:1.5px solid #e8e8e8;
-  border-radius:13px;
-  padding:0 14px;
-  outline:none;
-  font-size:14px
-}
-
-.input:focus{
-  border-color:var(--p)
-}
-
-.pbtn{
-  width:100%;
-  height:50px;
-  margin-top:16px;
-  border-radius:14px;
-  background:linear-gradient(135deg,var(--p),var(--p2));
-  color:#fff;
-  font-size:14px;
-  font-weight:900;
-  box-shadow:0 7px 18px rgba(226,19,110,.25)
-}
-
-.pbtn:disabled{
-  background:#ccc;
-  box-shadow:none
-}
-
-.card{
-  background:#fff;
-  border-radius:18px;
-  padding:15px;
-  box-shadow:0 2px 10px rgba(0,0,0,.04)
-}
-
-.info{
-  background:#fff5f9;
-  padding:12px;
-  border-radius:13px;
-  font-size:11px;
-  line-height:1.7;
-  color:#777;
-  margin-top:10px
-}
-
-.info b{
-  color:var(--p)
-}
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;background:rgba(0,0,0,.5)}
+.modal.show{display:flex}
+.mbox{width:min(520px,100%);margin:auto;max-height:92vh;overflow:auto;background:#f4f4f6;border-radius:26px 26px 0 0;animation:up .28s cubic-bezier(.2,.9,.3,1.1)}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.mhead{position:sticky;top:0;z-index:3;background:linear-gradient(135deg,#e2136e,#f53a8a);color:#fff;padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
+.mtitle{font-size:17px;font-weight:900}
+.close{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.22);color:#fff;font-size:20px}
+.mc{padding:16px 15px 32px}
+.label{display:block;font-size:12px;font-weight:800;margin:14px 0 7px;color:#555}
+.input{width:100%;height:49px;background:#fff;border:1.5px solid #e8e8e8;border-radius:13px;padding:0 14px;outline:none;font-size:14px}
+.input:focus{border-color:var(--p)}
+.pbtn{width:100%;height:50px;margin-top:16px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-size:14px;font-weight:900;box-shadow:0 7px 18px rgba(226,19,110,.25)}
+.pbtn:disabled{background:#ccc;box-shadow:none}
+.card{background:#fff;border-radius:18px;padding:15px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.info{background:#fff5f9;padding:12px;border-radius:13px;font-size:11px;line-height:1.7;color:#777;margin-top:10px}
+.info b{color:var(--p)}
 
 /* METHODS */
-.methods{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px
-}
-
-.method{
-  background:#fff;
-  border:2px solid #eee;
-  border-radius:14px;
-  padding:12px 6px;
-  text-align:center;
-  font-size:12px;
-  font-weight:800;
-  transition:.2s
-}
-
-.method img{
-  height:30px;
-  max-width:80px;
-  object-fit:contain;
-  display:block;
-  margin:0 auto 6px
-}
-
-.method.sel{
-  border-color:var(--p);
-  background:var(--soft);
-  transform:scale(1.03)
-}
+.methods{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.method{background:#fff;border:2px solid #eee;border-radius:14px;padding:12px 6px;text-align:center;font-size:12px;font-weight:800;transition:.2s}
+.method img{height:30px;max-width:80px;object-fit:contain;display:block;margin:0 auto 6px}
+.method.sel{border-color:var(--p);background:var(--soft);transform:scale(1.03)}
 
 /* LIST */
-.list{
-  display:flex;
-  flex-direction:column;
-  gap:9px
-}
-
-.li{
-  background:#fff;
-  border-radius:15px;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  gap:11px;
-  border:1px solid #f0f0f0
-}
-
-.li .in{
-  flex:1;
-  min-width:0
-}
-
-.li b{
-  display:block;
-  font-size:13px
-}
-
-.li span{
-  display:block;
-  font-size:10px;
-  color:#888;
-  margin-top:3px
-}
-
-.sbtn{
-  background:var(--p);
-  color:#fff;
-  border-radius:10px;
-  padding:9px 13px;
-  font-size:10px;
-  font-weight:800
-}
-
-.sbtn:disabled{
-  opacity:.5
-}
-
-.empty{
-  text-align:center;
-  padding:28px 15px;
-  color:#999;
-  font-size:12px
-}
+.list{display:flex;flex-direction:column;gap:9px}
+.li{background:#fff;border-radius:15px;padding:12px;display:flex;align-items:center;gap:11px;border:1px solid #f0f0f0}
+.li .in{flex:1;min-width:0}
+.li b{display:block;font-size:13px}
+.li span{display:block;font-size:10px;color:#888;margin-top:3px}
+.sbtn{background:var(--p);color:#fff;border-radius:10px;padding:9px 13px;font-size:10px;font-weight:800}
+.sbtn:disabled{opacity:.5}
+.sbtn.claim-ready{background:var(--g);opacity:1;animation:pulse 2s infinite}
+.empty{text-align:center;padding:28px 15px;color:#999;font-size:12px}
 
 /* REFERRAL */
-.refc{
-  background:linear-gradient(135deg,#e2136e,#f43b87);
-  color:#fff;
-  border-radius:20px;
-  padding:19px
-}
-
-.refcode{
-  font-size:24px;
-  font-weight:900;
-  letter-spacing:1px;
-  margin:6px 0 13px
-}
-
-.reflink{
-  background:rgba(255,255,255,.17);
-  padding:10px;
-  border-radius:11px;
-  font-size:11px;
-  word-break:break-all
-}
-
-.refb{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-top:11px
-}
-
-.refb button{
-  height:42px;
-  border-radius:12px;
-  background:#fff;
-  color:var(--p);
-  font-weight:900
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:9px;
-  margin-top:12px
-}
-
-.stat{
-  background:#fff;
-  border-radius:14px;
-  padding:13px 6px;
-  text-align:center
-}
-
-.stat b{
-  display:block;
-  color:var(--p);
-  font-size:17px
-}
-
-.stat span{
-  font-size:9px;
-  color:#888
-}
+.refc{background:linear-gradient(135deg,#e2136e,#f43b87);color:#fff;border-radius:20px;padding:19px}
+.refcode{font-size:24px;font-weight:900;letter-spacing:1px;margin:6px 0 13px}
+.reflink{background:rgba(255,255,255,.17);padding:10px;border-radius:11px;font-size:11px;word-break:break-all}
+.refb{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
+.refb button{height:42px;border-radius:12px;background:#fff;color:var(--p);font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.stat{background:#fff;border-radius:14px;padding:13px 6px;text-align:center}
+.stat b{display:block;color:var(--p);font-size:17px}
+.stat span{font-size:9px;color:#888}
 
 /* ADS */
-.premium{
-  background:#fff;
-  border:2px solid var(--p);
-  border-radius:22px;
-  padding:16px 12px;
-  background-image:linear-gradient(180deg,#fff,#fff0f6)
-}
-
-.ptitle{
-  text-align:center;
-  font-size:18px;
-  font-weight:900;
-  color:var(--p)
-}
-
-.psub{
-  text-align:center;
-  font-size:11px;
-  color:#777;
-  margin:6px 0 14px;
-  line-height:1.6
-}
-
-.ads{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px
-}
-
-.ad{
-  position:relative;
-  background:#fff;
-  border:1.5px solid #f7c3da;
-  border-radius:18px;
-  padding:14px 8px 10px;
-  text-align:center;
-  transition:.15s
-}
-
-.ad:active{
-  transform:scale(.96)
-}
-
-.adtag{
-  position:absolute;
-  top:-9px;
-  right:-3px;
-  background:linear-gradient(135deg,#ff7a00,#ff9a2e);
-  color:#fff;
-  font-size:9px;
-  font-weight:800;
-  padding:5px 9px;
-  border-radius:12px;
-  animation:bob 1.2s infinite
-}
-
-@keyframes bob{
-  50%{transform:translateY(-3px)}
-}
-
-.adplay{
-  width:60px;
-  height:60px;
-  border-radius:18px;
-  margin:6px auto 9px;
-  background:linear-gradient(145deg,#e2136e,#ff5b9d);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  font-size:26px;
-  box-shadow:0 6px 14px rgba(226,19,110,.3)
-}
-
-.ad b{
-  font-size:13px;
-  display:block
-}
-
-.ad small{
-  display:block;
-  font-size:10px;
-  color:#888;
-  margin:4px 0 9px
-}
-
-.adcnt{
-  background:var(--soft);
-  color:var(--p);
-  font-size:11px;
-  font-weight:800;
-  padding:7px;
-  border-radius:20px;
-  border:1px solid #f7c3da
-}
+.premium{background:#fff;border:2px solid var(--p);border-radius:22px;padding:16px 12px;background-image:linear-gradient(180deg,#fff,#fff0f6)}
+.ptitle{text-align:center;font-size:18px;font-weight:900;color:var(--p)}
+.psub{text-align:center;font-size:11px;color:#777;margin:6px 0 14px;line-height:1.6}
+.ads{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.ad{position:relative;background:#fff;border:1.5px solid #f7c3da;border-radius:18px;padding:14px 8px 10px;text-align:center;transition:.15s}
+.ad:active{transform:scale(.96)}
+.adtag{position:absolute;top:-9px;right:-3px;background:linear-gradient(135deg,#ff7a00,#ff9a2e);color:#fff;font-size:9px;font-weight:800;padding:5px 9px;border-radius:12px;animation:bob 1.2s infinite}
+@keyframes bob{50%{transform:translateY(-3px)}}
+.adplay{width:60px;height:60px;border-radius:18px;margin:6px auto 9px;background:linear-gradient(145deg,#e2136e,#ff5b9d);display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;box-shadow:0 6px 14px rgba(226,19,110,.3)}
+.ad b{font-size:13px;display:block}
+.ad small{display:block;font-size:10px;color:#888;margin:4px 0 9px}
+.adcnt{background:var(--soft);color:var(--p);font-size:11px;font-weight:800;padding:7px;border-radius:20px;border:1px solid #f7c3da}
 
 /* SPIN */
-.spin{
-  background:#fff;
-  border-radius:22px;
-  padding:18px 12px;
-  text-align:center
-}
-
-.timer{
-  display:inline-block;
-  background:var(--soft);
-  border:1px solid #f7c3da;
-  color:var(--p);
-  font-weight:900;
-  padding:10px 20px;
-  border-radius:30px;
-  margin:10px 0;
-  font-size:15px
-}
-
-.ww{
-  position:relative;
-  width:280px;
-  height:280px;
-  margin:14px auto
-}
-
-.wheel{
-  width:280px;
-  height:280px;
-  border-radius:50%;
-  border:8px solid #fff;
-  outline:4px solid var(--p);
-  box-shadow:0 6px 24px rgba(226,19,110,.3);
-  transition:transform 4.5s cubic-bezier(.12,.75,.17,1);
-  position:relative;
-  background:conic-gradient(
-    #e91e63 0 45deg,
-    #9c27b0 45deg 90deg,
-    #3f51b5 90deg 135deg,
-    #009688 135deg 180deg,
-    #ff9800 180deg 225deg,
-    #4caf50 225deg 270deg,
-    #00bcd4 270deg 315deg,
-    #f44336 315deg 360deg
-  )
-}
-
-.wl{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:0;
-  height:0
-}
-
-.wl span{
-  position:absolute;
-  left:-24px;
-  top:-112px;
-  width:48px;
-  text-align:center;
-  color:#fff;
-  font-size:12px;
-  font-weight:900;
-  text-shadow:0 1px 3px rgba(0,0,0,.4)
-}
-
-.wc{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  background:#fff;
-  color:var(--p);
-  font-weight:900;
-  font-size:13px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 3px 12px rgba(0,0,0,.2);
-  z-index:2
-}
-
-.ptr{
-  position:absolute;
-  top:-10px;
-  left:50%;
-  transform:translateX(-50%);
-  border-left:12px solid transparent;
-  border-right:12px solid transparent;
-  border-top:24px solid #222;
-  z-index:4
-}
+.spin{background:#fff;border-radius:22px;padding:18px 12px;text-align:center}
+.timer{display:inline-block;background:var(--soft);border:1px solid #f7c3da;color:var(--p);font-weight:900;padding:10px 20px;border-radius:30px;margin:10px 0;font-size:15px}
+.ww{position:relative;width:280px;height:280px;margin:14px auto}
+.wheel{width:280px;height:280px;border-radius:50%;border:8px solid #fff;outline:4px solid var(--p);box-shadow:0 6px 24px rgba(226,19,110,.3);transition:transform 4.5s cubic-bezier(.12,.75,.17,1);position:relative;background:conic-gradient(#e91e63 0 45deg,#9c27b0 45deg 90deg,#3f51b5 90deg 135deg,#009688 135deg 180deg,#ff9800 180deg 225deg,#4caf50 225deg 270deg,#00bcd4 270deg 315deg,#f44336 315deg 360deg)}
+.wl{position:absolute;left:50%;top:50%;width:0;height:0}
+.wl span{position:absolute;left:-24px;top:-112px;width:48px;text-align:center;color:#fff;font-size:12px;font-weight:900;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.wc{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;background:#fff;color:var(--p);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.2);z-index:2}
+.ptr{position:absolute;top:-10px;left:50%;transform:translateX(-50%);border-left:12px solid transparent;border-right:12px solid transparent;border-top:24px solid #222;z-index:4}
 
 /* MINING */
-.mcard{
-  background:linear-gradient(135deg,#c20f5d,#f53a8a);
-  color:#fff;
-  border-radius:24px;
-  padding:22px;
-  text-align:center
-}
-
-.ring{
-  width:190px;
-  height:190px;
-  border-radius:50%;
-  margin:14px auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative
-}
-
-.ring:before{
-  content:"";
-  position:absolute;
-  inset:11px;
-  border-radius:50%;
-  background:#d6126a
-}
-
-.ringin{
-  position:relative;
-  z-index:2
-}
-
-.ringin small{
-  font-size:11px;
-  opacity:.85
-}
-
-.ringin b{
-  display:block;
-  font-size:30px;
-  margin:3px 0
-}
-
-.mbtn{
-  width:100%;
-  height:48px;
-  background:#fff;
-  color:var(--p);
-  border-radius:14px;
-  font-weight:900;
-  margin-top:6px
-}
-
-.mbtn:disabled{
-  opacity:.7
-}
-
-.tiers{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:6px;
-  margin-top:14px
-}
-
-.tier{
-  background:rgba(255,255,255,.15);
-  border-radius:11px;
-  padding:9px 3px;
-  font-size:9px
-}
-
-.tier b{
-  display:block;
-  font-size:11px;
-  margin-bottom:2px
-}
+.mcard{background:linear-gradient(135deg,#c20f5d,#f53a8a);color:#fff;border-radius:24px;padding:22px;text-align:center}
+.ring{width:190px;height:190px;border-radius:50%;margin:14px auto;display:flex;align-items:center;justify-content:center;position:relative}
+.ring:before{content:"";position:absolute;inset:11px;border-radius:50%;background:#d6126a}
+.ringin{position:relative;z-index:2}
+.ringin small{font-size:11px;opacity:.85}
+.ringin b{display:block;font-size:30px;margin:3px 0}
+.mbtn{width:100%;height:48px;background:#fff;color:var(--p);border-radius:14px;font-weight:900;margin-top:6px}
+.mbtn:disabled{opacity:.7}
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
+.tier{background:rgba(255,255,255,.15);border-radius:11px;padding:9px 3px;font-size:9px}
+.tier b{display:block;font-size:11px;margin-bottom:2px}
 
 /* POPUP */
-.pop{
-  position:fixed;
-  inset:0;
-  z-index:2000;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:25px
-}
-
-.pop.show{
-  display:flex;
-  animation:fade .2s
-}
-
-@keyframes fade{
-  from{opacity:0}
-}
-
-.popbox{
-  position:relative;
-  width:100%;
-  max-width:330px;
-  background:#fff;
-  border-radius:26px;
-  padding:30px 22px 22px;
-  text-align:center;
-  animation:pp .5s cubic-bezier(.2,1.4,.4,1);
-  overflow:hidden
-}
-
-@keyframes pp{
-  from{
-    transform:scale(.3);
-    opacity:0
-  }
-}
-
-.pic{
-  width:84px;
-  height:84px;
-  border-radius:50%;
-  margin:0 auto 14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,var(--p),var(--p2));
-  box-shadow:0 0 0 0 rgba(226,19,110,.5);
-  animation:ring 1.6s infinite
-}
-
-.pic.err{
-  background:linear-gradient(135deg,#ef4444,#f97316)
-}
-
-@keyframes ring{
-  70%{
-    box-shadow:0 0 0 20px rgba(226,19,110,0)
-  }
-  100%{
-    box-shadow:0 0 0 0 rgba(226,19,110,0)
-  }
-}
-
-.pic svg{
-  width:44px;
-  height:44px
-}
-
-.pic path{
-  stroke:#fff;
-  stroke-width:5;
-  fill:none;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-dasharray:60;
-  stroke-dashoffset:60;
-  animation:draw .6s .3s forwards
-}
-
-@keyframes draw{
-  to{stroke-dashoffset:0}
-}
-
-.pt{
-  font-size:19px;
-  font-weight:900
-}
-
-.pm{
-  font-size:12px;
-  color:#777;
-  margin-top:7px;
-  line-height:1.6
-}
-
-.pa{
-  font-size:32px;
-  font-weight:900;
-  color:var(--p);
-  margin-top:9px;
-  animation:pp .6s .3s both
-}
-
-.pok{
-  width:100%;
-  height:46px;
-  margin-top:18px;
-  border-radius:14px;
-  background:linear-gradient(135deg,var(--p),var(--p2));
-  color:#fff;
-  font-weight:900
-}
-
-.cf{
-  position:absolute;
-  top:-10px;
-  width:8px;
-  height:12px;
-  border-radius:2px;
-  animation:fall 1.8s ease-in forwards
-}
-
-@keyframes fall{
-  to{
-    transform:translateY(420px) rotate(540deg);
-    opacity:0
-  }
-}
-
-.wait{
-  font-size:46px;
-  font-weight:900;
-  color:var(--p);
-  margin:6px 0
-}
-
-.bar{
-  height:8px;
-  background:#fde0ec;
-  border-radius:9px;
-  overflow:hidden;
-  margin-top:12px
-}
-
-.bar div{
-  height:100%;
-  width:0;
-  background:var(--p);
-  transition:width 1s linear
-}
+.pop{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:25px}
+.pop.show{display:flex;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.popbox{position:relative;width:100%;max-width:330px;background:#fff;border-radius:26px;padding:30px 22px 22px;text-align:center;animation:pp .5s cubic-bezier(.2,1.4,.4,1);overflow:hidden}
+@keyframes pp{from{transform:scale(.3);opacity:0}}
+.pic{width:84px;height:84px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--p),var(--p2));box-shadow:0 0 0 0 rgba(226,19,110,.5);animation:ring 1.6s infinite}
+.pic.err{background:linear-gradient(135deg,#ef4444,#f97316)}
+@keyframes ring{70%{box-shadow:0 0 0 20px rgba(226,19,110,0)}100%{box-shadow:0 0 0 0 rgba(226,19,110,0)}}
+.pic svg{width:44px;height:44px}
+.pic path{stroke:#fff;stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:draw .6s .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pt{font-size:19px;font-weight:900}
+.pm{font-size:12px;color:#777;margin-top:7px;line-height:1.6}
+.pa{font-size:32px;font-weight:900;color:var(--p);margin-top:9px;animation:pp .6s .3s both}
+.pok{width:100%;height:46px;margin-top:18px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-weight:900}
+.cf{position:absolute;top:-10px;width:8px;height:12px;border-radius:2px;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(420px) rotate(540deg);opacity:0}}
+.wait{font-size:46px;font-weight:900;color:var(--p);margin:6px 0}
+.bar{height:8px;background:#fde0ec;border-radius:9px;overflow:hidden;margin-top:12px}
+.bar div{height:100%;width:0;background:var(--p);transition:width 1s linear}
 
 /* LOADING */
-.loading{
-  position:fixed;
-  inset:0;
-  z-index:999;
-  background:linear-gradient(160deg,#e2136e,#f53a8a);
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column
-}
+.loading{position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#e2136e,#f53a8a);color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.logo{width:84px;height:84px;border-radius:26px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 15px 40px rgba(0,0,0,.2);animation:bob2 1.6s infinite}
+@keyframes bob2{50%{transform:translateY(-8px) scale(1.04)}}
+.logo img{width:100%;height:100%;object-fit:contain;padding:8px}
+.spinner{width:27px;height:27px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp 1s linear infinite;margin-top:15px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.toast{position:fixed;z-index:1000;left:50%;bottom:85px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;padding:12px 17px;border-radius:12px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
 
-.logo{
-  width:84px;
-  height:84px;
-  border-radius:26px;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  box-shadow:0 15px 40px rgba(0,0,0,.2);
-  animation:bob2 1.6s infinite
-}
-
-@keyframes bob2{
-  50%{
-    transform:translateY(-8px) scale(1.04)
-  }
-}
-
-.logo img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  padding:8px
-}
-
-.spinner{
-  width:27px;
-  height:27px;
-  border:3px solid rgba(255,255,255,.3);
-  border-top-color:#fff;
-  border-radius:50%;
-  animation:sp 1s linear infinite;
-  margin-top:15px
-}
-
-@keyframes sp{
-  to{transform:rotate(360deg)}
-}
-
-.toast{
-  position:fixed;
-  z-index:1000;
-  left:50%;
-  bottom:85px;
-  transform:translateX(-50%) translateY(20px);
-  background:#222;
-  color:#fff;
-  padding:12px 17px;
-  border-radius:12px;
-  font-size:12px;
-  font-weight:700;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-  max-width:90%;
-  text-align:center
-}
-
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%)
-}
 /* BOLD TEXT + BUTTONS */
 body{font-weight:600}
 button{font-weight:800}
@@ -1430,6 +229,7 @@ button{font-weight:800}
 .info{font-weight:700;color:#555}
 .pm,.psub,.paysub,.tap-hint,.row span.s,.li span,.stat span{font-weight:700}
 .label{font-weight:900}
+
 /* RULES BOX */
 .rules{background:#fff;border:1.5px dashed #f7c3da;border-radius:14px;padding:12px 14px;margin-top:14px;font-size:12px;font-weight:700;line-height:1.8;color:#444}
 .rules .rt{display:block;color:var(--p);font-size:14px;font-weight:900;margin-bottom:4px}
@@ -1441,12 +241,8 @@ button{font-weight:800}
 <body>
 
 <div id="loading" class="loading">
-  <div class="logo">
-    <img id="loaderLogo" src="https://i.ibb.co.com/fTtSK7B/IMG-3561.jpg" alt="">
-  </div>
-  <div id="loaderText" style="margin-top:16px;font-weight:800;font-size:14px">
-    Loading...
-  </div>
+  <div class="logo"><img id="loaderLogo" src="https://i.ibb.co.com/fTtSK7B/IMG-3561.jpg" alt=""></div>
+  <div id="loaderText" style="margin-top:16px;font-weight:800;font-size:14px">Loading...</div>
   <div class="spinner"></div>
 </div>
 
@@ -1454,306 +250,152 @@ button{font-weight:800}
 
 <header class="header">
   <div class="topbar">
-
     <div class="profile">
-      <img id="userPhoto"
-           class="avatar"
-           src="https://ui-avatars.com/api/?name=User&background=e2136e&color=fff">
-
+      <img id="userPhoto" class="avatar" src="https://ui-avatars.com/api/?name=User&background=e2136e&color=fff">
       <div>
         <div id="userName" class="pname">Loading...</div>
         <div id="userUsername" class="puser">@telegram</div>
       </div>
     </div>
-
     <button class="hbtn" onclick="openSettingsMenu()">☰</button>
-
   </div>
 </header>
 
 <div class="balance-card tap" onclick="toggleBalance()">
-
   <div>
-    <div class="tap-label" id="balanceLabel">
-      TAP FOR BALANCE
-    </div>
-
-    <div class="bv" id="balanceValue">
-      <span class="balance-hidden">••••••</span>
-    </div>
-
-    <div class="tap-hint" id="balanceHint">
-      Tap to show your available balance
-    </div>
+    <div class="tap-label" id="balanceLabel">TAP FOR BALANCE</div>
+    <div class="bv" id="balanceValue"><span class="balance-hidden">••••••</span></div>
+    <div class="tap-hint" id="balanceHint">Tap to show your available balance</div>
   </div>
-
   <div class="ric" id="balanceEye">৳</div>
-
 </div>
 
 <main class="content">
 
-<div class="stitle">
-  Quick Services
-</div>
+<div class="stitle">Quick Services</div>
 
-<!-- ================= QUICK SERVICES ================= -->
-
+<!-- QUICK SERVICES -->
 <div class="grid">
 
-  <!-- REFER -->
   <button class="svc" onclick="openPage('refer')">
-    <div class="sic">
-      <img
-        src="https://i.ibb.co.com/kgPP66Z6/IMG-3564.jpg"
-        alt="Refer"
-        loading="eager">
-    </div>
+    <div class="sic"><img src="https://i.ibb.co.com/kgPP66Z6/IMG-3564.jpg" alt="Refer" loading="eager"></div>
     <div class="snm">Refer</div>
   </button>
 
-  <!-- TASK -->
   <button class="svc" onclick="openPage('task')">
-    <div class="sic">
-      <img
-        src="https://i.ibb.co.com/Z6zQh4BW/IMG-3566.jpg"
-        alt="Task"
-        loading="eager">
-    </div>
+    <div class="sic"><img src="https://i.ibb.co.com/Z6zQh4BW/IMG-3566.jpg" alt="Task" loading="eager"></div>
     <div class="snm">Task</div>
   </button>
 
-  <!-- BONUS -->
   <button class="svc" onclick="openPage('bonus')">
-    <div class="sic">
-      <img
-        src="https://i.ibb.co.com/1JhxrzwG/IMG-3562.jpg"
-        alt="Bonus"
-        loading="eager">
-    </div>
+    <div class="sic"><img src="https://i.ibb.co.com/1JhxrzwG/IMG-3562.jpg" alt="Bonus" loading="eager"></div>
     <div class="snm">Bonus</div>
   </button>
 
-  <!-- SPIN -->
   <button class="svc" onclick="openPage('spin')">
-    <div class="sic">
-      <img
-        src="https://i.ibb.co.com/209HWZYc/IMG-3563.jpg"
-        alt="Spin"
-        loading="eager">
-    </div>
+    <div class="sic"><img src="https://i.ibb.co.com/209HWZYc/IMG-3563.jpg" alt="Spin" loading="eager"></div>
     <div class="snm">Spin</div>
   </button>
 
-  <!-- ADS -->
   <button class="svc" onclick="openPage('ads')">
-    <div class="sic">
-      <img
-        src="https://i.ibb.co.com/gMJq1Y5x/IMG-3565.jpg"
-        alt="Ads"
-        loading="eager">
-    </div>
+    <div class="sic"><img src="https://i.ibb.co.com/gMJq1Y5x/IMG-3565.jpg" alt="Ads" loading="eager"></div>
     <div class="snm">Ads</div>
   </button>
 
-  <!-- MINING -->
   <button class="svc" onclick="openPage('mining')">
-    <div class="sic">
-      <img
-        src="https://i.ibb.co.com/4wWMhB2q/IMG-3567.jpg"
-        alt="Mining"
-        loading="eager">
-    </div>
+    <div class="sic"><img src="https://i.ibb.co.com/4wWMhB2q/IMG-3567.jpg" alt="Mining" loading="eager"></div>
     <div class="snm">Mining</div>
   </button>
 
-  <!-- SUPPORT -->
   <button class="svc" onclick="openPage('support')">
-    <div class="sic">
-      <img
-        src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png"
-        alt="Telegram Support"
-        loading="eager">
-    </div>
+    <div class="sic"><img src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png" alt="Telegram Support" loading="eager"></div>
     <div class="snm">Support</div>
   </button>
 
-  <!-- TUTORIAL -->
   <button class="svc" onclick="openPage('tutorial')">
-    <div class="sic">
-      <img
-        src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg"
-        alt="Tutorial"
-        loading="eager">
-    </div>
+    <div class="sic"><img src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial" loading="eager"></div>
     <div class="snm">Tutorial</div>
   </button>
 
 </div>
 
-<!-- ================= WITHDRAW ================= -->
-
-<div class="stitle" style="margin-top:18px">
-  Withdraw
-</div>
+<!-- WITHDRAW -->
+<div class="stitle" style="margin-top:18px">Withdraw</div>
 
 <div class="payments">
 
-  <button class="paybtn"
-          onclick="openWithdrawMethod('bkash')">
-
-    <div class="paylogo">
-      <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQbs6dtZDI3_YGCOyoQJST3DjlIhVteRqlW-5fPftOI7AnPSYsjD3a2D56&s=10"
-        alt="bKash">
-    </div>
-
+  <button class="paybtn" onclick="openWithdrawMethod('bkash')">
+    <div class="paylogo"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQbs6dtZDI3_YGCOyoQJST3DjlIhVteRqlW-5fPftOI7AnPSYsjD3a2D56&s=10" alt="bKash"></div>
     <div>
       <div class="payname">bKash</div>
       <div class="paysub">Direct withdraw</div>
     </div>
-
   </button>
 
-  <button class="paybtn"
-          onclick="openWithdrawMethod('nagad')">
-
-    <div class="paylogo">
-      <img
-        src="https://www.logo.wine/a/logo/Nagad/Nagad-Logo.wine.svg"
-        alt="Nagad">
-    </div>
-
+  <button class="paybtn" onclick="openWithdrawMethod('nagad')">
+    <div class="paylogo"><img src="https://www.logo.wine/a/logo/Nagad/Nagad-Logo.wine.svg" alt="Nagad"></div>
     <div>
       <div class="payname">Nagad</div>
       <div class="paysub">Direct withdraw</div>
     </div>
-
   </button>
 
 </div>
 
 <!-- BANNER -->
-
-<div id="bannerBox" class="banner-box">
-  <div class="bph">Welcome 💗</div>
-</div>
+<div id="bannerBox" class="banner-box"><div class="bph">Welcome 💗</div></div>
 
 <!-- NOTICE -->
-
 <button class="row" onclick="openPage('notice')">
-
   <div class="ric">🔔</div>
-
-  <div>
-    <b>Notice</b>
-    <span class="s">Latest announcements</span>
-  </div>
-
+  <div><b>Notice</b><span class="s">Latest announcements</span></div>
   <div class="arrow">›</div>
-
 </button>
 
-<!-- OFFICIAL -->
-
+<!-- PAYMENT GROUP (আগে Official Channel ছিল) -->
 <button class="row" onclick="openPage('official')">
-
-  <div class="ric">📢</div>
-
-  <div>
-    <b>Official Channel</b>
-    <span class="s">Join our channel</span>
-  </div>
-
+  <div class="ric">💸</div>
+  <div><b>Payment Group</b><span class="s">Join our payment group</span></div>
   <div class="arrow">›</div>
-
 </button>
 
 <!-- TUTORIAL -->
-
 <button class="row" onclick="openTutorial()">
-
-  <img
-    class="tutorial-logo"
-    src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg"
-    alt="Tutorial">
-
-  <div>
-    <b>Tutorial</b>
-    <span class="s">Watch the tutorial video</span>
-  </div>
-
+  <img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial">
+  <div><b>Tutorial</b><span class="s">Watch the tutorial video</span></div>
   <div class="arrow">›</div>
-
 </button>
 
 </main>
 
 <!-- BOTTOM NAV -->
-
 <nav class="bottom-nav">
-
-  <button class="ni active" onclick="goHome()">
-    <i>⌂</i>
-    Home
-  </button>
-
-  <button class="ni" onclick="openPage('refer')">
-    <i>👥</i>
-    Refer
-  </button>
-
-  <button class="ni" onclick="openPage('mining')">
-    <i>⛏️</i>
-    Mining
-  </button>
-
+  <button class="ni active" onclick="goHome()"><i>⌂</i>Home</button>
+  <button class="ni" onclick="openPage('refer')"><i>👥</i>Refer</button>
+  <button class="ni" onclick="openPage('mining')"><i>⛏️</i>Mining</button>
   <button class="ni" onclick="openPage('support')">
-    <i class="tg-nav-icon">
-      <img
-        src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png"
-        alt="Telegram">
-    </i>
+    <i class="tg-nav-icon"><img src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png" alt="Telegram"></i>
     Support
   </button>
-
 </nav>
 
 </div>
 
 <!-- MODAL -->
-
-<div id="modal"
-     class="modal"
-     onclick="if(event.target.id==='modal')closeModal()">
-
+<div id="modal" class="modal" onclick="if(event.target.id==='modal')closeModal()">
   <div class="mbox">
-
     <div class="mhead">
-
       <div id="modalTitle" class="mtitle"></div>
-
-      <button class="close"
-              onclick="closeModal()">
-        ×
-      </button>
-
+      <button class="close" onclick="closeModal()">×</button>
     </div>
-
     <div id="modalContent" class="mc"></div>
-
   </div>
-
 </div>
 
 <!-- POPUP -->
-
-<div id="pop" class="pop">
-  <div id="popBox" class="popbox"></div>
-</div>
+<div id="pop" class="pop"><div id="popBox" class="popbox"></div></div>
 
 <div id="toast" class="toast"></div>
-
 <div id="activityPopup" class="activity"></div>
 
 
@@ -1784,13 +426,10 @@ const TS=firebase.database.ServerValue.TIMESTAMP;
    TELEGRAM
 ========================================================= */
 
-const tg=
-  window.Telegram &&
-  window.Telegram.WebApp
-  ? window.Telegram.WebApp
-  : null;
+const tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:null;
 
 const DAY=86400000;
+const TASK_WAIT_MS=10000; // টাস্ক শুরুর ১০ সেকেন্ড পর CLAIM
 
 
 /* =========================================================
@@ -1807,16 +446,7 @@ const LOGOS={
    GLOBAL VARIABLES
 ========================================================= */
 
-const WHEEL=[
-  1,
-  2,
-  5,
-  0.5,
-  10,
-  3,
-  1.5,
-  20
-];
+const WHEEL=[1,2,5,0.5,10,3,1.5,20];
 
 let currentUser=null;
 let settings={};
@@ -1834,17 +464,13 @@ let monetagLoaded=false;
 ========================================================= */
 
 function initTelegram(){
-
   if(!tg)return;
-
   tg.ready();
   tg.expand();
-
   try{
     tg.setHeaderColor("#e2136e");
     tg.setBackgroundColor("#f4f4f6");
   }catch(e){}
-
 }
 
 
@@ -1853,98 +479,45 @@ function initTelegram(){
 ========================================================= */
 
 function esc(v){
-
-  return v==null
-    ?""
-    :String(v)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-
+  return v==null?"":String(v)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
-
 
 function money(v){
-
-  return Number(v||0).toLocaleString(
-    "en-US",
-    {
-      minimumFractionDigits:2,
-      maximumFractionDigits:2
-    }
-  );
-
+  return Number(v||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
-
 
 function showToast(m){
-
   const e=document.getElementById("toast");
-
   e.innerText=m;
-
   e.classList.add("show");
-
-  setTimeout(
-    ()=>e.classList.remove("show"),
-    2500
-  );
-
+  setTimeout(()=>e.classList.remove("show"),2500);
 }
-
 
 function formatDate(t){
-
-  return t
-    ?new Date(t).toLocaleString(
-      "en-GB",
-      {
-        day:"2-digit",
-        month:"short",
-        year:"numeric",
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-    )
-    :"";
-
+  return t?new Date(t).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"";
 }
-
 
 function todayKey(){
-
   const d=new Date();
-
-  return d.getFullYear()
-    +"-"
-    +String(d.getMonth()+1).padStart(2,"0")
-    +"-"
-    +String(d.getDate()).padStart(2,"0");
-
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 
-
 function getTelegramUser(){
-
-  if(
-    tg &&
-    tg.initDataUnsafe &&
-    tg.initDataUnsafe.user
-  ){
+  if(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user){
     return tg.initDataUnsafe.user;
   }
-
   return{
     id:"test_"+Date.now(),
     first_name:"Test",
     last_name:"User",
     username:"test_user",
-    photo_url:
-      "https://ui-avatars.com/api/?name=Test+User&background=e2136e&color=fff"
+    photo_url:"https://ui-avatars.com/api/?name=Test+User&background=e2136e&color=fff"
   };
-
 }
 
 
@@ -1963,25 +536,10 @@ function showPopup(title,msg,amount,isErr){
   let cf="";
 
   if(!isErr){
-
-    const c=[
-      "#e2136e",
-      "#ff9800",
-      "#4caf50",
-      "#3f51b5",
-      "#ffb800"
-    ];
-
+    const c=["#e2136e","#ff9800","#4caf50","#3f51b5","#ffb800"];
     for(let i=0;i<26;i++){
-
-      cf+=
-        `<i class="cf"
-        style="left:${Math.random()*100}%;
-        background:${c[i%5]};
-        animation-delay:${Math.random()*.5}s"></i>`;
-
+      cf+=`<i class="cf" style="left:${Math.random()*100}%;background:${c[i%5]};animation-delay:${Math.random()*.5}s"></i>`;
     }
-
   }
 
   b.innerHTML=
@@ -1990,38 +548,20 @@ function showPopup(title,msg,amount,isErr){
       <svg viewBox="0 0 48 48">${icon}</svg>
     </div>
     <div class="pt">${esc(title)}</div>
-    ${
-      amount!=null
-      ?`<div class="pa">৳${money(amount)}</div>`
-      :""
-    }
+    ${amount!=null?`<div class="pa">৳${money(amount)}</div>`:""}
     <div class="pm">${esc(msg||"")}</div>
     <button class="pok" onclick="closePopup()">OK</button>`;
 
-  document
-    .getElementById("pop")
-    .classList.add("show");
+  document.getElementById("pop").classList.add("show");
 
-  if(
-    tg &&
-    tg.HapticFeedback
-  ){
-    try{
-      tg.HapticFeedback.notificationOccurred(
-        isErr?"error":"success"
-      );
-    }catch(e){}
+  if(tg&&tg.HapticFeedback){
+    try{tg.HapticFeedback.notificationOccurred(isErr?"error":"success");}catch(e){}
   }
 
 }
 
-
 function closePopup(){
-
-  document
-    .getElementById("pop")
-    .classList.remove("show");
-
+  document.getElementById("pop").classList.remove("show");
 }
 
 
@@ -2030,114 +570,39 @@ function closePopup(){
 ========================================================= */
 
 function sv(){
-
   for(const k of arguments){
-
     const v=settings?settings[k]:"";
-
-    if(
-      v!==undefined &&
-      v!==null &&
-      String(v).trim()!==""
-    ){
+    if(v!==undefined&&v!==null&&String(v).trim()!==""){
       return v;
     }
-
   }
-
   return"";
-
 }
 
-
-const getBotName=()=>
-  String(
-    sv(
-      "botName",
-      "name",
-      "siteName",
-      "appName"
-    )||"Mini App"
-  );
-
+const getBotName=()=>String(sv("botName","name","siteName","appName")||"Mini App");
 
 const getBotUsername=()=>"TK_PAY_BOT";
 
+const getLogoUrl=()=>String(sv("logoUrl","logo","siteLogo","adminLogo","logoURL","logo_url")||"");
 
-const getLogoUrl=()=>
-  String(
-    sv(
-      "logoUrl",
-      "logo",
-      "siteLogo",
-      "adminLogo",
-      "logoURL",
-      "logo_url"
-    )||""
-  );
+const getSupportTelegram=()=>String(sv("supportTelegram","support","supportUsername","supportId")||"").replace(/^@/,"");
 
+// Payment Group-এর লিংক: Firebase settings এ আগের মতোই officialChannel ফিল্ডে বসবে
+const getOfficialChannel=()=>String(sv("officialChannel","channelUrl","officialChannelUrl","channel")||"");
 
-const getSupportTelegram=()=>
-  String(
-    sv(
-      "supportTelegram",
-      "support",
-      "supportUsername",
-      "supportId"
-    )||""
-  ).replace(/^@/,"");
-
-
-const getOfficialChannel=()=>
-  String(
-    sv(
-      "officialChannel",
-      "channelUrl",
-      "officialChannelUrl",
-      "channel"
-    )||""
-  );
-
-
-const getTutorialUrl=()=>
-  String(
-    sv(
-      "tutorialUrl",
-      "tutorial",
-      "tutorialLink",
-      "videoUrl",
-      "tutorialVideo"
-    )||""
-  );
-
+const getTutorialUrl=()=>String(sv("tutorialUrl","tutorial","tutorialLink","videoUrl","tutorialVideo")||"");
 
 async function loadSettings(){
-
   try{
-
-    settings=
-      (
-        await db
-          .ref("settings")
-          .once("value")
-      ).val()||{};
-
+    settings=(await db.ref("settings").once("value")).val()||{};
     document.title=getBotName();
-
     const l=getLogoUrl();
-
     if(l){
-      document.getElementById(
-        "loaderLogo"
-      ).src=l;
+      document.getElementById("loaderLogo").src=l;
     }
-
   }catch(e){
-
     console.error(e);
-
   }
-
 }
 
 
@@ -2148,13 +613,16 @@ async function loadSettings(){
    is processed more than once.
 ========================================================= */
 
-async function creditBalance(amount, claimPath, meta={}){
-  const reward=Number(amount||0);
-  if(!currentUser || !userRef || reward<=0) return false;
+async function creditBalance(amount,claimPath,meta={}){
 
-  const claimRef=claimPath ? db.ref(claimPath) : null;
+  const reward=Number(amount||0);
+
+  if(!currentUser||!userRef||reward<=0)return false;
+
+  const claimRef=claimPath?db.ref(claimPath):null;
 
   if(claimRef){
+
     const claimSnap=await claimRef.once("value");
     const claim=claimSnap.val()||{};
 
@@ -2171,7 +639,7 @@ async function creditBalance(amount, claimPath, meta={}){
     const result=await userRef.transaction(u=>{
       u=u||{};
       const oldBalance=Number(u.balance||0);
-      return {
+      return{
         ...u,
         balance:oldBalance+reward,
         lastBalanceUpdate:Date.now()
@@ -2189,12 +657,14 @@ async function creditBalance(amount, claimPath, meta={}){
       updateBalance();
       return true;
     }
+
     return false;
+
   }
 
   const result=await userRef.transaction(u=>{
     u=u||{};
-    return {
+    return{
       ...u,
       balance:Number(u.balance||0)+reward,
       lastBalanceUpdate:Date.now()
@@ -2206,8 +676,11 @@ async function creditBalance(amount, claimPath, meta={}){
     updateBalance();
     return true;
   }
+
   return false;
+
 }
+
 
 /* =========================================================
    USER
@@ -2215,16 +688,13 @@ async function creditBalance(amount, claimPath, meta={}){
 
 const createReferralCode=id=>String(id);
 
-
 async function initializeUser(){
 
   currentUser=getTelegramUser();
 
-  userRef=
-    db.ref("users/"+currentUser.id);
+  userRef=db.ref("users/"+currentUser.id);
 
-  const snap=
-    await userRef.once("value");
+  const snap=await userRef.once("value");
 
   if(snap.exists()){
 
@@ -2253,38 +723,15 @@ async function initializeUser(){
   }
 
   await userRef.update({
-
-    firstName:
-      currentUser.first_name||
-      userData.firstName||
-      "",
-
-    lastName:
-      currentUser.last_name||
-      userData.lastName||
-      "",
-
-    username:
-      currentUser.username||
-      userData.username||
-      "",
-
-    photoUrl:
-      currentUser.photo_url||
-      userData.photoUrl||
-      "",
-
+    firstName:currentUser.first_name||userData.firstName||"",
+    lastName:currentUser.last_name||userData.lastName||"",
+    username:currentUser.username||userData.username||"",
+    photoUrl:currentUser.photo_url||userData.photoUrl||"",
     lastActive:TS,
-
-    referralCode:
-      String(currentUser.id)
-
+    referralCode:String(currentUser.id)
   });
 
-  userData=
-    (
-      await userRef.once("value")
-    ).val()||userData;
+  userData=(await userRef.once("value")).val()||userData;
 
   await processReferral();
 
@@ -2292,225 +739,114 @@ async function initializeUser(){
 
 }
 
-
 function getStartParam(){
 
   try{
-
-    if(
-      tg &&
-      tg.initDataUnsafe &&
-      tg.initDataUnsafe.start_param
-    ){
+    if(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param){
       return tg.initDataUnsafe.start_param;
     }
-
   }catch(e){}
 
-  return new URLSearchParams(
-    location.search
-  ).get("ref")||"";
+  return new URLSearchParams(location.search).get("ref")||"";
 
 }
-
 
 async function processReferral(){
 
-  let c=
-    String(
-      getStartParam()||""
-    ).trim();
+  let c=String(getStartParam()||"").trim();
 
   if(!c||userData.referredBy)return;
 
-  if(c.startsWith("ref_"))
-    c=c.substring(4);
-
-  if(c.startsWith("REF"))
-    c=c.substring(3);
+  if(c.startsWith("ref_"))c=c.substring(4);
+  if(c.startsWith("REF"))c=c.substring(3);
 
   const rid=String(c);
 
-  if(
-    !/^\d+$/.test(rid)||
-    rid===String(currentUser.id)
-  )return;
+  if(!/^\d+$/.test(rid)||rid===String(currentUser.id))return;
 
-  const refSnap=
-    await db
-      .ref("users/"+rid)
-      .once("value");
+  const refSnap=await db.ref("users/"+rid).once("value");
 
   if(!refSnap.exists())return;
 
-  const oldRef=
-    await db
-      .ref(
-        "referrals/"
-        +rid+
-        "/"
-        +currentUser.id
-      )
-      .once("value");
+  const oldRef=await db.ref("referrals/"+rid+"/"+currentUser.id).once("value");
 
   if(oldRef.exists()){
-
-    await userRef.update({
-      referredBy:rid
-    });
-
+    await userRef.update({referredBy:rid});
     return;
-
   }
 
-  await db
-    .ref(
-      "referrals/"
-      +rid+
-      "/"
-      +currentUser.id
-    )
-    .set({
-
-      referrerId:rid,
-
-      referredId:
-        String(currentUser.id),
-
-      referredName:[
-        currentUser.first_name||"",
-        currentUser.last_name||""
-      ].join(" ").trim(),
-
-      referredUsername:
-        currentUser.username||"",
-
-      createdAt:TS
-
-    });
-
-  await userRef.update({
-    referredBy:rid
+  await db.ref("referrals/"+rid+"/"+currentUser.id).set({
+    referrerId:rid,
+    referredId:String(currentUser.id),
+    referredName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),
+    referredUsername:currentUser.username||"",
+    createdAt:TS
   });
 
-  const rr=
-    db.ref("users/"+rid);
+  await userRef.update({referredBy:rid});
 
-  const ru=
-    refSnap.val()||{};
+  const rr=db.ref("users/"+rid);
+  const ru=refSnap.val()||{};
 
-  await rr.update({
-    totalReferrals:
-      Number(ru.totalReferrals||0)+1
-  });
+  await rr.update({totalReferrals:Number(ru.totalReferrals||0)+1});
 
-  const reward=
-    Number(settings.referralReward||0);
+  const reward=Number(settings.referralReward||0);
 
   if(reward>0){
-
-    await db
-      .ref(
-        "referralRewards/"
-        +rid+
-        "/"
-        +currentUser.id
-      )
-      .set({
-        amount:reward,
-        createdAt:TS,
-        status:"pending"
-      });
-
+    await db.ref("referralRewards/"+rid+"/"+currentUser.id).set({
+      amount:reward,
+      createdAt:TS,
+      status:"pending"
+    });
   }
 
 }
 
-
 function updateProfileUI(){
 
-  document.getElementById(
-    "userName"
-  ).innerText=
-    [
-      currentUser.first_name||"",
-      currentUser.last_name||""
-    ].join(" ").trim()
-    ||"Telegram User";
+  document.getElementById("userName").innerText=
+    [currentUser.first_name||"",currentUser.last_name||""].join(" ").trim()||"Telegram User";
 
-  document.getElementById(
-    "userUsername"
-  ).innerText=
-    currentUser.username
-      ?"@"+currentUser.username
-      :"Telegram User";
+  document.getElementById("userUsername").innerText=
+    currentUser.username?"@"+currentUser.username:"Telegram User";
 
   if(currentUser.photo_url){
-
-    document.getElementById(
-      "userPhoto"
-    ).src=currentUser.photo_url;
-
+    document.getElementById("userPhoto").src=currentUser.photo_url;
   }
 
   updateBalance();
 
 }
 
-
 function updateBalance(){
 
-  const e=
-    document.getElementById(
-      "balanceValue"
-    );
-
-  const h=
-    document.getElementById(
-      "balanceHint"
-    );
-
-  const l=
-    document.getElementById(
-      "balanceLabel"
-    );
+  const e=document.getElementById("balanceValue");
+  const h=document.getElementById("balanceHint");
+  const l=document.getElementById("balanceLabel");
 
   if(!e)return;
 
   if(balanceVisible){
 
-    e.innerHTML=
-      `<span class="balance-reveal">৳ ${money(userData.balance||0)}</span>`;
+    e.innerHTML=`<span class="balance-reveal">৳ ${money(userData.balance||0)}</span>`;
 
     e.classList.remove("balance-reveal");
     void e.offsetWidth;
     e.classList.add("balance-reveal");
 
-    if(h)
-      h.innerText=
-        "Tap to hide your balance";
-
-    if(l)
-      l.innerText=
-        "AVAILABLE BALANCE";
+    if(h)h.innerText="Tap to hide your balance";
+    if(l)l.innerText="AVAILABLE BALANCE";
 
   }else{
 
-    e.innerHTML=
-      '<span class="balance-hidden">••••••</span>';
+    e.innerHTML='<span class="balance-hidden">••••••</span>';
 
-    if(h)
-      h.innerText=
-        "Tap to show your available balance";
-
-    if(l)
-      l.innerText=
-        "TAP FOR BALANCE";
+    if(h)h.innerText="Tap to show your available balance";
+    if(l)l.innerText="TAP FOR BALANCE";
 
   }
 
 }
-
 
 function toggleBalance(){
 
@@ -2519,43 +855,28 @@ function toggleBalance(){
   updateBalance();
 
   const eye=document.getElementById("balanceEye");
+
   if(eye){
     eye.classList.remove("balance-eye-pop");
     void eye.offsetWidth;
     eye.classList.add("balance-eye-pop");
   }
 
-  if(
-    tg &&
-    tg.HapticFeedback
-  ){
-
-    try{
-      tg.HapticFeedback.impactOccurred(
-        "light"
-      );
-    }catch(e){}
-
+  if(tg&&tg.HapticFeedback){
+    try{tg.HapticFeedback.impactOccurred("light");}catch(e){}
   }
 
 }
-
 
 function listenUser(){
 
   if(!userRef)return;
 
-  userRef.on(
-    "value",
-    s=>{
-
-      userData=s.val()||{};
-      userData.balance=Number(userData.balance||0);
-
-      updateBalance();
-
-    }
-  );
+  userRef.on("value",s=>{
+    userData=s.val()||{};
+    userData.balance=Number(userData.balance||0);
+    updateBalance();
+  });
 
 }
 
@@ -2568,40 +889,25 @@ function openModal(t,h){
 
   clearInterval(tickT);
 
-  document.getElementById(
-    "modalTitle"
-  ).innerText=t;
-
-  document.getElementById(
-    "modalContent"
-  ).innerHTML=h;
-
-  document
-    .getElementById("modal")
-    .classList.add("show");
+  document.getElementById("modalTitle").innerText=t;
+  document.getElementById("modalContent").innerHTML=h;
+  document.getElementById("modal").classList.add("show");
 
 }
-
 
 function closeModal(){
 
   clearInterval(tickT);
 
-  document
-    .getElementById("modal")
-    .classList.remove("show");
+  document.getElementById("modal").classList.remove("show");
 
 }
-
 
 function goHome(){
 
   closeModal();
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+  window.scrollTo({top:0,behavior:"smooth"});
 
 }
 
@@ -2618,435 +924,174 @@ function rulesBox(title,arr){
 }
 
 const FIXED_WITHDRAW_METHODS=[
-  {
-    id:"bkash",
-    name:"bKash",
-    logo:LOGOS.bkash
-  },
-  {
-    id:"nagad",
-    name:"Nagad",
-    logo:LOGOS.nagad
-  }
+  {id:"bkash",name:"bKash",logo:LOGOS.bkash},
+  {id:"nagad",name:"Nagad",logo:LOGOS.nagad}
 ];
 
-let wMethods=[
-  ...FIXED_WITHDRAW_METHODS
-];
+let wMethods=[...FIXED_WITHDRAW_METHODS];
 
 let wSel="bkash";
 
-
 async function openWithdrawMethod(preferred){
-
   await openWithdraw(preferred);
-
 }
-
 
 async function openWithdraw(preferred){
 
-  wMethods=[
-    ...FIXED_WITHDRAW_METHODS
-  ];
+  wMethods=[...FIXED_WITHDRAW_METHODS];
 
-  const q=
-    String(preferred||"")
-    .toLowerCase();
+  const q=String(preferred||"").toLowerCase();
 
   wSel=
-    (
-      q==="bkash"||
-      q.includes("bkash")||
-      q.includes("বিকাশ")
-    )
+    (q==="bkash"||q.includes("bkash")||q.includes("বিকাশ"))
     ?"bkash"
-    :
-    (
-      q==="nagad"||
-      q.includes("nagad")||
-      q.includes("নগদ")
-    )
+    :(q==="nagad"||q.includes("nagad")||q.includes("নগদ"))
     ?"nagad"
     :"bkash";
 
-  const mh=
-    wMethods
-      .map(
-        m=>
-        `<button
-          class="method ${m.id===wSel?"sel":""}"
-          data-id="${m.id}"
-          onclick="pickMethod('${m.id}')">
-
-          <img src="${m.logo}" alt="${m.name}">
-
-          <b>${m.name}</b>
-
-          <small
-            style="display:block;color:#888;margin-top:4px">
-            Direct withdraw
-          </small>
-
-        </button>`
-      )
-      .join("");
+  const mh=wMethods.map(m=>
+    `<button class="method ${m.id===wSel?"sel":""}" data-id="${m.id}" onclick="pickMethod('${m.id}')">
+      <img src="${m.logo}" alt="${m.name}">
+      <b>${m.name}</b>
+      <small style="display:block;color:#888;margin-top:4px">Direct withdraw</small>
+    </button>`
+  ).join("");
 
   openModal(
     "Withdraw",
 
-    `<div
-      class="card"
-      style="display:flex;gap:12px;align-items:center">
-
+    `<div class="card" style="display:flex;gap:12px;align-items:center">
       <div class="ric">💰</div>
-
       <div>
-        <b style="font-size:12px;color:#888">
-          Available Balance
-        </b>
-
-        <div
-          style="font-size:22px;font-weight:900;color:var(--p)">
-          ৳ ${money(userData.balance||0)}
-        </div>
+        <b style="font-size:12px;color:#888">Available Balance</b>
+        <div style="font-size:22px;font-weight:900;color:var(--p)">৳ ${money(userData.balance||0)}</div>
       </div>
-
     </div>
 
     <div class="info">
-
-      Minimum Withdraw:
-      <b>৳${money(settings.minWithdraw||0)}</b>
-
-      <br>
-
-      Minimum Referral:
-      <b>${Number(settings.minRefer||0)}</b>
-
-      <br>
-
-      Your Referral:
-      <b>${Number(userData.totalReferrals||0)}</b>
-
+      Minimum Withdraw: <b>৳${money(settings.minWithdraw||0)}</b><br>
+      Minimum Referral: <b>${Number(settings.minRefer||0)}</b><br>
+      Your Referral: <b>${Number(userData.totalReferrals||0)}</b>
     </div>
 
-    <label class="label">
-      Withdraw Method
-    </label>
+    <label class="label">Withdraw Method</label>
 
-    <div class="methods">
-      ${mh}
-    </div>
+    <div class="methods">${mh}</div>
 
-    <label class="label">
-      Amount
-    </label>
+    <label class="label">Amount</label>
 
-    <input
-      id="withdrawAmount"
-      class="input"
-      type="number"
-      placeholder="Enter amount">
+    <input id="withdrawAmount" class="input" type="number" placeholder="Enter amount">
 
-    <label class="label">
-      Account Number
-    </label>
+    <label class="label">Account Number</label>
 
-    <input
-      id="withdrawNumber"
-      class="input"
-      type="text"
-      inputmode="numeric"
-      maxlength="11"
-      placeholder="01XXXXXXXXX">
+    <input id="withdrawNumber" class="input" type="text" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX">
 
-    <button
-      class="pbtn"
-      onclick="submitWithdraw()">
-      Submit Withdraw
-    </button>
+    <button class="pbtn" onclick="submitWithdraw()">Submit Withdraw</button>
 
     ${rulesBox("উইথড্র নিয়ম",["সর্বনিম্ন উইথড্র <b>৳"+money(settings.minWithdraw||0)+"</b>।","কমপক্ষে <b>"+Number(settings.minRefer||0)+" জন</b> রেফার থাকতে হবে।","নাম্বার অবশ্যই <b>01 দিয়ে শুরু ১১ ডিজিট</b> হতে হবে।","রিকোয়েস্ট দেওয়ার পর <b>পেন্ডিং</b> থাকবে, যাচাইয়ের পর পেমেন্ট হবে।"])}`
   );
 
 }
 
-
 function pickMethod(id){
 
   id=String(id||"").toLowerCase();
 
-  if(
-    id!=="bkash"&&
-    id!=="nagad"
-  )return;
+  if(id!=="bkash"&&id!=="nagad")return;
 
   wSel=id;
 
-  document
-    .querySelectorAll(".method")
-    .forEach(
-      b=>
-      b.classList.toggle(
-        "sel",
-        b.dataset.id===id
-      )
-    );
+  document.querySelectorAll(".method").forEach(b=>b.classList.toggle("sel",b.dataset.id===id));
 
 }
 
-
 async function submitWithdraw(){
 
-  const amount=
-    Number(
-      document.getElementById(
-        "withdrawAmount"
-      ).value
-    );
+  const amount=Number(document.getElementById("withdrawAmount").value);
+  const number=document.getElementById("withdrawNumber").value.trim();
+  const minW=Number(settings.minWithdraw||0);
+  const minR=Number(settings.minRefer||0);
+  const bal=Number(userData.balance||0);
+  const refs=Number(userData.totalReferrals||0);
 
-  const number=
-    document.getElementById(
-      "withdrawNumber"
-    ).value.trim();
+  const err=m=>showPopup("Failed",m,null,true);
 
-  const minW=
-    Number(settings.minWithdraw||0);
+  if(wSel!=="bkash"&&wSel!=="nagad")return err("Select withdraw method");
+  if(!amount||amount<=0)return err("Enter valid amount");
+  if(amount<minW)return err("Minimum withdraw ৳"+minW);
+  if(refs<minR)return err("You need at least "+minR+" referrals");
+  if(amount>bal)return err("Insufficient balance");
+  if(!number)return err("Enter account number");
+  if(!/^01\d{9}$/.test(number))return err("Enter a valid 11 digit account number");
 
-  const minR=
-    Number(settings.minRefer||0);
+  const method=wMethods.find(x=>x.id===wSel);
 
-  const bal=
-    Number(userData.balance||0);
+  const id=db.ref("withdrawals").push().key;
 
-  const refs=
-    Number(userData.totalReferrals||0);
-
-  const err=
-    m=>
-    showPopup(
-      "Failed",
-      m,
-      null,
-      true
-    );
-
-  if(
-    wSel!=="bkash"&&
-    wSel!=="nagad"
-  )
-    return err("Select withdraw method");
-
-  if(!amount||amount<=0)
-    return err("Enter valid amount");
-
-  if(amount<minW)
-    return err(
-      "Minimum withdraw ৳"+minW
-    );
-
-  if(refs<minR)
-    return err(
-      "You need at least "
-      +minR+
-      " referrals"
-    );
-
-  if(amount>bal)
-    return err(
-      "Insufficient balance"
-    );
-
-  if(!number)
-    return err(
-      "Enter account number"
-    );
-
-  if(!/^01\d{9}$/.test(number))
-    return err(
-      "Enter a valid 11 digit account number"
-    );
-
-  const method=
-    wMethods.find(
-      x=>x.id===wSel
-    );
-
-  const id=
-    db
-      .ref("withdrawals")
-      .push()
-      .key;
-
-  await db
-    .ref("withdrawals/"+id)
-    .set({
-
-      id,
-
-      userId:
-        String(currentUser.id),
-
-      userName:[
-        currentUser.first_name||"",
-        currentUser.last_name||""
-      ].join(" ").trim(),
-
-      username:
-        currentUser.username||"",
-
-      amount,
-
-      methodId:
-        method.id,
-
-      methodName:
-        method.name,
-
-      accountNumber:number,
-
-      status:"pending",
-
-      createdAt:TS
-
-    });
+  await db.ref("withdrawals/"+id).set({
+    id,
+    userId:String(currentUser.id),
+    userName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),
+    username:currentUser.username||"",
+    amount,
+    methodId:method.id,
+    methodName:method.name,
+    accountNumber:number,
+    status:"pending",
+    createdAt:TS
+  });
 
   closeModal();
 
   showPopup(
     "Request Submitted!",
-    method.name+
-    " withdraw request submitted successfully. It is pending processing.",
+    method.name+" withdraw request submitted successfully. It is pending processing.",
     amount
   );
 
 }
 
-
 async function openWithdrawHistory(){
 
-  const snap=
-    await db
-      .ref("withdrawals")
-      .orderByChild("userId")
-      .equalTo(
-        String(currentUser.id)
-      )
-      .once("value");
+  const snap=await db.ref("withdrawals").orderByChild("userId").equalTo(String(currentUser.id)).once("value");
 
   let arr=[];
 
-  snap.forEach(
-    c=>
-    arr.push({
-      id:c.key,
-      ...c.val()
-    })
-  );
+  snap.forEach(c=>arr.push({id:c.key,...c.val()}));
 
-  arr.sort(
-    (a,b)=>
-      Number(b.createdAt||0)-
-      Number(a.createdAt||0)
-  );
+  arr.sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
 
-  const h=
-    arr
-      .map(
-        w=>{
+  const h=arr.map(w=>{
 
-          const st=
-            String(
-              w.status||"pending"
-            );
+    const st=String(w.status||"pending");
+    const label=st.charAt(0).toUpperCase()+st.slice(1);
 
-          const label=
-            st.charAt(0).toUpperCase()
-            +st.slice(1);
+    const cls=
+      ["approved","completed","paid","success","successful"].includes(st.toLowerCase())
+      ?"color:#16a56b"
+      :st.toLowerCase()==="rejected"
+      ?"color:#e53935"
+      :"color:#f59e0b";
 
-          const cls=
-            [
-              "approved",
-              "completed",
-              "paid",
-              "success",
-              "successful"
-            ].includes(
-              st.toLowerCase()
-            )
-            ?"color:#16a56b"
-            :
-            st.toLowerCase()==="rejected"
-            ?"color:#e53935"
-            :"color:#f59e0b";
+    const mn=String(w.methodName||w.methodId||"Withdraw");
 
-          const mn=
-            String(
-              w.methodName||
-              w.methodId||
-              "Withdraw"
-            );
+    const icon=(mn.toLowerCase().includes("nagad")||mn.includes("নগদ"))?"🟠":"💗";
 
-          const icon=
-            mn.toLowerCase().includes("nagad")||
-            mn.includes("নগদ")
-            ?"🟠"
-            :"💗";
+    return`
+      <div class="li">
+        <div class="ric">${icon}</div>
+        <div class="in">
+          <b>${esc(mn)} • ৳${money(w.amount)}</b>
+          <span>${esc(String(w.accountNumber||"").replace(/.(?=.{4})/g,"•"))} • ${formatDate(w.createdAt)}</span>
+        </div>
+        <div style="font-size:10px;font-weight:900;${cls}">${esc(label)}</div>
+      </div>`;
 
-          return`
-            <div class="li">
-
-              <div class="ric">
-                ${icon}
-              </div>
-
-              <div class="in">
-
-                <b>
-                  ${esc(mn)}
-                  •
-                  ৳${money(w.amount)}
-                </b>
-
-                <span>
-                  ${
-                    esc(
-                      String(
-                        w.accountNumber||""
-                      ).replace(
-                        /.(?=.{4})/g,
-                        "•"
-                      )
-                    )
-                  }
-                  •
-                  ${formatDate(w.createdAt)}
-                </span>
-
-              </div>
-
-              <div
-                style="font-size:10px;font-weight:900;${cls}">
-                ${esc(label)}
-              </div>
-
-            </div>
-          `;
-
-        }
-      )
-      .join("");
+  }).join("");
 
   openModal(
     "Withdraw History",
-
-    `<div class="list">
-      ${
-        h||
-        '<div class="empty">No withdrawal history found.</div>'
-      }
-    </div>`
+    `<div class="list">${h||'<div class="empty">No withdrawal history found.</div>'}</div>`
   );
 
 }
@@ -3058,119 +1103,44 @@ async function openWithdrawHistory(){
 
 async function openRefer(){
 
-  const bu=
-    getBotUsername();
+  const bu=getBotUsername();
+  const code=String(currentUser.id);
 
-  const code=
-    String(currentUser.id);
+  const link=bu
+    ?"https://t.me/"+bu+"/app?startapp="+encodeURIComponent(code)
+    :location.origin+location.pathname+"?ref="+encodeURIComponent(code);
 
-  const link=
-    bu
-    ?
-    "https://t.me/"
-    +bu+
-    "/app?startapp="
-    +encodeURIComponent(code)
-
-    :
-
-    location.origin+
-    location.pathname+
-    "?ref="+
-    encodeURIComponent(code);
-
-  const rs=
-    await db
-      .ref(
-        "referrals/"
-        +currentUser.id
-      )
-      .once("value");
+  const rs=await db.ref("referrals/"+currentUser.id).once("value");
 
   let arr=[];
 
-  rs.forEach(
-    c=>
-    arr.push({
-      id:c.key,
-      ...c.val()
-    })
-  );
+  rs.forEach(c=>arr.push({id:c.key,...c.val()}));
 
-  const lh=
-    arr
-      .reverse()
-      .map(
-        i=>
-        `<div class="li">
-
-          <div class="ric">
-            👤
-          </div>
-
-          <div class="in">
-
-            <b>
-              ${esc(
-                i.referredName||
-                "Telegram User"
-              )}
-            </b>
-
-            <span>
-              ${
-                i.referredUsername
-                ?"@"+esc(
-                  i.referredUsername
-                )
-                :"Telegram user"
-              }
-            </span>
-
-          </div>
-
-          <div
-            style="font-size:10px;color:#16a56b;font-weight:800">
-            Joined
-          </div>
-
-        </div>`
-      )
-      .join("")
-      ||
-      `<div class="empty">
-        No referrals yet.<br>
-        Share your referral link.
-      </div>`;
+  const lh=arr.reverse().map(i=>
+    `<div class="li">
+      <div class="ric">👤</div>
+      <div class="in">
+        <b>${esc(i.referredName||"Telegram User")}</b>
+        <span>${i.referredUsername?"@"+esc(i.referredUsername):"Telegram user"}</span>
+      </div>
+      <div style="font-size:10px;color:#16a56b;font-weight:800">Joined</div>
+    </div>`
+  ).join("")||`<div class="empty">No referrals yet.<br>Share your referral link.</div>`;
 
   openModal(
     "Refer & Earn",
 
     `<div class="refc">
 
-      <div
-        style="font-size:13px;font-weight:800;opacity:.9">
-        YOUR REFERRAL CODE
-      </div>
+      <div style="font-size:13px;font-weight:800;opacity:.9">YOUR REFERRAL CODE</div>
 
-      <div class="refcode">
-        ${esc(code)}
-      </div>
+      <div class="refcode">${esc(code)}</div>
 
-      <div class="reflink">
-        ${esc(link)}
-      </div>
+      <div class="reflink">${esc(link)}</div>
 
       <div class="refb">
-
-        <button onclick="copyReferral()">
-          📋 Copy
-        </button>
-
-        <button onclick="shareReferral()">
-          🚀 Share
-        </button>
-
+        <button onclick="copyReferral()">📋 Copy</button>
+        <button onclick="shareReferral()">🚀 Share</button>
       </div>
 
     </div>
@@ -3197,270 +1167,198 @@ async function openRefer(){
     <div class="ref-rate">
       <div>
         <div class="label">💰 Referral Reward</div>
-        <div style="font-size:11px;color:#999;margin-top:4px;font-weight:700">
-          You earn for each successful referral
-        </div>
+        <div style="font-size:11px;color:#999;margin-top:4px;font-weight:700">You earn for each successful referral</div>
       </div>
-      <div class="amount">
-        ৳${money(settings.referralReward||0)}
-      </div>
+      <div class="amount">৳${money(settings.referralReward||0)}</div>
     </div>
 
     ${rulesBox("রেফার নিয়ম",["আপনার রেফার লিংক শেয়ার করুন, লিংকে ঢুকে নতুন ইউজার জয়েন করলে রেফার গণনা হবে।","প্রতি সফল রেফারে পাবেন <b>৳"+money(settings.referralReward||0)+"</b>।","নিজের লিংকে নিজে জয়েন করা যাবে না।","ভুয়া বা একাধিক অ্যাকাউন্ট খুললে রেফার বাতিল হতে পারে।"])}
 
-    <div
-      class="stitle"
-      style="margin-top:18px">
-      Your Referrals
-    </div>
+    <div class="stitle" style="margin-top:18px">Your Referrals</div>
 
-    <div class="list">
-      ${lh}
-    </div>`
+    <div class="list">${lh}</div>`
   );
 
-  window.currentReferralLink=
-    link;
+  window.currentReferralLink=link;
 
 }
-
 
 async function copyReferral(){
 
   try{
-
-    await navigator.clipboard.writeText(
-      window.currentReferralLink||""
-    );
-
-    showPopup(
-      "Copied!",
-      "Referral link copied to clipboard."
-    );
-
+    await navigator.clipboard.writeText(window.currentReferralLink||"");
+    showPopup("Copied!","Referral link copied to clipboard.");
   }catch(e){
-
-    showToast(
-      window.currentReferralLink
-    );
-
+    showToast(window.currentReferralLink);
   }
 
 }
 
-
 function shareReferral(){
 
-  const u=
-    "https://t.me/share/url?url="
-    +encodeURIComponent(
-      window.currentReferralLink||""
-    )
-    +"&text="
-    +encodeURIComponent(
-      "Join "
-      +getBotName()
-      +" and earn rewards! 🎁"
-    );
+  const u="https://t.me/share/url?url="+encodeURIComponent(window.currentReferralLink||"")
+    +"&text="+encodeURIComponent("Join "+getBotName()+" and earn rewards! 🎁");
 
-  if(
-    tg &&
-    tg.openTelegramLink
-  )
-    tg.openTelegramLink(u);
-  else
-    window.open(u,"_blank");
+  if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);
+  else window.open(u,"_blank");
 
 }
 
 
 /* =========================================================
-   TASK
+   TASK  (FIXED)
+   Flow: JOIN -> link খুলবে -> ১০ সেকেন্ড WAIT -> CLAIM -> balance add -> DONE
 ========================================================= */
+
+function tickTaskButtons(){
+
+  document.querySelectorAll(".task-claim").forEach(b=>{
+
+    const left=Math.ceil((Number(b.dataset.start)+TASK_WAIT_MS-Date.now())/1000);
+
+    if(left>0){
+      b.disabled=true;
+      b.classList.remove("claim-ready");
+      b.innerText="WAIT "+left+"s";
+    }else{
+      b.disabled=false;
+      b.classList.add("claim-ready");
+      b.innerText="CLAIM";
+    }
+
+  });
+
+}
 
 async function openTasks(){
 
-  const snap=
-    await db
-      .ref("tasks")
-      .once("value");
+  const snap=await db.ref("tasks").once("value");
 
-  const claims=
-    (
-      await db
-        .ref(
-          "taskClaims/"
-          +currentUser.id
-        )
-        .once("value")
-    ).val()||{};
+  const claims=(await db.ref("taskClaims/"+currentUser.id).once("value")).val()||{};
 
   let h="";
 
-  snap.forEach(
-    ch=>{
+  snap.forEach(ch=>{
 
-      const t=
-        ch.val()||{};
+    const t=ch.val()||{};
 
-      if(
-        t.status===false||
-        t.status==="inactive"
-      )return;
+    if(t.status===false||t.status==="inactive")return;
 
-      const cl=
-        claims[ch.key]&&
-        [
-          "completed",
-          "approved",
-          "pending"
-        ].includes(
-          claims[ch.key].status
-        );
+    const c=claims[ch.key]||{};
+    const st=String(c.status||"");
 
-      const img=
-        t.image||
-        t.imageUrl||
-        t.logo||
-        "";
+    const done=["completed","approved","pending"].includes(st);
+    const started=st==="started";
 
-      h+=
-        `<div class="li">
+    const img=t.image||t.imageUrl||t.logo||"";
 
-          ${
-            img
-            ?
-            `<img
-              class="ric"
-              src="${esc(img)}">`
-            :
-            `<div class="ric">
-              🎯
-            </div>`
-          }
+    let btn="";
 
-          <div class="in">
-
-            <b>
-              ${esc(
-                t.name||
-                t.title||
-                "Task"
-              )}
-            </b>
-
-            <span>
-              Reward:
-              ৳${money(t.reward||0)}
-            </span>
-
-          </div>
-
-          <button
-            class="sbtn"
-            ${cl?"disabled":""}
-            onclick="openTask(
-              '${esc(t.link||t.url||"")}',
-              '${esc(ch.key)}',
-              ${Number(t.reward||0)}
-            )">
-
-            ${cl?"DONE":"JOIN"}
-
-          </button>
-
-        </div>`;
-
+    if(done){
+      btn=`<button class="sbtn" disabled>DONE</button>`;
+    }else if(started){
+      btn=`<button class="sbtn task-claim" disabled
+              data-start="${Number(c.startedAt||Date.now())}"
+              onclick="claimTask('${esc(ch.key)}')">WAIT</button>`;
+    }else{
+      btn=`<button class="sbtn"
+              onclick="openTask('${esc(t.link||t.url||"")}','${esc(ch.key)}',${Number(t.reward||0)})">JOIN</button>`;
     }
-  );
+
+    h+=`<div class="li">
+
+      ${img?`<img class="ric" src="${esc(img)}">`:`<div class="ric">🎯</div>`}
+
+      <div class="in">
+        <b>${esc(t.name||t.title||"Task")}</b>
+        <span>Reward: ৳${money(t.reward||0)}</span>
+      </div>
+
+      ${btn}
+
+    </div>`;
+
+  });
 
   openModal(
     "Tasks",
 
-    `<div
-      class="info"
-      style="margin:0 0 12px">
-
-      📌 state বাটনে চাপ দেন, তার পরে 👉Telegram join বাটনে চাপ না দিলে অনেক কিছু মিস করবেন 100% গ্যারান্টি তাই এখনই JOIN করুন 🔥
-
+    `<div class="info" style="margin:0 0 12px">
+      📌 JOIN বাটনে চাপ দিন, টাস্ক শেষ করে ১০ সেকেন্ড পর CLAIM বাটনে চাপ দিয়ে ব্যালেন্স নিন 🔥
     </div>
 
     <div class="list">
-
-      ${
-        h||
-        '<div class="empty">No active tasks available.</div>'
-      }
-
+      ${h||'<div class="empty">No active tasks available.</div>'}
     </div>`
   );
 
+  tickTaskButtons();
+  tickT=setInterval(tickTaskButtons,1000);
+
 }
 
-
-async function openTask(
-  link,
-  id,
-  reward
-){
+async function openTask(link,id,reward){
 
   if(!id)return;
 
-  const ex=
-    await db
-      .ref(
-        "taskClaims/"
-        +currentUser.id+
-        "/"
-        +id
-      )
-      .once("value");
+  const ref=db.ref("taskClaims/"+currentUser.id+"/"+id);
 
-  if(
-    ex.exists()&&
-    [
-      "pending",
-      "completed",
-      "approved"
-    ].includes(
-      String(ex.val().status)
-    )
-  )
-    return showPopup(
-      "Already Submitted",
-      "This task is already submitted.",
-      null,
-      true
-    );
+  const ex=await ref.once("value");
 
-  if(link)
-    openExternal(link);
+  const st=ex.exists()?String(ex.val().status):"";
 
-  await db
-    .ref(
-      "taskClaims/"
-      +currentUser.id+
-      "/"
-      +id
-    )
-    .set({
+  if(["pending","completed","approved"].includes(st))
+    return showPopup("Already Submitted","This task is already submitted.",null,true);
 
+  if(link)openExternal(link);
+
+  // আগেই started থাকলে timer reset হবে না
+  if(st!=="started"){
+    await ref.set({
       taskId:id,
-
-      reward:
-        Number(reward||0),
-
+      reward:Number(reward||0),
       status:"started",
-
+      startedAt:Date.now(),
       createdAt:TS
-
     });
+  }
 
-  showPopup(
-    "Task Opened",
-    "Complete it, then wait for verification.",
-    reward
-  );
+  openTasks();
+
+}
+
+async function claimTask(id){
+
+  if(!id)return;
+
+  const claimPath="taskClaims/"+currentUser.id+"/"+id;
+  const ref=db.ref(claimPath);
+
+  const c=(await ref.once("value")).val();
+
+  if(!c||c.status!=="started")
+    return showPopup("Not Available","Please start the task first.",null,true);
+
+  const startedAt=Number(c.startedAt||0);
+
+  if(!startedAt||Date.now()-startedAt<TASK_WAIT_MS)
+    return showToast("১০ সেকেন্ড অপেক্ষা করুন");
+
+  // reward সরাসরি tasks node থেকে নেওয়া হচ্ছে
+  const taskSnap=await db.ref("tasks/"+id).once("value");
+  const reward=Number((taskSnap.val()||{}).reward||c.reward||0);
+
+  if(reward<=0)
+    return showPopup("Error","Task reward not found.",null,true);
+
+  const credited=await creditBalance(reward,claimPath,{amount:reward,source:"task"});
+
+  if(!credited)
+    return showPopup("Error","Task reward could not be added to your balance. Please try again.",null,true);
+
+  showPopup("Task Completed! 🎉","টাস্কের টাকা আপনার ব্যালেন্সে যোগ হয়েছে।",reward);
+
+  openTasks();
 
 }
 
@@ -3471,66 +1369,27 @@ async function openTask(
 
 async function openBonus(){
 
-  const claimed=
-    (
-      await db
-        .ref(
-          "bonusClaims/"
-          +currentUser.id+
-          "/"
-          +todayKey()
-        )
-        .once("value")
-    ).exists();
+  const claimed=(await db.ref("bonusClaims/"+currentUser.id+"/"+todayKey()).once("value")).exists();
 
-  const r=
-    Number(
-      settings.dailyBonus||0
-    );
+  const r=Number(settings.dailyBonus||0);
 
   openModal(
     "Daily Bonus",
 
-    `<div
-      class="card"
-      style="text-align:center;padding:26px">
+    `<div class="card" style="text-align:center;padding:26px">
 
-      <div
-        style="font-size:60px;animation:bob2 1.6s infinite">
-        🎁
-      </div>
+      <div style="font-size:60px;animation:bob2 1.6s infinite">🎁</div>
 
-      <h2 style="margin-top:8px">
-        Daily Bonus
-      </h2>
+      <h2 style="margin-top:8px">Daily Bonus</h2>
 
-      <div
-        style="color:var(--p);font-size:32px;font-weight:900;margin-top:8px">
-        ৳${money(r)}
-      </div>
+      <div style="color:var(--p);font-size:32px;font-weight:900;margin-top:8px">৳${money(r)}</div>
 
-      <p
-        style="color:#888;font-size:11px;margin-top:8px">
-
-        ${
-          claimed
-          ?"You already claimed today's bonus."
-          :"Claim once every 24 hours."
-        }
-
+      <p style="color:#888;font-size:11px;margin-top:8px">
+        ${claimed?"You already claimed today's bonus.":"Claim once every 24 hours."}
       </p>
 
-      <button
-        class="pbtn"
-        ${claimed?"disabled":""}
-        onclick="claimBonus()">
-
-        ${
-          claimed
-          ?"Already Claimed"
-          :"CLAIM BONUS"
-        }
-
+      <button class="pbtn" ${claimed?"disabled":""} onclick="claimBonus()">
+        ${claimed?"Already Claimed":"CLAIM BONUS"}
       </button>
 
     </div>`
@@ -3538,33 +1397,14 @@ async function openBonus(){
 
 }
 
-
 async function claimBonus(){
 
-  const ref=
-    db.ref(
-      "bonusClaims/"
-      +currentUser.id+
-      "/"
-      +todayKey()
-    );
+  const ref=db.ref("bonusClaims/"+currentUser.id+"/"+todayKey());
 
-  if(
-    (
-      await ref.once("value")
-    ).exists()
-  )
-    return showPopup(
-      "Already Claimed",
-      "Come back tomorrow.",
-      null,
-      true
-    );
+  if((await ref.once("value")).exists())
+    return showPopup("Already Claimed","Come back tomorrow.",null,true);
 
-  const r=
-    Number(
-      settings.dailyBonus||0
-    );
+  const r=Number(settings.dailyBonus||0);
 
   await ref.set({
     amount:r,
@@ -3573,26 +1413,14 @@ async function claimBonus(){
     createdAt:TS
   });
 
-  const credited=await creditBalance(
-    r,
-    "bonusClaims/"+currentUser.id+"/"+todayKey()
-  );
+  const credited=await creditBalance(r,"bonusClaims/"+currentUser.id+"/"+todayKey());
 
   if(!credited)
-    return showPopup(
-      "Error",
-      "Bonus could not be added to your balance. Please try again.",
-      null,
-      true
-    );
+    return showPopup("Error","Bonus could not be added to your balance. Please try again.",null,true);
 
   closeModal();
 
-  showPopup(
-    "Bonus Added! 🎉",
-    "আপনার বোনাস সরাসরি ব্যালেন্সে যোগ হয়েছে।",
-    r
-  );
+  showPopup("Bonus Added! 🎉","আপনার বোনাস সরাসরি ব্যালেন্সে যোগ হয়েছে।",r);
 
 }
 
@@ -3605,7 +1433,7 @@ async function loadRecentWithdrawActivity(){
 
   /*
     Real withdrawals are shown only when they actually exist in Firebase.
-    Sample entries are clearly labeled "Sample Activity" so they are not
+    Sample entries are clearly labeled so they are not
     presented as real customer withdrawals.
   */
 
@@ -3628,36 +1456,19 @@ async function loadRecentWithdrawActivity(){
   let realRows=[];
 
   try{
-    const snap=
-      await db
-        .ref("withdrawals")
-        .orderByChild("createdAt")
-        .limitToLast(50)
-        .once("value");
+
+    const snap=await db.ref("withdrawals").orderByChild("createdAt").limitToLast(50).once("value");
 
     snap.forEach(c=>{
       const d=c.val()||{};
       const st=String(d.status||"").toLowerCase();
-
-      if(
-        [
-          "approved",
-          "completed",
-          "paid",
-          "success",
-          "successful"
-        ].includes(st) &&
-        Number(d.amount)>0
-      ){
+      if(["approved","completed","paid","success","successful"].includes(st)&&Number(d.amount)>0){
         realRows.push(d);
       }
     });
 
-    realRows.sort(
-      (a,b)=>
-        Number(b.createdAt||0)-
-        Number(a.createdAt||0)
-    );
+    realRows.sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
+
   }catch(e){
     console.error("Activity load error:",e);
   }
@@ -3666,7 +1477,9 @@ async function loadRecentWithdrawActivity(){
   let sampleIndex=Math.floor(Math.random()*sampleNames.length);
 
   const showActivity=(item,isSample=false)=>{
+
     const el=document.getElementById("activityPopup");
+
     if(!el)return;
 
     const name=String(item.name||"User").trim()||"User";
@@ -3675,29 +1488,22 @@ async function loadRecentWithdrawActivity(){
     el.classList.remove("out");
 
     el.innerHTML=`
-      <div class="activity-avatar">
-        ${isSample?"✨":"💸"}
-      </div>
+      <div class="activity-avatar">${isSample?"✨":"💸"}</div>
 
       <div class="activity-txt">
         <b>${esc(name)}</b>
-        <span>${isSample
-          ?"Recently withdrawal"
-          :"Verified withdrawal completed"}</span>
-        ${isSample
-          ?'<small class="activity-demo">Live preview</small>'
-          :''}
+        <span>${isSample?"Recently withdrawal":"Verified withdrawal completed"}</span>
+        ${isSample?'<small class="activity-demo">Live preview</small>':''}
       </div>
 
-      <div class="activity-amt">
-        ৳${money(amount)}
-      </div>`;
+      <div class="activity-amt">৳${money(amount)}</div>`;
 
     el.classList.add("show");
 
     clearTimeout(activityTimer);
 
     activityTimer=setTimeout(()=>{
+
       el.classList.add("out");
 
       setTimeout(()=>{
@@ -3705,51 +1511,40 @@ async function loadRecentWithdrawActivity(){
       },300);
 
     },5200);
+
   };
 
   const showNext=()=>{
-    /*
-      Prefer a real approved withdrawal if one exists.
-      Otherwise (or after the real list is exhausted), show a
-      clearly-labeled sample entry.
-    */
-    if(realRows.length && realIndex<realRows.length){
+
+    if(realRows.length&&realIndex<realRows.length){
+
       const d=realRows[realIndex++];
 
       showActivity({
-        name:
-          String(
-            d.userName||
-            d.name||
-            "Telegram User"
-          ).trim() || "Telegram User",
+        name:String(d.userName||d.name||"Telegram User").trim()||"Telegram User",
         amount:Number(d.amount||0)
       },false);
 
     }else{
+
       const name=sampleNames[sampleIndex++%sampleNames.length];
 
-      // Demo amount only; it is explicitly labeled as sample activity.
       const amounts=[50,80,100,120,150,200,250,300,350,500];
-      const amount=
-        amounts[
-          Math.floor(Math.random()*amounts.length)
-        ];
+      const amount=amounts[Math.floor(Math.random()*amounts.length)];
 
       showActivity({name,amount},true);
+
     }
+
   };
 
-  // First popup after a short delay.
   setTimeout(showNext,7000);
 
-  // Exactly one popup per minute.
   clearInterval(window.__activityInterval);
-  window.__activityInterval=setInterval(
-    showNext,
-    60000
-  );
+  window.__activityInterval=setInterval(showNext,60000);
+
 }
+
 
 /* =========================================================
    MONETAG
@@ -3757,60 +1552,25 @@ async function loadRecentWithdrawActivity(){
 
 function loadMonetag(){
 
-  const zone=
-    String(
-      sv("monetagZoneId")||
-      "8449094"
-    )
-    .replace(/[^0-9]/g,"")
-    ||"8449094";
+  const zone=String(sv("monetagZoneId")||"8449094").replace(/[^0-9]/g,"")||"8449094";
 
-  const fnName=
-    "show_"+zone;
+  const fnName="show_"+zone;
 
-  const old=
-    document.getElementById(
-      "tkpayMonetagSDK"
-    );
+  const old=document.getElementById("tkpayMonetagSDK");
 
-  if(old)
-    old.remove();
+  if(old)old.remove();
 
-  document
-    .querySelectorAll(
-      "script[data-tkpay-monetag]"
-    )
-    .forEach(
-      x=>x.remove()
-    );
+  document.querySelectorAll("script[data-tkpay-monetag]").forEach(x=>x.remove());
 
-  const sc=
-    document.createElement(
-      "script"
-    );
+  const sc=document.createElement("script");
 
-  sc.id=
-    "tkpayMonetagSDK";
-
-  sc.src=
-    "//libtl.com/sdk.js";
-
+  sc.id="tkpayMonetagSDK";
+  sc.src="//libtl.com/sdk.js";
   sc.async=true;
 
-  sc.setAttribute(
-    "data-zone",
-    zone
-  );
-
-  sc.setAttribute(
-    "data-sdk",
-    fnName
-  );
-
-  sc.setAttribute(
-    "data-tkpay-monetag",
-    "1"
-  );
+  sc.setAttribute("data-zone",zone);
+  sc.setAttribute("data-sdk",fnName);
+  sc.setAttribute("data-tkpay-monetag","1");
 
   document.head.appendChild(sc);
 
@@ -3820,70 +1580,41 @@ function loadMonetag(){
 
 }
 
-
 async function showMonetagReward(){
 
-  const zone=
-    String(
-      sv("monetagZoneId")||
-      "8449094"
-    )
-    .replace(/[^0-9]/g,"")
-    ||"8449094";
+  const zone=String(sv("monetagZoneId")||"8449094").replace(/[^0-9]/g,"")||"8449094";
 
-  const fnName=
-    "show_"+zone;
+  const fnName="show_"+zone;
 
-  if(
-    typeof window[fnName]!=="function"
-  ){
+  if(typeof window[fnName]!=="function"){
     loadMonetag();
   }
 
   for(let i=0;i<12;i++){
 
-    if(
-      typeof window[fnName]==="function"
-    ){
+    if(typeof window[fnName]==="function"){
 
       try{
 
-        await Promise.resolve(
-          window[fnName]()
-        );
+        await Promise.resolve(window[fnName]());
 
-        return{
-          ok:true
-        };
+        return{ok:true};
 
       }catch(e){
 
-        console.error(
-          "Monetag",
-          e
-        );
+        console.error("Monetag",e);
 
-        return{
-          ok:false,
-          error:
-            "Ad could not be shown. Please try again."
-        };
+        return{ok:false,error:"Ad could not be shown. Please try again."};
 
       }
 
     }
 
-    await new Promise(
-      r=>setTimeout(r,500)
-    );
+    await new Promise(r=>setTimeout(r,500));
 
   }
 
-  return{
-    ok:false,
-    error:
-      "Monetag ad is not ready. Check the Zone ID and try again."
-  };
+  return{ok:false,error:"Monetag ad is not ready. Check the Zone ID and try again."};
 
 }
 
@@ -3895,67 +1626,30 @@ async function showMonetagReward(){
 const AD_MAX_DEFAULT=10;
 const AD_WAIT_DEFAULT=15;
 
-
 async function openAds(){
 
-  const cnt=
-    (
-      await db
-        .ref(
-          "adClaims/"
-          +currentUser.id+
-          "/"
-          +todayKey()
-        )
-        .once("value")
-    ).val()||{};
+  const cnt=(await db.ref("adClaims/"+currentUser.id+"/"+todayKey()).once("value")).val()||{};
 
-  const bn=[
-    "১",
-    "২",
-    "৩",
-    "৪"
-  ];
+  const bn=["১","২","৩","৪"];
 
   let cards="";
 
   for(let i=1;i<=4;i++){
 
-    const c=
-      Number(
-        cnt["ad"+i]||0
-      );
+    const c=Number(cnt["ad"+i]||0);
 
     cards+=
-      `<button
-        class="ad"
-        onclick="startAd(${i})">
+      `<button class="ad" onclick="startAd(${i})">
 
-        <div class="adtag">
-          এখানে চাপ দিন
-        </div>
+        <div class="adtag">এখানে চাপ দিন</div>
 
-        <div class="adplay">
-          ▶
-        </div>
+        <div class="adplay">▶</div>
 
-        <b>
-          বিজ্ঞাপন দেখুন ${bn[i-1]}
-        </b>
+        <b>বিজ্ঞাপন দেখুন ${bn[i-1]}</b>
 
-        <small>
-          শর্ট অ্যাড দেখে টাকা নিন
-        </small>
+        <small>শর্ট অ্যাড দেখে টাকা নিন</small>
 
-        <div class="adcnt">
-          ▶ অ্যাড ${bn[i-1]}:
-          ${c}
-          /
-          ${Number(
-            sv("adMax")||
-            AD_MAX_DEFAULT
-          )}
-        </div>
+        <div class="adcnt">▶ অ্যাড ${bn[i-1]}: ${c} / ${Number(sv("adMax")||AD_MAX_DEFAULT)}</div>
 
       </button>`;
 
@@ -3966,18 +1660,11 @@ async function openAds(){
 
     `<div class="premium">
 
-      <div class="ptitle">
-        👑 প্রিমিয়াম ইনকাম
-      </div>
+      <div class="ptitle">👑 প্রিমিয়াম ইনকাম</div>
 
-      <div class="psub">
-        Monetag Rewarded Interstitial দেখুন
-        এবং ad complete হলে reward claim হবে
-      </div>
+      <div class="psub">Monetag Rewarded Interstitial দেখুন এবং ad complete হলে reward claim হবে</div>
 
-      <div class="ads">
-        ${cards}
-      </div>
+      <div class="ads">${cards}</div>
 
     </div>
 
@@ -3986,121 +1673,49 @@ async function openAds(){
 
 }
 
-
 async function startAd(n){
 
-  const key=
-    "ad"+n;
+  const key="ad"+n;
 
-  const ref=
-    db.ref(
-      "adClaims/"
-      +currentUser.id+
-      "/"
-      +todayKey()
-    );
+  const ref=db.ref("adClaims/"+currentUser.id+"/"+todayKey());
 
-  const c=
-    Number(
-      (
-        await ref.once("value")
-      ).val()?.[key]||0
-    );
+  const c=Number(((await ref.once("value")).val()||{})[key]||0);
 
-  if(
-    c>=Number(
-      sv("adMax")||
-      AD_MAX_DEFAULT
-    )
-  )
-    return showPopup(
-      "Limit Reached",
-      "Today's limit for this ad is finished.",
-      null,
-      true
-    );
+  if(c>=Number(sv("adMax")||AD_MAX_DEFAULT))
+    return showPopup("Limit Reached","Today's limit for this ad is finished.",null,true);
 
-  const adResult=
-    await showMonetagReward();
+  const adResult=await showMonetagReward();
 
   if(!adResult.ok)
-    return showPopup(
-      "Ad Unavailable",
-      adResult.error,
-      null,
-      true
-    );
+    return showPopup("Ad Unavailable",adResult.error,null,true);
 
-  const reward=
-    Number(
-      sv("adReward")||1
-    );
+  const reward=Number(sv("adReward")||1);
 
-  const k=
-    db
-      .ref("rewardClaims")
-      .push()
-      .key;
+  const k=db.ref("rewardClaims").push().key;
 
-  await ref
-    .child(key)
-    .set(c+1);
+  await ref.child(key).set(c+1);
 
   const claimPath="rewardClaims/"+k;
 
-  await db
-    .ref(claimPath)
-    .set({
+  await db.ref(claimPath).set({
+    type:"monetag_rewarded_interstitial",
+    zoneId:String(sv("monetagZoneId")||"8449094"),
+    userId:String(currentUser.id),
+    amount:reward,
+    source:key,
+    status:"approved",
+    balanceCredited:false,
+    createdAt:TS
+  });
 
-      type:
-        "monetag_rewarded_interstitial",
-
-      zoneId:
-        String(
-          sv("monetagZoneId")||
-          "8449094"
-        ),
-
-      userId:
-        String(currentUser.id),
-
-      amount:reward,
-
-      source:key,
-
-      status:"approved",
-
-      balanceCredited:false,
-
-      createdAt:TS
-
-    });
-
-  const credited=await creditBalance(
-    reward,
-    claimPath,
-    {source:key}
-  );
+  const credited=await creditBalance(reward,claimPath,{source:key});
 
   if(!credited)
-    return showPopup(
-      "Error",
-      "Ad reward could not be added to your balance. Please try again.",
-      null,
-      true
-    );
+    return showPopup("Error","Ad reward could not be added to your balance. Please try again.",null,true);
 
-  showPopup(
-    "Reward Added! 🎉",
-    "অ্যাড সম্পূর্ণ হয়েছে এবং টাকা আপনার ব্যালেন্সে যোগ হয়েছে।",
-    reward
-  );
+  showPopup("Reward Added! 🎉","অ্যাড সম্পূর্ণ হয়েছে এবং টাকা আপনার ব্যালেন্সে যোগ হয়েছে।",reward);
 
-  if(
-    document.getElementById(
-      "modalTitle"
-    ).innerText==="Premium Income"
-  ){
+  if(document.getElementById("modalTitle").innerText==="Premium Income"){
     openAds();
   }
 
@@ -4113,127 +1728,64 @@ async function startAd(n){
 
 function fmtT(ms){
 
-  const s=
-    Math.max(
-      0,
-      Math.floor(ms/1000)
-    );
+  const s=Math.max(0,Math.floor(ms/1000));
 
   return[
     Math.floor(s/3600),
-    Math.floor(
-      s%3600/60
-    ),
+    Math.floor(s%3600/60),
     s%60
-  ]
-  .map(
-    x=>String(x).padStart(2,"0")
-  )
-  .join(":");
+  ].map(x=>String(x).padStart(2,"0")).join(":");
 
 }
 
-
 async function openSpin(){
 
-  const st=
-    (
-      await db
-        .ref(
-          "spinState/"
-          +currentUser.id
-        )
-        .once("value")
-    ).val()||{};
+  const st=(await db.ref("spinState/"+currentUser.id).once("value")).val()||{};
 
   let labels="";
 
-  WHEEL.forEach(
-    (v,i)=>{
-
-      labels+=
-        `<div
-          class="wl"
-          style="transform:rotate(${i*45+22.5}deg)">
-
-          <span>
-            ৳${v}
-          </span>
-
-        </div>`;
-
-    }
-  );
+  WHEEL.forEach((v,i)=>{
+    labels+=
+      `<div class="wl" style="transform:rotate(${i*45+22.5}deg)">
+        <span>৳${v}</span>
+      </div>`;
+  });
 
   openModal(
     "Daily Spin",
 
     `<div class="spin">
 
-      <div
-        style="font-size:18px;font-weight:900;color:var(--p)">
-        🎡 চাকা ঘুরিয়ে ইনকাম
+      <div style="font-size:18px;font-weight:900;color:var(--p)">🎡 চাকা ঘুরিয়ে ইনকাম</div>
+
+      <div style="font-size:11px;color:#777;margin-top:5px">
+        প্রতি ২৪ ঘণ্টায় একবার স্পিন করুন এবং জিতে নিন ক্যাশ!
       </div>
 
-      <div
-        style="font-size:11px;color:#777;margin-top:5px">
+      <div class="timer" id="spinTimer">পরবর্তী স্পিন: --:--:--</div>
 
-        প্রতি ২৪ ঘণ্টায় একবার স্পিন করুন
-        এবং জিতে নিন ক্যাশ!
-
-      </div>
-
-      <div
-        class="timer"
-        id="spinTimer">
-        পরবর্তী স্পিন: --:--:--
-      </div>
-
-      <div
-        class="info"
-        style="text-align:left;margin-top:0">
-
-        SPIN বাটনে চাপ দিন।
-        চাকা থামলেই ব্যালেন্সে টাকা যুক্ত হবে।
-
+      <div class="info" style="text-align:left;margin-top:0">
+        SPIN বাটনে চাপ দিন। চাকা থামলেই ব্যালেন্সে টাকা যুক্ত হবে।
       </div>
 
       <div class="ww">
 
         <div class="ptr"></div>
 
-        <div
-          id="wheel"
-          class="wheel"
-          style="transform:rotate(${spinRot}deg)">
+        <div id="wheel" class="wheel" style="transform:rotate(${spinRot}deg)">
 
           ${labels}
 
-          <button
-            class="wc"
-            id="spinBtn"
-            onclick="doSpin()">
-
-            SPIN
-
-          </button>
+          <button class="wc" id="spinBtn" onclick="doSpin()">SPIN</button>
 
         </div>
 
       </div>
 
-      <div
-        id="spinMsg"
-        style="color:#c8102e;font-size:12px;font-weight:700">
-      </div>
+      <div id="spinMsg" style="color:#c8102e;font-size:12px;font-weight:700"></div>
 
-      <div
-        style="font-size:11px;color:#999;margin-top:12px">
-
-        মোট স্পিন করেছেন:
-        ${Number(st.total||0)}
-        বার
-
+      <div style="font-size:11px;color:#999;margin-top:12px">
+        মোট স্পিন করেছেন: ${Number(st.total||0)} বার
       </div>
 
     </div>`
@@ -4241,202 +1793,93 @@ async function openSpin(){
 
   const upd=()=>{
 
-    const left=
-      Number(st.last||0)
-      +DAY
-      -Date.now();
+    const left=Number(st.last||0)+DAY-Date.now();
 
-    const T=
-      document.getElementById(
-        "spinTimer"
-      );
+    const T=document.getElementById("spinTimer");
 
     if(!T){
-
       clearInterval(tickT);
-
       return;
-
     }
 
-    const ok=
-      left<=0;
+    const ok=left<=0;
 
-    T.innerText=
-      ok
-      ?"✅ এখন স্পিন করুন!"
-      :"পরবর্তী স্পিন: "+fmtT(left);
+    T.innerText=ok?"✅ এখন স্পিন করুন!":"পরবর্তী স্পিন: "+fmtT(left);
 
-    const m=
-      document.getElementById(
-        "spinMsg"
-      );
+    const m=document.getElementById("spinMsg");
 
-    if(m)
-      m.innerText=
-        ok
-        ?""
-        :"সময় শেষ না হওয়া পর্যন্ত স্পিন করা যাবে না।";
+    if(m)m.innerText=ok?"":"সময় শেষ না হওয়া পর্যন্ত স্পিন করা যাবে না।";
 
   };
 
   upd();
 
-  tickT=
-    setInterval(
-      upd,
-      1000
-    );
+  tickT=setInterval(upd,1000);
 
 }
 
-
 async function doSpin(){
 
-  const ref=
-    db.ref(
-      "spinState/"
-      +currentUser.id
-    );
+  const ref=db.ref("spinState/"+currentUser.id);
 
-  const st=
-    (
-      await ref.once("value")
-    ).val()||{};
+  const st=(await ref.once("value")).val()||{};
 
-  if(
-    Date.now()-
-    Number(st.last||0)
-    <DAY
-  )
-    return showPopup(
-      "Wait!",
-      "সময় শেষ না হওয়া পর্যন্ত স্পিন করা যাবে না।",
-      null,
-      true
-    );
+  if(Date.now()-Number(st.last||0)<DAY)
+    return showPopup("Wait!","সময় শেষ না হওয়া পর্যন্ত স্পিন করা যাবে না।",null,true);
 
-  const btn=
-    document.getElementById(
-      "spinBtn"
-    );
+  const btn=document.getElementById("spinBtn");
 
   if(btn.disabled)return;
 
   btn.disabled=true;
 
-  const idx=
-    Math.floor(
-      Math.random()*
-      WHEEL.length
-    );
+  const idx=Math.floor(Math.random()*WHEEL.length);
 
-  const reward=
-    WHEEL[idx];
+  const reward=WHEEL[idx];
 
-  const target=
-    360-
-    (idx*45+22.5);
+  const target=360-(idx*45+22.5);
 
-  spinRot=
-    Math.ceil(
-      spinRot/360
-    )*360+
-    1800+
-    target;
+  spinRot=Math.ceil(spinRot/360)*360+1800+target;
 
-  document
-    .getElementById(
-      "wheel"
-    )
-    .style.transform=
-      "rotate("
-      +spinRot+
-      "deg)";
+  document.getElementById("wheel").style.transform="rotate("+spinRot+"deg)";
 
   await ref.set({
-
     last:Date.now(),
-
-    total:
-      Number(st.total||0)+1
-
+    total:Number(st.total||0)+1
   });
 
-  setTimeout(
-    async()=>{
+  setTimeout(async()=>{
 
-      const k=
-        db
-          .ref("rewardClaims")
-          .push()
-          .key;
+    const k=db.ref("rewardClaims").push().key;
 
-      await db
-        .ref(
-          "spinClaims/"
-          +currentUser.id+
-          "/"
-          +todayKey()
-        )
-        .set({
+    await db.ref("spinClaims/"+currentUser.id+"/"+todayKey()).set({
+      reward,
+      status:"pending",
+      claimId:k,
+      createdAt:TS
+    });
 
-          reward,
+    const claimPath="rewardClaims/"+k;
 
-          status:"pending",
+    await db.ref(claimPath).set({
+      type:"spin",
+      userId:String(currentUser.id),
+      amount:reward,
+      status:"approved",
+      balanceCredited:false,
+      createdAt:TS
+    });
 
-          claimId:k,
+    const credited=await creditBalance(reward,claimPath,{source:"spin"});
 
-          createdAt:TS
+    if(!credited)
+      return showPopup("Error","Spin reward could not be added to your balance. Please try again.",null,true);
 
-        });
+    showPopup("অভিনন্দন! 🎉","আপনি স্পিনে জিতেছেন এবং টাকা ব্যালেন্সে যোগ হয়েছে।",reward);
 
-      const claimPath="rewardClaims/"+k;
+    openSpin();
 
-      await db
-        .ref(claimPath)
-        .set({
-
-          type:"spin",
-
-          userId:
-            String(currentUser.id),
-
-          amount:reward,
-
-          status:"approved",
-
-          balanceCredited:false,
-
-          createdAt:TS
-
-        });
-
-      const credited=await creditBalance(
-        reward,
-        claimPath,
-        {source:"spin"}
-      );
-
-      if(!credited)
-        return showPopup(
-          "Error",
-          "Spin reward could not be added to your balance. Please try again.",
-          null,
-          true
-        );
-
-      showPopup(
-        "অভিনন্দন! 🎉",
-        "আপনি স্পিনে জিতেছেন এবং টাকা ব্যালেন্সে যোগ হয়েছে।",
-        reward
-      );
-
-      openSpin();
-
-    },
-    4700
-  );
+  },4700);
 
 }
 
@@ -4448,491 +1891,195 @@ async function doSpin(){
 function getMiningTier(r){
 
   return[
-    {
-      min:0,
-      max:2,
-      low:30,
-      high:40
-    },
-    {
-      min:3,
-      max:5,
-      low:50,
-      high:50
-    },
-    {
-      min:6,
-      max:9,
-      low:70,
-      high:70
-    },
-    {
-      min:10,
-      max:999999,
-      low:100,
-      high:120
-    }
-  ].find(
-    t=>
-      r>=t.min&&
-      r<=t.max
-  );
+    {min:0,max:2,low:30,high:40},
+    {min:3,max:5,low:50,high:50},
+    {min:6,max:9,low:70,high:70},
+    {min:10,max:999999,low:100,high:120}
+  ].find(t=>r>=t.min&&r<=t.max);
 
 }
 
+const miningReward=r=>{
+  const t=getMiningTier(r);
+  return Math.floor(Math.random()*(t.high-t.low+1))+t.low;
+};
 
-const miningReward=
-  r=>{
-
-    const t=
-      getMiningTier(r);
-
-    return Math.floor(
-      Math.random()*
-      (t.high-t.low+1)
-    )+
-    t.low;
-
-  };
-
-
-const miningProgress=
-  l=>
-    !l
-    ?0
-    :Math.min(
-      100,
-      Math.max(
-        0,
-        (
-          Date.now()-
-          Number(l)
-        )/DAY*100
-      )
-    );
-
+const miningProgress=l=>!l?0:Math.min(100,Math.max(0,(Date.now()-Number(l))/DAY*100));
 
 async function openMining(){
 
-  const m=
-    (
-      await db
-        .ref(
-          "mining/"
-          +currentUser.id
-        )
-        .once("value")
-    ).val()||{};
+  const m=(await db.ref("mining/"+currentUser.id).once("value")).val()||{};
 
-  const refs=
-    Number(
-      userData.totalReferrals||0
-    );
+  const refs=Number(userData.totalReferrals||0);
 
-  const tier=
-    getMiningTier(refs);
+  const tier=getMiningTier(refs);
 
-  const last=
-    Number(
-      m.lastStart||0
-    );
+  const last=Number(m.lastStart||0);
 
-  const ready=
-    last&&
-    m.status==="mining"&&
-    Date.now()-last>=DAY;
+  const ready=last&&m.status==="mining"&&Date.now()-last>=DAY;
 
-  const active=
-    last&&
-    m.status==="mining"&&
-    !ready;
+  const active=last&&m.status==="mining"&&!ready;
 
-  const pr=
-    ready
-    ?100
-    :active
-    ?miningProgress(last)
-    :0;
+  const pr=ready?100:active?miningProgress(last):0;
 
-  const rate=
-    tier.low+
-    (
-      tier.low!==tier.high
-      ?"-"+tier.high
-      :""
-    );
+  const rate=tier.low+(tier.low!==tier.high?"-"+tier.high:"");
 
   const act=
     ready
-
-    ?
-
-    `<button
-      class="mbtn"
-      onclick="claimMining()">
-
-      💰 CLAIM ৳${money(m.reward||0)}
-
-    </button>`
-
-    :
-
-    active
-
-    ?
-
-    `<button
-      class="mbtn"
-      disabled>
-
-      ⏳ Mining in progress
-
-    </button>`
-
-    :
-
-    `<button
-      class="mbtn"
-      onclick="startMining()">
-
-      ⛏ START 24H MINING
-
-    </button>`;
+    ?`<button class="mbtn" onclick="claimMining()">💰 CLAIM ৳${money(m.reward||0)}</button>`
+    :active
+    ?`<button class="mbtn" disabled>⏳ Mining in progress</button>`
+    :`<button class="mbtn" onclick="startMining()">⛏ START 24H MINING</button>`;
 
   openModal(
     "Daily Mining",
 
     `<div class="mcard">
 
-      <div
-        style="font-size:19px;font-weight:900">
-        ⛏️ Daily Mining
-      </div>
+      <div style="font-size:19px;font-weight:900">⛏️ Daily Mining</div>
 
-      <div
-        style="font-size:10px;opacity:.8;margin-top:4px">
+      <div style="font-size:10px;opacity:.8;margin-top:4px">Your referral count controls mining speed</div>
 
-        Your referral count controls mining speed
-
-      </div>
-
-      <div
-        class="ring"
-        style="background:conic-gradient(
-          #fff ${pr*3.6}deg,
-          rgba(255,255,255,.25) 0
-        )">
+      <div class="ring" style="background:conic-gradient(#fff ${pr*3.6}deg,rgba(255,255,255,.25) 0)">
 
         <div class="ringin">
 
-          <small>
-            ${
-              ready
-              ?"Ready to claim"
-              :
-              active
-              ?"Mining..."
-              :"Estimated"
-            }
-          </small>
+          <small>${ready?"Ready to claim":active?"Mining...":"Estimated"}</small>
 
-          <b>
-            ${
-              ready
-              ?"+৳"+money(m.reward||0)
-              :"৳"+rate
-            }
-          </b>
+          <b>${ready?"+৳"+money(m.reward||0):"৳"+rate}</b>
 
-          <small>
-            BDT / 24h
-          </small>
+          <small>BDT / 24h</small>
 
         </div>
 
       </div>
 
-      <div
-        style="font-size:12px;margin-bottom:12px"
-        id="mt">
-
-        ${
-          active
-          ?fmtT(
-            last+
-            DAY-
-            Date.now()
-          )+" left"
-          :Math.floor(pr)+"%"
-        }
-
+      <div style="font-size:12px;margin-bottom:12px" id="mt">
+        ${active?fmtT(last+DAY-Date.now())+" left":Math.floor(pr)+"%"}
       </div>
 
       ${act}
 
       <div class="tiers">
-
-        <div class="tier">
-          <b>0-2</b>
-          ৳30-40
-        </div>
-
-        <div class="tier">
-          <b>3-5</b>
-          ৳50
-        </div>
-
-        <div class="tier">
-          <b>6-9</b>
-          ৳70
-        </div>
-
-        <div class="tier">
-          <b>10+</b>
-          ৳100-120
-        </div>
-
+        <div class="tier"><b>0-2</b>৳30-40</div>
+        <div class="tier"><b>3-5</b>৳50</div>
+        <div class="tier"><b>6-9</b>৳70</div>
+        <div class="tier"><b>10+</b>৳100-120</div>
       </div>
 
     </div>
 
-    <div
-      class="card"
-      style="margin-top:12px">
+    <div class="card" style="margin-top:12px">
 
-      <b style="font-size:14px">
-        Your Mining Level
-      </b>
+      <b style="font-size:14px">Your Mining Level</b>
 
-      <div
-        style="font-size:12px;color:#777;margin-top:6px">
-
-        ${refs}
-        referral(s)
-        • Current rate
-        ৳${rate}/24h
-
+      <div style="font-size:12px;color:#777;margin-top:6px">
+        ${refs} referral(s) • Current rate ৳${rate}/24h
       </div>
 
     </div>
 
     <div class="info">
-
-      Start mining once, wait 24 hours,
-      then claim your reward.
-      More referrals increase your daily rate.
-
+      Start mining once, wait 24 hours, then claim your reward. More referrals increase your daily rate.
     </div>
 
-    ${rulesBox("মাইনিং নিয়ম",["একবার <b>স্টার্ট</b> করলে ২৪ ঘণ্টা পর ক্লেইম করা যাবে।","রেফার যত বেশি, দৈনিক রেট তত বেশি (০-২ জনে ৳৩০-৪০, ১০+ জনে ৳১০০-১২০)।","২৪ ঘণ্টা শেষ না হলে ক্লেইম বাটন কাজ করবে না।","ক্লেইমের পর রিওয়ার্ড <b>পেন্ডিং</b> থাকবে, যাচাইয়ের পর ব্যালেন্সে যুক্ত হবে।"])}`
+    ${rulesBox("মাইনিং নিয়ম",["একবার <b>স্টার্ট</b> করলে ২৪ ঘণ্টা পর ক্লেইম করা যাবে।","রেফার যত বেশি, দৈনিক রেট তত বেশি (০-২ জনে ৳৩০-৪০, ১০+ জনে ৳১০০-১২০)।","২৪ ঘণ্টা শেষ না হলে ক্লেইম বাটন কাজ করবে না।","ক্লেইম করলে রিওয়ার্ড সরাসরি <b>ব্যালেন্সে</b> যোগ হবে।"])}`
   );
 
   if(active){
 
-    tickT=
-      setInterval(
-        ()=>{
+    tickT=setInterval(()=>{
 
-          const e=
-            document.getElementById(
-              "mt"
-            );
+      const e=document.getElementById("mt");
 
-          if(!e){
+      if(!e){
+        clearInterval(tickT);
+        return;
+      }
 
-            clearInterval(tickT);
+      const l=last+DAY-Date.now();
 
-            return;
+      if(l<=0){
+        clearInterval(tickT);
+        openMining();
+      }else{
+        e.innerText=fmtT(l)+" left";
+      }
 
-          }
-
-          const l=
-            last+
-            DAY-
-            Date.now();
-
-          if(l<=0){
-
-            clearInterval(tickT);
-
-            openMining();
-
-          }else{
-
-            e.innerText=
-              fmtT(l)+
-              " left";
-
-          }
-
-        },
-        1000
-      );
+    },1000);
 
   }
 
 }
 
-
 async function startMining(){
 
-  const ref=
-    db.ref(
-      "mining/"
-      +currentUser.id
-    );
+  const ref=db.ref("mining/"+currentUser.id);
 
-  const m=
-    (
-      await ref.once("value")
-    ).val()||{};
+  const m=(await ref.once("value")).val()||{};
 
-  const now=
-    Date.now();
+  const now=Date.now();
 
-  if(
-    m.status==="mining"&&
-    m.lastStart&&
-    now-
-    Number(m.lastStart)
-    <DAY
-  )
-    return showPopup(
-      "Already Running",
-      "Mining is already running.",
-      null,
-      true
-    );
+  if(m.status==="mining"&&m.lastStart&&now-Number(m.lastStart)<DAY)
+    return showPopup("Already Running","Mining is already running.",null,true);
 
-  const refs=
-    Number(
-      userData.totalReferrals||0
-    );
+  const refs=Number(userData.totalReferrals||0);
 
   await ref.set({
-
     lastStart:now,
-
-    reward:
-      miningReward(refs),
-
+    reward:miningReward(refs),
     status:"mining",
-
     referralCount:refs,
-
     updatedAt:TS
-
   });
 
-  showPopup(
-    "Mining Started ⛏️",
-    "Come back after 24 hours to claim your reward."
-  );
+  showPopup("Mining Started ⛏️","Come back after 24 hours to claim your reward.");
 
   openMining();
 
 }
 
-
 async function claimMining(){
 
-  const ref=
-    db.ref(
-      "mining/"
-      +currentUser.id
-    );
+  const ref=db.ref("mining/"+currentUser.id);
 
-  const m=
-    (
-      await ref.once("value")
-    ).val()||{};
+  const m=(await ref.once("value")).val()||{};
 
-  const last=
-    Number(
-      m.lastStart||0
-    );
+  const last=Number(m.lastStart||0);
 
-  const reward=
-    Number(
-      m.reward||0
-    );
+  const reward=Number(m.reward||0);
 
-  if(
-    m.status!=="mining"||
-    !last||
-    Date.now()-last<DAY
-  )
-    return showPopup(
-      "Not Ready",
-      "Your mining cycle is not complete yet.",
-      null,
-      true
-    );
+  if(m.status!=="mining"||!last||Date.now()-last<DAY)
+    return showPopup("Not Ready","Your mining cycle is not complete yet.",null,true);
 
   if(!reward)
-    return showPopup(
-      "Error",
-      "No mining reward available.",
-      null,
-      true
-    );
+    return showPopup("Error","No mining reward available.",null,true);
 
-  const k=
-    db
-      .ref("rewardClaims")
-      .push()
-      .key;
+  const k=db.ref("rewardClaims").push().key;
 
   const claimPath="rewardClaims/"+k;
 
-  await db
-    .ref(claimPath)
-    .set({
-
-      type:"mining",
-
-      userId:
-        String(currentUser.id),
-
-      amount:reward,
-
-      source:"daily_mining",
-
-      status:"approved",
-
-      balanceCredited:false,
-
-      createdAt:TS
-
-    });
-
-  const credited=await creditBalance(
-    reward,
-    claimPath,
-    {source:"daily_mining"}
-  );
-
-  if(!credited)
-    return showPopup(
-      "Error",
-      "Mining reward could not be added to your balance. Please try again.",
-      null,
-      true
-    );
-
-  await ref.update({
-
-    lastClaim:TS,
-
-    status:"claimed"
-
+  await db.ref(claimPath).set({
+    type:"mining",
+    userId:String(currentUser.id),
+    amount:reward,
+    source:"daily_mining",
+    status:"approved",
+    balanceCredited:false,
+    createdAt:TS
   });
 
-  showPopup(
-    "Mining Reward Added! 🎉",
-    "মাইনিং রিওয়ার্ড আপনার ব্যালেন্সে যোগ হয়েছে।",
-    reward
-  );
+  const credited=await creditBalance(reward,claimPath,{source:"daily_mining"});
+
+  if(!credited)
+    return showPopup("Error","Mining reward could not be added to your balance. Please try again.",null,true);
+
+  await ref.update({
+    lastClaim:TS,
+    status:"claimed"
+  });
+
+  showPopup("Mining Reward Added! 🎉","মাইনিং রিওয়ার্ড আপনার ব্যালেন্সে যোগ হয়েছে।",reward);
 
   openMining();
 
@@ -4940,52 +2087,25 @@ async function claimMining(){
 
 
 /* =========================================================
-   SUPPORT / OFFICIAL / NOTICE / TUTORIAL
+   SUPPORT / PAYMENT GROUP / NOTICE / TUTORIAL
 ========================================================= */
 
-function infoCard(
-  icon,
-  t,
-  p,
-  btn,
-  fn
-){
+function infoCard(icon,t,p,btn,fn){
 
   return`
-    <div
-      class="card"
-      style="text-align:center;padding:26px">
+    <div class="card" style="text-align:center;padding:26px">
 
-      <div
-        style="font-size:56px;animation:bob2 1.6s infinite">
+      <div style="font-size:56px;animation:bob2 1.6s infinite">${icon}</div>
 
-        ${icon}
+      <h2 style="margin-top:10px;font-size:21px;font-weight:900">${t}</h2>
 
-      </div>
+      <p style="color:#777;font-size:14px;font-weight:700;margin-top:10px;line-height:1.7">${p}</p>
 
-      <h2 style="margin-top:10px;font-size:21px;font-weight:900">
-        ${t}
-      </h2>
-
-      <p
-        style="color:#777;font-size:14px;font-weight:700;margin-top:10px;line-height:1.7">
-
-        ${p}
-
-      </p>
-
-      <button
-        class="pbtn"
-        onclick="${fn}">
-
-        ${btn}
-
-      </button>
+      <button class="pbtn" onclick="${fn}">${btn}</button>
 
     </div>`;
 
 }
-
 
 function openSupport(){
 
@@ -4997,122 +2117,71 @@ function openSupport(){
       "Support",
       "কোন সমস্যা হলে এখানে জয়েন দেন সকল প্রকারের সমস্যার সমাধান পাবেন।",
       "💬 Join Support",
-      `openTelegram('${esc(
-        getSupportTelegram()
-      )}')`
+      `openTelegram('${esc(getSupportTelegram())}')`
     )
   );
 
 }
 
-
+// Payment Group (আগে Official Channel ছিল)
 function openOfficial(){
 
   openModal(
-    "Official Channel",
+    "Payment Group",
 
     infoCard(
-      "📢",
-      "Official Channel",
-      "Follow our official Telegram channel for updates.",
-      "📢 Open Channel",
-      `openExternal('${esc(
-        getOfficialChannel()
-      )}')`
+      "💸",
+      "Payment Group",
+      "পেমেন্ট প্রুফ ও আপডেট দেখতে আমাদের পেমেন্ট গ্রুপে জয়েন করুন।",
+      "💸 Join Payment Group",
+      `openExternal('${esc(getOfficialChannel())}')`
     )
   );
 
 }
 
-
 async function openNotice(){
 
-  const snap=
-    await db
-      .ref("notices")
-      .once("value");
+  const snap=await db.ref("notices").once("value");
 
   let h="";
 
-  snap.forEach(
-    ch=>{
+  snap.forEach(ch=>{
 
-      const n=
-        ch.val()||{};
+    const n=ch.val()||{};
 
-      if(
-        n.status===false||
-        n.status==="inactive"
-      )return;
+    if(n.status===false||n.status==="inactive")return;
 
-      h+=
-        `<div
-          class="card"
-          style="border-left:4px solid var(--p)">
+    h+=
+      `<div class="card" style="border-left:4px solid var(--p)">
 
-          <b
-            style="font-size:14px">
+        <b style="font-size:14px">${esc(n.title||"Notice")}</b>
 
-            ${esc(
-              n.title||"Notice"
-            )}
+        <p style="color:#666;font-size:12px;line-height:1.6;margin-top:7px">
+          ${esc(n.text||n.description||"")}
+        </p>
 
-          </b>
+        <small style="display:block;color:#aaa;margin-top:9px">
+          ${formatDate(n.date||n.createdAt)}
+        </small>
 
-          <p
-            style="color:#666;font-size:12px;line-height:1.6;margin-top:7px">
+      </div>`;
 
-            ${esc(
-              n.text||
-              n.description||
-              ""
-            )}
-
-          </p>
-
-          <small
-            style="display:block;color:#aaa;margin-top:9px">
-
-            ${formatDate(
-              n.date||
-              n.createdAt
-            )}
-
-          </small>
-
-        </div>`;
-
-    }
-  );
+  });
 
   openModal(
     "Notice",
-
-    `<div class="list">
-
-      ${
-        h||
-        '<div class="empty">No notices available.</div>'
-      }
-
-    </div>`
+    `<div class="list">${h||'<div class="empty">No notices available.</div>'}</div>`
   );
 
 }
 
-
 function openTutorial(){
 
-  const u=
-    getTutorialUrl();
+  const u=getTutorialUrl();
 
   if(!u)
-    return showPopup(
-      "Not Available",
-      "Tutorial not configured.",
-      null,
-      true
-    );
+    return showPopup("Not Available","Tutorial not configured.",null,true);
 
   openModal(
     "Tutorial",
@@ -5124,19 +2193,13 @@ function openTutorial(){
           alt="Tutorial"
           style="width:96px;height:96px;border-radius:22px;object-fit:cover;border:2px solid #f7c3da;box-shadow:0 8px 20px rgba(226,19,110,.15)">
 
-        <h2 style="font-size:21px;font-weight:900;margin-top:14px">
-          Tutorial
-        </h2>
+        <h2 style="font-size:21px;font-weight:900;margin-top:14px">Tutorial</h2>
 
         <p style="font-size:14px;font-weight:700;color:#777;line-height:1.7;margin-top:8px">
           🧲আপনি নতুন সদস্য হলে এখানে জয়েন কাজ শিখুন।
         </p>
 
-        <button
-          class="pbtn"
-          onclick="openExternal('${esc(u)}')">
-          🎬 Watch Tutorial
-        </button>
+        <button class="pbtn" onclick="openExternal('${esc(u)}')">🎬 Watch Tutorial</button>
 
       </div>
     `
@@ -5151,82 +2214,30 @@ function openTutorial(){
 
 function openSettingsMenu(){
 
-  const it=
-    (i,t,s,f)=>
-      `<button
-        class="row"
-        style="margin:0"
-        onclick="${f}">
-
-        <div class="ric">
-          ${i}
-        </div>
-
-        <div>
-
-          <b>${t}</b>
-
-          <span class="s">
-            ${s}
-          </span>
-
-        </div>
-
-        <div class="arrow">
-          ›
-        </div>
-
-      </button>`;
+  const it=(i,t,s,f)=>
+    `<button class="row" style="margin:0" onclick="${f}">
+      <div class="ric">${i}</div>
+      <div>
+        <b>${t}</b>
+        <span class="s">${s}</span>
+      </div>
+      <div class="arrow">›</div>
+    </button>`;
 
   openModal(
     getBotName(),
 
     `<div class="list">
 
-      ${
-        it(
-          `<img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial">`,
-          "Tutorial",
-          "Learn how to use the app",
-          "openTutorial()"
-        )
-      }
+      ${it(`<img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial">`,"Tutorial","Learn how to use the app","openTutorial()")}
 
-      ${
-        it(
-          "🧾",
-          "Withdraw History",
-          "View your withdrawal history",
-          "openWithdrawHistory()"
-        )
-      }
+      ${it("🧾","Withdraw History","View your withdrawal history","openWithdrawHistory()")}
 
-      ${
-        it(
-          "🔔",
-          "Notice",
-          "Latest announcements",
-          "openNotice()"
-        )
-      }
+      ${it("🔔","Notice","Latest announcements","openNotice()")}
 
-      ${
-        it(
-          "📢",
-          "Official Channel",
-          "Join our official channel",
-          "openOfficial()"
-        )
-      }
+      ${it("💸","Payment Group","Join our payment group","openOfficial()")}
 
-      ${
-        it(
-          "🎧",
-          "Support",
-          "Contact support",
-          "openSupport()"
-        )
-      }
+      ${it("🎧","Support","Contact support","openSupport()")}
 
     </div>`
   );
@@ -5256,19 +2267,13 @@ async function openPage(p){
       tutorial:openTutorial
     };
 
-    if(m[p])
-      await m[p]();
+    if(m[p])await m[p]();
 
   }catch(e){
 
     console.error(e);
 
-    showPopup(
-      "Oops",
-      "Something went wrong.",
-      null,
-      true
-    );
+    showPopup("Oops","Something went wrong.",null,true);
 
   }
 
@@ -5282,53 +2287,22 @@ async function openPage(p){
 function openTelegram(u){
 
   if(!u)
-    return showPopup(
-      "Not Available",
-      "Support is not configured.",
-      null,
-      true
-    );
+    return showPopup("Not Available","Support is not configured.",null,true);
 
-  const url=
-    /^https?:\/\//i.test(u)
-    ?u
-    :"https://t.me/"+u;
+  const url=/^https?:\/\//i.test(u)?u:"https://t.me/"+u;
 
-  if(
-    tg &&
-    tg.openTelegramLink &&
-    url.includes("t.me/")
-  )
-    tg.openTelegramLink(url);
-  else
-    window.open(
-      url,
-      "_blank"
-    );
+  if(tg&&tg.openTelegramLink&&url.includes("t.me/"))tg.openTelegramLink(url);
+  else window.open(url,"_blank");
 
 }
-
 
 function openExternal(u){
 
   if(!u)
-    return showPopup(
-      "Not Available",
-      "Link not configured.",
-      null,
-      true
-    );
+    return showPopup("Not Available","Link not configured.",null,true);
 
-  if(
-    tg &&
-    tg.openLink
-  )
-    tg.openLink(u);
-  else
-    window.open(
-      u,
-      "_blank"
-    );
+  if(tg&&tg.openLink)tg.openLink(u);
+  else window.open(u,"_blank");
 
 }
 
@@ -5339,28 +2313,15 @@ function openExternal(u){
 
 function loadBanner(){
 
-  const box=
-    document.getElementById(
-      "bannerBox"
-    );
+  const box=document.getElementById("bannerBox");
 
   if(!box)return;
 
-  const bannerUrl=
-    "https://i.ibb.co/GfL8xMpN/Tkpay-Free-Earning-Bot-Banner.png";
+  const bannerUrl="https://i.ibb.co/GfL8xMpN/Tkpay-Free-Earning-Bot-Banner.png";
 
   box.innerHTML=
-    `<a
-      href="${bannerUrl}"
-      target="_blank"
-      rel="noopener"
-      style="display:block;line-height:0">
-
-      <img
-        class="banner"
-        src="${bannerUrl}"
-        alt="TK Pay Free Earning Bot Banner">
-
+    `<a href="${bannerUrl}" target="_blank" rel="noopener" style="display:block;line-height:0">
+      <img class="banner" src="${bannerUrl}" alt="TK Pay Free Earning Bot Banner">
     </a>`;
 
 }
@@ -5376,18 +2337,13 @@ async function startApp(){
 
     initTelegram();
 
-    const L=
-      document.getElementById(
-        "loaderText"
-      );
+    const L=document.getElementById("loaderText");
 
-    L.innerText=
-      "Loading settings...";
+    L.innerText="Loading settings...";
 
     await loadSettings();
 
-    L.innerText=
-      "Loading account...";
+    L.innerText="Loading account...";
 
     await initializeUser();
 
@@ -5399,27 +2355,17 @@ async function startApp(){
 
     loadRecentWithdrawActivity();
 
-    await new Promise(
-      r=>setTimeout(r,1200)
-    );
+    await new Promise(r=>setTimeout(r,1200));
 
-    document.getElementById(
-      "loading"
-    ).style.display="none";
+    document.getElementById("loading").style.display="none";
 
   }catch(e){
 
     console.error(e);
 
-    document.getElementById(
-      "loaderText"
-    ).innerText=
-      "Failed to load";
+    document.getElementById("loaderText").innerText="Failed to load";
 
-    showToast(
-      e.message||
-      "Application failed to start"
-    );
+    showToast(e.message||"Application failed to start");
 
   }
 
