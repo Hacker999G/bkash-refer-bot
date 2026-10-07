@@ -2142,6 +2142,74 @@ async function loadSettings(){
 
 
 /* =========================================================
+   BALANCE CREDIT
+   Rewards are credited atomically to users/{id}/balance.
+   balanceCredited prevents duplicate credits if the same claim
+   is processed more than once.
+========================================================= */
+
+async function creditBalance(amount, claimPath, meta={}){
+  const reward=Number(amount||0);
+  if(!currentUser || !userRef || reward<=0) return false;
+
+  const claimRef=claimPath ? db.ref(claimPath) : null;
+
+  if(claimRef){
+    const claimSnap=await claimRef.once("value");
+    const claim=claimSnap.val()||{};
+
+    if(claim.balanceCredited===true){
+      return true;
+    }
+
+    await claimRef.update({
+      status:"approved",
+      balanceCredited:false,
+      creditedAt:TS
+    });
+
+    const result=await userRef.transaction(u=>{
+      u=u||{};
+      const oldBalance=Number(u.balance||0);
+      return {
+        ...u,
+        balance:oldBalance+reward,
+        lastBalanceUpdate:Date.now()
+      };
+    });
+
+    if(result.committed){
+      await claimRef.update({
+        status:"approved",
+        balanceCredited:true,
+        creditedAt:TS,
+        ...meta
+      });
+      userData=result.snapshot.val()||userData;
+      updateBalance();
+      return true;
+    }
+    return false;
+  }
+
+  const result=await userRef.transaction(u=>{
+    u=u||{};
+    return {
+      ...u,
+      balance:Number(u.balance||0)+reward,
+      lastBalanceUpdate:Date.now()
+    };
+  });
+
+  if(result.committed){
+    userData=result.snapshot.val()||userData;
+    updateBalance();
+    return true;
+  }
+  return false;
+}
+
+/* =========================================================
    USER
 ========================================================= */
 
@@ -2482,6 +2550,7 @@ function listenUser(){
     s=>{
 
       userData=s.val()||{};
+      userData.balance=Number(userData.balance||0);
 
       updateBalance();
 
@@ -3296,7 +3365,7 @@ async function openTasks(){
               ${Number(t.reward||0)}
             )">
 
-            ${cl?"DONE":"START"}
+            ${cl?"DONE":"JOIN"}
 
           </button>
 
@@ -3312,8 +3381,7 @@ async function openTasks(){
       class="info"
       style="margin:0 0 12px">
 
-      Open the task link, complete the action,
-      then wait for verification.
+      📌 state বাটনে চাপ দেন, তার পরে 👉Telegram join বাটনে চাপ না দিলে অনেক কিছু মিস করবেন 100% গ্যারান্টি তাই এখনই JOIN করুন 🔥
 
     </div>
 
@@ -3500,14 +3568,29 @@ async function claimBonus(){
 
   await ref.set({
     amount:r,
+    status:"approved",
+    balanceCredited:false,
     createdAt:TS
   });
+
+  const credited=await creditBalance(
+    r,
+    "bonusClaims/"+currentUser.id+"/"+todayKey()
+  );
+
+  if(!credited)
+    return showPopup(
+      "Error",
+      "Bonus could not be added to your balance. Please try again.",
+      null,
+      true
+    );
 
   closeModal();
 
   showPopup(
-    "Bonus Claimed!",
-    "Your bonus claim has been submitted.",
+    "Bonus Added! 🎉",
+    "আপনার বোনাস সরাসরি ব্যালেন্সে যোগ হয়েছে।",
     r
   );
 
@@ -3898,7 +3981,7 @@ async function openAds(){
 
     </div>
 
-    ${rulesBox("অ্যাড নিয়ম",["প্রতিটি অ্যাড দিনে সর্বোচ্চ <b>"+Number(sv("adMax")||AD_MAX_DEFAULT)+" বার</b> দেখা যাবে।","অ্যাড <b>পুরোটা শেষ পর্যন্ত</b> দেখলে তবেই রিওয়ার্ড পাবেন।","মাঝপথে বন্ধ করলে বা ফেইল হলে রিওয়ার্ড যুক্ত হবে না।","রিওয়ার্ড প্রথমে <b>পেন্ডিং</b> থাকবে, যাচাইয়ের পর ব্যালেন্সে আসবে।"])}`
+    ${rulesBox("অ্যাড নিয়ম",["প্রতিটি অ্যাড দিনে সর্বোচ্চ <b>"+Number(sv("adMax")||AD_MAX_DEFAULT)+" বার</b> দেখা যাবে।","অ্যাড <b>পুরোটা শেষ পর্যন্ত</b> দেখলে তবেই রিওয়ার্ড পাবেন।","মাঝপথে বন্ধ করলে বা ফেইল হলে রিওয়ার্ড যুক্ত হবে না।","কাজ/অ্যাড/স্পিন/মাইনিং সফল হলে রিওয়ার্ড সরাসরি <b>ব্যালেন্সে</b> যোগ হবে।"])}`
   );
 
 }
@@ -3963,8 +4046,10 @@ async function startAd(n){
     .child(key)
     .set(c+1);
 
+  const claimPath="rewardClaims/"+k;
+
   await db
-    .ref("rewardClaims/"+k)
+    .ref(claimPath)
     .set({
 
       type:
@@ -3983,15 +4068,31 @@ async function startAd(n){
 
       source:key,
 
-      status:"pending",
+      status:"approved",
+
+      balanceCredited:false,
 
       createdAt:TS
 
     });
 
+  const credited=await creditBalance(
+    reward,
+    claimPath,
+    {source:key}
+  );
+
+  if(!credited)
+    return showPopup(
+      "Error",
+      "Ad reward could not be added to your balance. Please try again.",
+      null,
+      true
+    );
+
   showPopup(
-    "Reward Earned!",
-    "Rewarded ad completed successfully. Your reward is pending processing.",
+    "Reward Added! 🎉",
+    "অ্যাড সম্পূর্ণ হয়েছে এবং টাকা আপনার ব্যালেন্সে যোগ হয়েছে।",
     reward
   );
 
@@ -4290,10 +4391,10 @@ async function doSpin(){
 
         });
 
+      const claimPath="rewardClaims/"+k;
+
       await db
-        .ref(
-          "rewardClaims/"+k
-        )
+        .ref(claimPath)
         .set({
 
           type:"spin",
@@ -4303,15 +4404,31 @@ async function doSpin(){
 
           amount:reward,
 
-          status:"pending",
+          status:"approved",
+
+          balanceCredited:false,
 
           createdAt:TS
 
         });
 
+      const credited=await creditBalance(
+        reward,
+        claimPath,
+        {source:"spin"}
+      );
+
+      if(!credited)
+        return showPopup(
+          "Error",
+          "Spin reward could not be added to your balance. Please try again.",
+          null,
+          true
+        );
+
       showPopup(
         "অভিনন্দন! 🎉",
-        "আপনি স্পিনে জিতেছেন। ব্যালেন্সে যুক্ত হচ্ছে।",
+        "আপনি স্পিনে জিতেছেন এবং টাকা ব্যালেন্সে যোগ হয়েছে।",
         reward
       );
 
@@ -4766,10 +4883,10 @@ async function claimMining(){
       .push()
       .key;
 
+  const claimPath="rewardClaims/"+k;
+
   await db
-    .ref(
-      "rewardClaims/"+k
-    )
+    .ref(claimPath)
     .set({
 
       type:"mining",
@@ -4781,11 +4898,27 @@ async function claimMining(){
 
       source:"daily_mining",
 
-      status:"pending",
+      status:"approved",
+
+      balanceCredited:false,
 
       createdAt:TS
 
     });
+
+  const credited=await creditBalance(
+    reward,
+    claimPath,
+    {source:"daily_mining"}
+  );
+
+  if(!credited)
+    return showPopup(
+      "Error",
+      "Mining reward could not be added to your balance. Please try again.",
+      null,
+      true
+    );
 
   await ref.update({
 
@@ -4796,8 +4929,8 @@ async function claimMining(){
   });
 
   showPopup(
-    "Mining Reward!",
-    "Your mining claim has been submitted.",
+    "Mining Reward Added! 🎉",
+    "মাইনিং রিওয়ার্ড আপনার ব্যালেন্সে যোগ হয়েছে।",
     reward
   );
 
@@ -4861,9 +4994,9 @@ function openSupport(){
 
     infoCard(
       `<img src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png" alt="Telegram Support" style="width:54px;height:54px;object-fit:cover;border-radius:14px;">`,
-      "Need Help?",
-      "If you have any problem, contact our official support.",
-      "💬 Contact Support",
+      "Support",
+      "কোন সমস্যা হলে এখানে জয়েন দেন সকল প্রকারের সমস্যার সমাধান পাবেন।",
+      "💬 Join Support",
       `openTelegram('${esc(
         getSupportTelegram()
       )}')`
@@ -4996,7 +5129,7 @@ function openTutorial(){
         </h2>
 
         <p style="font-size:14px;font-weight:700;color:#777;line-height:1.7;margin-top:8px">
-          Watch the tutorial video to learn how to use the app.
+          🧲আপনি নতুন সদস্য হলে এখানে জয়েন কাজ শিখুন।
         </p>
 
         <button
