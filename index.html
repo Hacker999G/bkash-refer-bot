@@ -747,7 +747,13 @@ function getStartParam(){
     }
   }catch(e){}
 
-  return new URLSearchParams(location.search).get("ref")||"";
+  try{
+    const q=new URLSearchParams(location.search);
+    const h=new URLSearchParams((location.hash||"").replace(/^#/,""));
+    return q.get("ref")||q.get("startapp")||q.get("tgWebAppStartParam")||h.get("tgWebAppStartParam")||"";
+  }catch(e){
+    return"";
+  }
 
 }
 
@@ -768,39 +774,53 @@ async function processReferral(){
 
   if(!refSnap.exists())return;
 
-  const oldRef=await db.ref("referrals/"+rid+"/"+currentUser.id).once("value");
+  const reward=Number(settings.referralReward||0);
 
-  if(oldRef.exists()){
-    await userRef.update({referredBy:rid});
-    return;
-  }
+  // একই ইউজার দুইবার রেফার গণনা হওয়া আটকাতে transaction
+  const rRef=db.ref("referrals/"+rid+"/"+currentUser.id);
 
-  await db.ref("referrals/"+rid+"/"+currentUser.id).set({
-    referrerId:rid,
-    referredId:String(currentUser.id),
-    referredName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),
-    referredUsername:currentUser.username||"",
-    createdAt:TS
+  await rRef.once("value");
+
+  const tr=await rRef.transaction(cur=>{
+    if(cur)return;
+    return{
+      referrerId:rid,
+      referredId:String(currentUser.id),
+      referredName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),
+      referredUsername:currentUser.username||"",
+      createdAt:Date.now()
+    };
   });
 
   await userRef.update({referredBy:rid});
 
-  const rr=db.ref("users/"+rid);
-  const ru=refSnap.val()||{};
+  userData.referredBy=rid;
 
-  await rr.update({totalReferrals:Number(ru.totalReferrals||0)+1});
+  if(!tr.committed)return;
 
-  const reward=Number(settings.referralReward||0);
+  // রেফারারের রেফার সংখ্যা + ব্যালেন্স সরাসরি আপডেট
+  await db.ref("users/"+rid).transaction(u=>{
+    if(!u)return u;
+    return{
+      ...u,
+      totalReferrals:Number(u.totalReferrals||0)+1,
+      balance:Number(u.balance||0)+reward,
+      referralEarnings:Number(u.referralEarnings||0)+reward,
+      lastBalanceUpdate:Date.now()
+    };
+  });
 
   if(reward>0){
     await db.ref("referralRewards/"+rid+"/"+currentUser.id).set({
       amount:reward,
       createdAt:TS,
-      status:"pending"
+      status:"approved",
+      balanceCredited:true
     });
   }
 
 }
+
 
 function updateProfileUI(){
 
@@ -1116,6 +1136,8 @@ async function openRefer(){
 
   rs.forEach(c=>arr.push({id:c.key,...c.val()}));
 
+  const refCount=Math.max(Number(userData.totalReferrals||0),arr.length);
+
   const lh=arr.reverse().map(i=>
     `<div class="li">
       <div class="ric">👤</div>
@@ -1148,7 +1170,7 @@ async function openRefer(){
     <div class="stats" style="grid-template-columns:repeat(3,1fr)">
 
       <div class="stat">
-        <b>${userData.totalReferrals||0}</b>
+        <b>${refCount}</b>
         <span>Total Referrals</span>
       </div>
 
@@ -1210,6 +1232,20 @@ function shareReferral(){
    Flow: JOIN -> link খুলবে -> ১০ সেকেন্ড WAIT -> CLAIM -> balance add -> DONE
 ========================================================= */
 
+const TASK_DAILY_LIMIT=2; // একটি টাস্ক ২৪ ঘণ্টায় সর্বোচ্চ ২ বার (ইউজারকে দেখানো হয় না)
+
+function taskState(c){
+  c=c||{};
+  let count=Number(c.count||0);
+  let ws=Number(c.windowStart||0);
+  if(ws&&Date.now()-ws>=DAY){count=0;ws=0;}
+  return{count,ws,status:String(c.status||""),startedAt:Number(c.startedAt||0)};
+}
+
+function taskLimit(t){
+  return Number((t&&t.dailyLimit)||TASK_DAILY_LIMIT)||TASK_DAILY_LIMIT;
+}
+
 function tickTaskButtons(){
 
   document.querySelectorAll(".task-claim").forEach(b=>{
@@ -1244,26 +1280,19 @@ async function openTasks(){
 
     if(t.status===false||t.status==="inactive")return;
 
-    const c=claims[ch.key]||{};
-    const st=String(c.status||"");
+    const s=taskState(claims[ch.key]);
 
-    const done=["completed","approved","pending"].includes(st);
-    const started=st==="started";
+    // লিমিট শেষ হলে টাস্ক লিস্ট থেকে উধাও, ২৪ ঘণ্টা পর আবার আসবে
+    if(s.count>=taskLimit(t))return;
 
     const img=t.image||t.imageUrl||t.logo||"";
 
-    let btn="";
-
-    if(done){
-      btn=`<button class="sbtn" disabled>DONE</button>`;
-    }else if(started){
-      btn=`<button class="sbtn task-claim" disabled
-              data-start="${Number(c.startedAt||Date.now())}"
-              onclick="claimTask('${esc(ch.key)}')">WAIT</button>`;
-    }else{
-      btn=`<button class="sbtn"
-              onclick="openTask('${esc(t.link||t.url||"")}','${esc(ch.key)}',${Number(t.reward||0)})">JOIN</button>`;
-    }
+    const btn=s.status==="started"
+      ?`<button class="sbtn task-claim" disabled
+          data-start="${s.startedAt||Date.now()}"
+          onclick="claimTask('${esc(ch.key)}')">WAIT</button>`
+      :`<button class="sbtn"
+          onclick="openTask('${esc(t.link||t.url||"")}','${esc(ch.key)}',${Number(t.reward||0)})">START</button>`;
 
     h+=`<div class="li">
 
@@ -1284,11 +1313,11 @@ async function openTasks(){
     "Tasks",
 
     `<div class="info" style="margin:0 0 12px">
-      📌 JOIN বাটনে চাপ দিন, টাস্ক শেষ করে ১০ সেকেন্ড পর CLAIM বাটনে চাপ দিয়ে ব্যালেন্স নিন 🔥
+      📌 START বাটনে চাপ দিয়ে টাস্কে যান, কাজ শেষ করে ১০ সেকেন্ড পর CLAIM বাটনে চাপ দিয়ে ব্যালেন্স নিন 🔥
     </div>
 
     <div class="list">
-      ${h||'<div class="empty">No active tasks available.</div>'}
+      ${h||'<div class="empty">এখন কোনো টাস্ক নেই। ২৪ ঘণ্টা পর আবার আসবে।</div>'}
     </div>`
   );
 
@@ -1303,23 +1332,27 @@ async function openTask(link,id,reward){
 
   const ref=db.ref("taskClaims/"+currentUser.id+"/"+id);
 
-  const ex=await ref.once("value");
+  const tSnap=await db.ref("tasks/"+id).once("value");
+  const t=tSnap.val()||{};
 
-  const st=ex.exists()?String(ex.val().status):"";
+  const s=taskState((await ref.once("value")).val());
 
-  if(["pending","completed","approved"].includes(st))
-    return showPopup("Already Submitted","This task is already submitted.",null,true);
+  if(s.count>=taskLimit(t)){
+    showPopup("Task Finished","এই টাস্ক এখন আর করা যাবে না। ২৪ ঘণ্টা পর আবার আসবে।",null,true);
+    return openTasks();
+  }
 
   if(link)openExternal(link);
 
   // আগেই started থাকলে timer reset হবে না
-  if(st!=="started"){
-    await ref.set({
+  if(s.status!=="started"){
+    await ref.update({
       taskId:id,
       reward:Number(reward||0),
       status:"started",
       startedAt:Date.now(),
-      createdAt:TS
+      count:s.count,
+      windowStart:s.ws||0
     });
   }
 
@@ -1331,30 +1364,61 @@ async function claimTask(id){
 
   if(!id)return;
 
-  const claimPath="taskClaims/"+currentUser.id+"/"+id;
-  const ref=db.ref(claimPath);
+  const ref=db.ref("taskClaims/"+currentUser.id+"/"+id);
 
   const c=(await ref.once("value")).val();
 
   if(!c||c.status!=="started")
     return showPopup("Not Available","Please start the task first.",null,true);
 
-  const startedAt=Number(c.startedAt||0);
-
-  if(!startedAt||Date.now()-startedAt<TASK_WAIT_MS)
+  if(Date.now()-Number(c.startedAt||0)<TASK_WAIT_MS)
     return showToast("১০ সেকেন্ড অপেক্ষা করুন");
 
-  // reward সরাসরি tasks node থেকে নেওয়া হচ্ছে
-  const taskSnap=await db.ref("tasks/"+id).once("value");
-  const reward=Number((taskSnap.val()||{}).reward||c.reward||0);
+  const t=(await db.ref("tasks/"+id).once("value")).val()||{};
+  const reward=Number(t.reward||c.reward||0);
+  const limit=taskLimit(t);
 
   if(reward<=0)
     return showPopup("Error","Task reward not found.",null,true);
 
-  const credited=await creditBalance(reward,claimPath,{amount:reward,source:"task"});
+  // ডবল ক্লিক/ডবল ক্লেইম আটকাতে আগে স্টেট আপডেট
+  const tr=await ref.transaction(cur=>{
+    if(!cur||cur.status!=="started")return;
+    if(Date.now()-Number(cur.startedAt||0)<TASK_WAIT_MS)return;
+    let count=Number(cur.count||0);
+    let ws=Number(cur.windowStart||0);
+    if(!ws||Date.now()-ws>=DAY){count=0;ws=Date.now();}
+    if(count>=limit)return;
+    return{...cur,status:"idle",count:count+1,windowStart:ws,lastClaimAt:Date.now()};
+  });
 
-  if(!credited)
+  if(!tr.committed)
+    return showToast("Claim করা যায়নি, আবার চেষ্টা করুন");
+
+  const k=db.ref("rewardClaims").push().key;
+  const claimPath="rewardClaims/"+k;
+
+  await db.ref(claimPath).set({
+    type:"task",
+    taskId:id,
+    userId:String(currentUser.id),
+    amount:reward,
+    source:"task",
+    status:"approved",
+    balanceCredited:false,
+    createdAt:TS
+  });
+
+  const credited=await creditBalance(reward,claimPath,{source:"task"});
+
+  if(!credited){
+    // ব্যালেন্স না বাড়লে স্টেট ফেরত
+    await ref.transaction(cur=>{
+      if(!cur)return cur;
+      return{...cur,status:"started",count:Math.max(0,Number(cur.count||1)-1)};
+    });
     return showPopup("Error","Task reward could not be added to your balance. Please try again.",null,true);
+  }
 
   showPopup("Task Completed! 🎉","টাস্কের টাকা আপনার ব্যালেন্সে যোগ হয়েছে।",reward);
 
