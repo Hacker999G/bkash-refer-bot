@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Loading...</title>
+<link rel="preconnect" href="https://bkash-refer-bot-default-rtdb.firebaseio.com">
+<link rel="preconnect" href="https://www.gstatic.com">
+<link rel="preconnect" href="https://i.ibb.co">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -230,7 +233,7 @@ button{border:0;cursor:pointer;background:none}
 <div id="bannerBox" class="banner-box"><div class="bph">Welcome 💗</div></div>
 
 <button class="row" onclick="openPage('notice')"><div class="ric">🔔</div><div><b>Notice</b><span class="s">Latest announcements</span></div><div class="arrow">›</div></button>
-<button class="row" onclick="openPage('official')"><div class="ric">📢</div><div><b>Official Channel</b><span class="s">Join our channel</span></div><div class="arrow">›</div></button>
+<button class="row" onclick="openPage('official')"><div class="ric">📢</div><div><b>Payment Group</b><span class="s">Join our payment group</span></div><div class="arrow">›</div></button>
 <button class="row" onclick="openTutorial()"><img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial"><div><b>Tutorial</b><span class="s">Watch the tutorial video</span></div><div class="arrow">›</div></button>
 </main>
 
@@ -309,8 +312,10 @@ async function loadSettings(){
 async function creditReward(type,amount,source){
   amount=Number(amount||0);
   if(amount<=0)return false;
-  await userRef.child("balance").transaction(v=>Number(v||0)+amount);
-  await db.ref("rewardClaims").push().set({type,userId:String(currentUser.id),amount,source:source||type,status:"paid",createdAt:TS});
+  await Promise.all([
+    userRef.child("balance").transaction(v=>Number(v||0)+amount),
+    db.ref("rewardClaims").push().set({type,userId:String(currentUser.id),amount,source:source||type,status:"paid",createdAt:TS})
+  ]);
   return true;
 }
 
@@ -325,7 +330,7 @@ async function initializeUser(){
     await userRef.set(userData);
   }
   await userRef.update({firstName:currentUser.first_name||userData.firstName||"",lastName:currentUser.last_name||userData.lastName||"",username:currentUser.username||userData.username||"",photoUrl:currentUser.photo_url||userData.photoUrl||"",lastActive:TS,referralCode:String(currentUser.id)});
-  userData=(await userRef.once("value")).val()||userData;
+  userData.referralCode=String(currentUser.id);
   try{await processReferral()}catch(e){console.error("Referral error:",e)}
   updateProfileUI();
 }
@@ -426,8 +431,8 @@ async function submitWithdraw(){
   if(!/^01\d{9}$/.test(number))return err("Enter a valid 11 digit account number");
   const btn=document.getElementById("wBtn");if(btn)btn.disabled=true;
   // balance atomically kete nei (double withdraw ঠেকাতে)
-  const tx=await userRef.child("balance").transaction(v=>Number(v||0)>=amount?Number(v||0)-amount:undefined);
-  if(!tx.committed){if(btn)btn.disabled=false;return err("Insufficient balance")}
+  const tx=await userRef.child("balance").transaction(v=>v===null?v:(Number(v)>=amount?Number(v)-amount:undefined));
+  if(!tx.committed||tx.snapshot.val()===null){if(btn)btn.disabled=false;return err("Insufficient balance")}
   const method=wMethods.find(x=>x.id===wSel);
   const id=db.ref("withdrawals").push().key;
   await db.ref("withdrawals/"+id).set({id,userId:String(currentUser.id),userName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),username:currentUser.username||"",amount,methodId:method.id,methodName:method.name,accountNumber:number,status:"pending",balanceDeducted:true,createdAt:TS});
@@ -472,42 +477,53 @@ function shareReferral(){
 }
 
 /* ===== TASK ===== */
+const TASK_WAIT=10000;
+function taskLeft(c){
+  if(!c||!["completed","approved","pending"].includes(String(c.status)))return 0;
+  const left=Number(c.completedAt||c.createdAt||0)+DAY-Date.now();
+  return left>0?left:0;
+}
 async function openTasks(){
-  const snap=await db.ref("tasks").once("value");
-  const claims=(await db.ref("taskClaims/"+currentUser.id).once("value")).val()||{};
+  const [snap,cs]=await Promise.all([db.ref("tasks").once("value"),db.ref("taskClaims/"+currentUser.id).once("value")]);
+  const claims=cs.val()||{};
   let h="";
   snap.forEach(ch=>{
     const t=ch.val()||{};
     if(t.status===false||t.status==="inactive")return;
-    const cs=claims[ch.key]?String(claims[ch.key].status):"";
-    const done=["completed","approved","pending"].includes(cs);
-    const started=cs==="started";
+    const c=claims[ch.key];
+    const left=taskLeft(c);
+    const started=!left&&c&&c.status==="started";
     const img=t.image||t.imageUrl||t.logo||"";
     const act=started?`claimTask('${esc(ch.key)}')`:`openTask('${esc(t.link||t.url||"")}','${esc(ch.key)}',${Number(t.reward||0)})`;
-    h+=`<div class="li">${img?`<img class="ric" src="${esc(img)}">`:`<div class="ric">🎯</div>`}<div class="in"><b>${esc(t.name||t.title||"Task")}</b><span>Reward: ৳${money(t.reward||0)}</span></div><button class="sbtn" ${done?"disabled":""} onclick="${act}">${done?"DONE":started?"CLAIM":"START"}</button></div>`;
+    const sub=left?"আবার করতে পারবেন: "+fmtT(left):"Reward: ৳"+money(t.reward||0);
+    h+=`<div class="li">${img?`<img class="ric" src="${esc(img)}">`:`<div class="ric">🎯</div>`}<div class="in"><b>${esc(t.name||t.title||"Task")}</b><span>${sub}</span></div><button class="sbtn" ${left?"disabled":""} onclick="${act}">${left?"DONE":started?"CLAIM":"START"}</button></div>`;
   });
-  openModal("Tasks",`<div class="info" style="margin:0 0 12px">Task link খুলে কাজ শেষ করুন, তারপর ১০ সেকেন্ড পর CLAIM চাপুন।</div><div class="list">${h||'<div class="empty">No active tasks available.</div>'}</div>`);
+  openModal("Tasks",`<div class="info" style="margin:0 0 12px">START চাপুন, কাজ শেষ করুন, ১০ সেকেন্ড পর CLAIM চাপুন। প্রতিটি task ২৪ ঘণ্টায় ১ বার করা যাবে।</div><div class="list">${h||'<div class="empty">No active tasks available.</div>'}</div>`);
 }
 async function openTask(link,id,reward){
   if(!id)return;
-  const ex=(await db.ref("taskClaims/"+currentUser.id+"/"+id).once("value")).val();
-  if(ex&&["completed","approved","pending"].includes(String(ex.status)))
-    return showPopup("Already Submitted","This task is already completed.",null,true);
+  const ref=db.ref("taskClaims/"+currentUser.id+"/"+id);
+  const ex=(await ref.once("value")).val();
+  const left=taskLeft(ex);
+  if(left)return showPopup("Already Done","২৪ ঘণ্টা পর আবার করতে পারবেন: "+fmtT(left),null,true);
   if(link)openExternal(link);
-  if(!ex)await db.ref("taskClaims/"+currentUser.id+"/"+id).set({taskId:id,reward:Number(reward||0),status:"started",startedAt:Date.now(),createdAt:TS});
-  showPopup("Task Opened","কাজ শেষ করে ১০ সেকেন্ড পর Tasks এ গিয়ে CLAIM চাপুন।");
+  await ref.set({taskId:id,reward:Number(reward||0),status:"started",startedAt:Date.now(),createdAt:TS});
+  showPopup("Task Started","কাজ শেষ করে ১০ সেকেন্ড পর Tasks এ এসে CLAIM চাপুন।");
   openTasks();
 }
 async function claimTask(id){
   const ref=db.ref("taskClaims/"+currentUser.id+"/"+id);
   const t=(await ref.once("value")).val()||{};
-  if(t.status!=="started")return;
-  if(Date.now()-Number(t.startedAt||0)<10000)
-    return showPopup("Wait","একটু অপেক্ষা করুন, কাজ শেষ করে claim করুন।",null,true);
-  const tx=await ref.child("status").transaction(s=>s==="started"?"completed":undefined);
-  if(!tx.committed)return;
-  await creditReward("task",t.reward,id);
-  showPopup("Task Completed!","Reward added to your balance.",t.reward);
+  if(t.status!=="started")return openTasks();
+  const wait=TASK_WAIT-(Date.now()-Number(t.startedAt||0));
+  if(wait>0)return showPopup("Wait",Math.ceil(wait/1000)+" সেকেন্ড অপেক্ষা করুন, তারপর CLAIM চাপুন।",null,true);
+  const tx=await ref.child("status").transaction(s=>s===null?s:(s==="started"?"completed":undefined));
+  if(!tx.committed||tx.snapshot.val()!=="completed")return;
+  const tr=(await db.ref("tasks/"+id+"/reward").once("value")).val();
+  const reward=Number(tr||t.reward||0);
+  await ref.update({completedAt:Date.now()});
+  await creditReward("task",reward,id);
+  showPopup("Task Completed!","Reward added to your balance.",reward);
   openTasks();
 }
 
@@ -690,8 +706,8 @@ async function claimMining(){
   const last=Number(m.lastStart||0),reward=Number(m.reward||0);
   if(m.status!=="mining"||!last||Date.now()-last<DAY)return showPopup("Not Ready","Your mining cycle is not complete yet.",null,true);
   if(!reward)return showPopup("Error","No mining reward available.",null,true);
-  const tx=await ref.child("status").transaction(s=>s==="mining"?"claimed":undefined);
-  if(!tx.committed)return;
+  const tx=await ref.child("status").transaction(s=>s===null?s:(s==="mining"?"claimed":undefined));
+  if(!tx.committed||tx.snapshot.val()!=="claimed")return showPopup("Error","Claim failed, please try again.",null,true);
   await ref.update({lastClaim:TS});
   await creditReward("mining",reward,"daily_mining");
   showPopup("Mining Reward!","Reward added to your balance.",reward);
@@ -706,7 +722,7 @@ function openSupport(){
   openModal("Support",infoCard(`<img src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png" alt="Telegram Support" style="width:54px;height:54px;object-fit:cover;border-radius:14px;">`,"Need Help?","If you have any problem, contact our official support.","💬 Contact Support",`openTelegram('${esc(getSupportTelegram())}')`));
 }
 function openOfficial(){
-  openModal("Official Channel",infoCard("📢","Official Channel","Follow our official Telegram channel for updates.","📢 Open Channel",`openExternal('${esc(getOfficialChannel())}')`));
+  openModal("Payment Group",infoCard("📢","Payment Group","Join our payment group to see payment proofs and updates.","📢 Open Group",`openExternal('${esc(getOfficialChannel())}')`));
 }
 async function openNotice(){
   const snap=await db.ref("notices").once("value");let h="";
@@ -730,7 +746,7 @@ function openSettingsMenu(){
     ${it(`<img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial">`,"Tutorial","Learn how to use the app","openTutorial()")}
     ${it("🧾","Withdraw History","View your withdrawal history","openWithdrawHistory()")}
     ${it("🔔","Notice","Latest announcements","openNotice()")}
-    ${it("📢","Official Channel","Join our official channel","openOfficial()")}
+    ${it("📢","Payment Group","Join our payment group","openOfficial()")}
     ${it("🎧","Support","Contact support","openSupport()")}
   </div>`);
 }
@@ -769,7 +785,6 @@ async function startApp(){
     L.innerText="Loading settings...";await loadSettings();
     L.innerText="Loading account...";await initializeUser();
     listenUser();loadBanner();loadMonetag();loadRecentWithdrawActivity();
-    await new Promise(r=>setTimeout(r,1200));
     document.getElementById("loading").style.display="none";
   }catch(e){
     console.error(e);
