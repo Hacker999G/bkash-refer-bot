@@ -298,7 +298,7 @@ function closePopup(){document.getElementById("pop").classList.remove("show")}
 /* ===== SETTINGS ===== */
 function sv(){for(const k of arguments){const v=settings?settings[k]:"";if(v!==undefined&&v!==null&&String(v).trim()!=="")return v}return""}
 const getBotName=()=>String(sv("botName","name","siteName","appName")||"Mini App");
-const getBotUsername=()=>"TK_PAY_BOT";
+const getBotUsername=()=>String(sv("botUsername","bot_username")||"TK_PAY_BOT").replace(/^@/,"");
 const getLogoUrl=()=>String(sv("logoUrl","logo","siteLogo","adminLogo","logoURL","logo_url")||"");
 const getSupportTelegram=()=>String(sv("supportTelegram","support","supportUsername","supportId")||"").replace(/^@/,"");
 const getOfficialChannel=()=>String(sv("officialChannel","channelUrl","officialChannelUrl","channel")||"");
@@ -320,41 +320,50 @@ async function creditReward(type,amount,source){
 }
 
 /* ===== USER ===== */
-async function initializeUser(){
-  currentUser=getTelegramUser();
-  userRef=db.ref("users/"+currentUser.id);
-  const snap=await userRef.once("value");
-  if(snap.exists()){userData=snap.val()||{}}
-  else{
-    userData={telegramId:String(currentUser.id),firstName:currentUser.first_name||"",lastName:currentUser.last_name||"",username:currentUser.username||"",photoUrl:currentUser.photo_url||"",balance:0,referralCode:String(currentUser.id),referredBy:"",totalReferrals:0,referralEarnings:0,totalWithdraw:0,createdAt:TS,lastActive:TS};
-    await userRef.set(userData);
-  }
-  await userRef.update({firstName:currentUser.first_name||userData.firstName||"",lastName:currentUser.last_name||userData.lastName||"",username:currentUser.username||userData.username||"",photoUrl:currentUser.photo_url||userData.photoUrl||"",lastActive:TS,referralCode:String(currentUser.id)});
-  userData.referralCode=String(currentUser.id);
-  try{await processReferral()}catch(e){console.error("Referral error:",e)}
-  updateProfileUI();
-}
 function getStartParam(){
-  try{if(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)return tg.initDataUnsafe.start_param}catch(e){}
-  return new URLSearchParams(location.search).get("ref")||"";
+  try{
+    if(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param){
+      return String(tg.initDataUnsafe.start_param).trim();
+    }
+  }catch(e){}
+  const p=new URLSearchParams(window.location.search);
+  return String(p.get("tgWebAppStartParam")||p.get("startapp")||p.get("ref")||"").trim();
 }
+
 async function processReferral(){
-  let c=String(getStartParam()||"").trim();
+  let c=getStartParam();
   if(!c||userData.referredBy)return;
   if(c.startsWith("ref_"))c=c.substring(4);
   if(c.startsWith("REF"))c=c.substring(3);
-  const rid=String(c);
+  const rid=String(c).trim();
+
+  // নিজের রেফারেল লিংক বা ভুল আইডি ব্লক
   if(!/^\d+$/.test(rid)||rid===String(currentUser.id))return;
+
   const refSnap=await db.ref("users/"+rid).once("value");
   if(!refSnap.exists())return;
+
+  // রেফারেল হিস্ট্রি অ্যাড করা
   const tx=await db.ref("referrals/"+rid+"/"+currentUser.id).transaction(cur=>{
     if(cur)return;
-    return{referrerId:rid,referredId:String(currentUser.id),referredName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),referredUsername:currentUser.username||"",createdAt:Date.now()};
+    return{
+      referrerId:rid,
+      referredId:String(currentUser.id),
+      referredName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim()||"Telegram User",
+      referredUsername:currentUser.username||"",
+      createdAt:Date.now()
+    };
   });
+
   await userRef.update({referredBy:rid});
+  userData.referredBy=rid;
+
   if(!tx.committed)return;
-  const reward=Number(settings.referralReward||0);
+
+  // Settings থেকে অ্যামাউন্ট নিবে, না থাকলে ডিফল্ট ১০ টাকা নিবে
+  const reward=Number(settings.referralReward!==undefined?settings.referralReward:10);
   const rref=db.ref("users/"+rid);
+  
   await rref.child("totalReferrals").transaction(v=>Number(v||0)+1);
   if(reward>0){
     await rref.child("balance").transaction(v=>Number(v||0)+reward);
@@ -362,12 +371,52 @@ async function processReferral(){
     await db.ref("referralRewards/"+rid+"/"+currentUser.id).set({amount:reward,createdAt:TS,status:"paid"});
   }
 }
+
+async function initializeUser(){
+  currentUser=getTelegramUser();
+  userRef=db.ref("users/"+currentUser.id);
+  const snap=await userRef.once("value");
+  if(snap.exists()){
+    userData=snap.val()||{};
+  }else{
+    userData={
+      telegramId:String(currentUser.id),
+      firstName:currentUser.first_name||"",
+      lastName:currentUser.last_name||"",
+      username:currentUser.username||"",
+      photoUrl:currentUser.photo_url||"",
+      balance:0,
+      referralCode:String(currentUser.id),
+      referredBy:"",
+      totalReferrals:0,
+      referralEarnings:0,
+      totalWithdraw:0,
+      createdAt:TS,
+      lastActive:TS
+    };
+    await userRef.set(userData);
+  }
+  await userRef.update({
+    firstName:currentUser.first_name||userData.firstName||"",
+    lastName:currentUser.last_name||userData.lastName||"",
+    username:currentUser.username||userData.username||"",
+    photoUrl:currentUser.photo_url||userData.photoUrl||"",
+    lastActive:TS,
+    referralCode:String(currentUser.id)
+  });
+  userData.referralCode=String(currentUser.id);
+  
+  try{await processReferral()}catch(e){console.error("Referral process error:",e)}
+  updateProfileUI();
+}
+
 function updateProfileUI(){
   document.getElementById("userName").innerText=[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim()||"Telegram User";
   document.getElementById("userUsername").innerText=currentUser.username?"@"+currentUser.username:"Telegram User";
   if(currentUser.photo_url)document.getElementById("userPhoto").src=currentUser.photo_url;
   updateBalance();
 }
+
 function updateBalance(){
   const e=document.getElementById("balanceValue"),h=document.getElementById("balanceHint"),l=document.getElementById("balanceLabel");
   if(!e)return;
@@ -381,13 +430,21 @@ function updateBalance(){
     if(l)l.innerText="TAP FOR BALANCE";
   }
 }
+
 function toggleBalance(){
   balanceVisible=!balanceVisible;updateBalance();
   const eye=document.getElementById("balanceEye");
   if(eye){eye.classList.remove("balance-eye-pop");void eye.offsetWidth;eye.classList.add("balance-eye-pop")}
   if(tg&&tg.HapticFeedback){try{tg.HapticFeedback.impactOccurred("light")}catch(e){}}
 }
-function listenUser(){if(!userRef)return;userRef.on("value",s=>{userData=s.val()||{};updateBalance()})}
+
+function listenUser(){
+  if(!userRef)return;
+  userRef.on("value",s=>{
+    userData=s.val()||{};
+    updateBalance();
+  });
+}
 
 /* ===== MODAL ===== */
 function openModal(t,h){clearInterval(tickT);document.getElementById("modalTitle").innerText=t;document.getElementById("modalContent").innerHTML=h;document.getElementById("modal").classList.add("show")}
@@ -430,7 +487,7 @@ async function submitWithdraw(){
   if(!number)return err("Enter account number");
   if(!/^01\d{9}$/.test(number))return err("Enter a valid 11 digit account number");
   const btn=document.getElementById("wBtn");if(btn)btn.disabled=true;
-  // balance atomically kete nei (double withdraw ঠেকাতে)
+  
   const tx=await userRef.child("balance").transaction(v=>v===null?v:(Number(v)>=amount?Number(v)-amount:undefined));
   if(!tx.committed||tx.snapshot.val()===null){if(btn)btn.disabled=false;return err("Insufficient balance")}
   const method=wMethods.find(x=>x.id===wSel);
@@ -457,13 +514,15 @@ async function openWithdrawHistory(){
 /* ===== REFER ===== */
 async function openRefer(){
   const bu=getBotUsername(),code=String(currentUser.id);
-  const link=bu?"https://t.me/"+bu+"/app?startapp="+encodeURIComponent(code):location.origin+location.pathname+"?ref="+encodeURIComponent(code);
+  const link=bu?"https://t.me/"+bu+"?start=ref_"+encodeURIComponent(code):location.origin+location.pathname+"?ref="+encodeURIComponent(code);
   const rs=await db.ref("referrals/"+currentUser.id).once("value");
   let arr=[];rs.forEach(c=>{arr.push({id:c.key,...c.val()})});
   const lh=arr.reverse().map(i=>`<div class="li"><div class="ric">👤</div><div class="in"><b>${esc(i.referredName||"Telegram User")}</b><span>${i.referredUsername?"@"+esc(i.referredUsername):"Telegram user"}</span></div><div style="font-size:10px;color:#16a56b;font-weight:800">Joined</div></div>`).join("")||`<div class="empty">No referrals yet.<br>Share your referral link.</div>`;
+  
+  const refReward=settings.referralReward!==undefined?settings.referralReward:10;
   openModal("Refer & Earn",`<div class="refc"><div style="font-size:13px;font-weight:800;opacity:.9">YOUR REFERRAL CODE</div><div class="refcode">${esc(code)}</div><div class="reflink">${esc(link)}</div><div class="refb"><button onclick="copyReferral()">📋 Copy</button><button onclick="shareReferral()">🚀 Share</button></div></div>
-  <div class="stats"><div class="stat"><b>${userData.totalReferrals||0}</b><span>Total Referrals</span></div><div class="stat"><b>৳${money(userData.referralEarnings||0)}</b><span>Total Earned</span></div><div class="stat"><b>৳${money(settings.referralReward||0)}</b><span>Per Referral</span></div></div>
-  <div class="ref-rate"><div><div class="label">💰 Referral Reward</div><div style="font-size:11px;color:#999;margin-top:4px;font-weight:700">You earn for each successful referral</div></div><div class="amount">৳${money(settings.referralReward||0)}</div></div>
+  <div class="stats"><div class="stat"><b>${userData.totalReferrals||0}</b><span>Total Referrals</span></div><div class="stat"><b>৳${money(userData.referralEarnings||0)}</b><span>Total Earned</span></div><div class="stat"><b>৳${money(refReward)}</b><span>Per Referral</span></div></div>
+  <div class="ref-rate"><div><div class="label">💰 Referral Reward</div><div style="font-size:11px;color:#999;margin-top:4px;font-weight:700">You earn for each successful referral</div></div><div class="amount">৳${money(refReward)}</div></div>
   <div class="stitle" style="margin-top:18px">Your Referrals</div><div class="list">${lh}</div>`);
   window.currentReferralLink=link;
 }
