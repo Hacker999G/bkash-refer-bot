@@ -206,7 +206,7 @@ button{border:0;cursor:pointer;background:none}
 </div>
 
 <main class="content">
-<div class="stitle">Quick Services</div>
+<div class="stitle">কুইক সার্ভিসেস</div>
 <div class="grid">
   <button class="svc" onclick="openPage('refer')"><div class="sic"><img src="https://i.ibb.co.com/kgPP66Z6/IMG-3564.jpg" alt="Refer" loading="eager"></div><div class="snm">Refer</div></button>
   <button class="svc" onclick="openPage('task')"><div class="sic"><img src="https://i.ibb.co.com/Z6zQh4BW/IMG-3566.jpg" alt="Task" loading="eager"></div><div class="snm">Task</div></button>
@@ -218,23 +218,23 @@ button{border:0;cursor:pointer;background:none}
   <button class="svc" onclick="openPage('tutorial')"><div class="sic"><img src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial" loading="eager"></div><div class="snm">Tutorial</div></button>
 </div>
 
-<div class="stitle" style="margin-top:18px">Withdraw</div>
+<div class="stitle" style="margin-top:18px">উইথড্র</div>
 <div class="payments">
   <button class="paybtn" onclick="openWithdrawMethod('bkash')">
     <div class="paylogo"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQbs6dtZDI3_YGCOyoQJST3DjlIhVteRqlW-5fPftOI7AnPSYsjD3a2D56&s=10" alt="bKash"></div>
-    <div><div class="payname">bKash</div><div class="paysub">Direct withdraw</div></div>
+    <div><div class="payname">bKash</div><div class="paysub">সরাসরি উইথড্র</div></div>
   </button>
   <button class="paybtn" onclick="openWithdrawMethod('nagad')">
     <div class="paylogo"><img src="https://www.logo.wine/a/logo/Nagad/Nagad-Logo.wine.svg" alt="Nagad"></div>
-    <div><div class="payname">Nagad</div><div class="paysub">Direct withdraw</div></div>
+    <div><div class="payname">Nagad</div><div class="paysub">সরাসরি উইথড্র</div></div>
   </button>
 </div>
 
 <div id="bannerBox" class="banner-box"><div class="bph">Welcome 💗</div></div>
 
-<button class="row" onclick="openPage('notice')"><div class="ric">🔔</div><div><b>Notice</b><span class="s">Latest announcements</span></div><div class="arrow">›</div></button>
-<button class="row" onclick="openPage('official')"><div class="ric">📢</div><div><b>Payment Group</b><span class="s">Join our payment group</span></div><div class="arrow">›</div></button>
-<button class="row" onclick="openTutorial()"><img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial"><div><b>Tutorial</b><span class="s">Watch the tutorial video</span></div><div class="arrow">›</div></button>
+<button class="row" onclick="openPage('notice')"><div class="ric">🔔</div><div><b>নোটিশ</b><span class="s">সর্বশেষ আপডেটগুলো দেখুন</span></div><div class="arrow">›</div></button>
+<button class="row" onclick="openPage('official')"><div class="ric">📢</div><div><b>পেমেন্ট গ্রুপ</b><span class="s">আমাদের পেমেন্ট গ্রুপে জয়েন করুন</span></div><div class="arrow">›</div></button>
+<button class="row" onclick="openTutorial()"><img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial"><div><b>টিউটোরিয়াল</b><span class="s">টিউটোরিয়াল ভিডিও দেখুন</span></div><div class="arrow">›</div></button>
 </main>
 
 <nav class="bottom-nav">
@@ -456,13 +456,13 @@ async function openWithdraw(preferred){
   wMethods=[...FIXED_WITHDRAW_METHODS];
   const q=String(preferred||"").toLowerCase();
   wSel=(q.includes("nagad")||q.includes("নগদ"))?"nagad":"bkash";
-  const mh=wMethods.map(m=>`<button class="method ${m.id===wSel?"sel":""}" data-id="${m.id}" onclick="pickMethod('${m.id}')"><img src="${m.logo}" alt="${m.name}"><b>${m.name}</b><small style="display:block;color:#888;margin-top:4px">Direct withdraw</small></button>`).join("");
-  openModal("Withdraw",`<div class="card" style="display:flex;gap:12px;align-items:center"><div class="ric">💰</div><div><b style="font-size:12px;color:#888">Available Balance</b><div style="font-size:22px;font-weight:900;color:var(--p)">৳ ${money(userData.balance||0)}</div></div></div>
-  <div class="info">Minimum Withdraw: <b>৳${money(settings.minWithdraw||0)}</b><br>Minimum Referral: <b>${Number(settings.minRefer||0)}</b><br>Your Referral: <b>${Number(userData.totalReferrals||0)}</b></div>
-  <label class="label">Withdraw Method</label><div class="methods">${mh}</div>
-  <label class="label">Amount</label><input id="withdrawAmount" class="input" type="number" placeholder="Enter amount">
-  <label class="label">Account Number</label><input id="withdrawNumber" class="input" type="text" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX">
-  <button class="pbtn" id="wBtn" onclick="submitWithdraw()">Submit Withdraw</button>`);
+  const mh=wMethods.map(m=>`<button class="method ${m.id===wSel?"sel":""}" data-id="${m.id}" onclick="pickMethod('${m.id}')"><img src="${m.logo}" alt="${m.name}"><b>${m.name}</b><small style="display:block;color:#888;margin-top:4px">সরাসরি উইথড্র</small></button>`).join("");
+  openModal("উইথড্র",`<div class="card" style="display:flex;gap:12px;align-items:center"><div class="ric">💰</div><div><b style="font-size:12px;color:#888">বর্তমান ব্যালেন্স</b><div style="font-size:22px;font-weight:900;color:var(--p)">৳ ${money(userData.balance||0)}</div></div></div>
+  <div class="info">সর্বনিম্ন উইথড্র: <b>৳${money(settings.minWithdraw||0)}</b><br>সর্বনিম্ন রেফারেল: <b>${Number(settings.minRefer||0)}</b><br>আপনার রেফারেল: <b>${Number(userData.totalReferrals||0)}</b></div>
+  <label class="label">উইথড্র মেথড</label><div class="methods">${mh}</div>
+  <label class="label">টাকার পরিমাণ</label><input id="withdrawAmount" class="input" type="number" placeholder="Enter amount">
+  <label class="label">অ্যাকাউন্ট নাম্বার</label><input id="withdrawNumber" class="input" type="text" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX">
+  <button class="pbtn" id="wBtn" onclick="submitWithdraw()">উইথড্র দিন</button>`);
 }
 function pickMethod(id){
   id=String(id||"").toLowerCase();
@@ -476,22 +476,22 @@ async function submitWithdraw(){
   const minW=Number(settings.minWithdraw||0),minR=Number(settings.minRefer||0);
   const bal=Number(userData.balance||0),refs=Number(userData.totalReferrals||0);
   const err=m=>showPopup("Failed",m,null,true);
-  if(wSel!=="bkash"&&wSel!=="nagad")return err("Select withdraw method");
-  if(!amount||amount<=0)return err("Enter valid amount");
-  if(amount<minW)return err("Minimum withdraw ৳"+minW);
-  if(refs<minR)return err("You need at least "+minR+" referrals");
-  if(amount>bal)return err("Insufficient balance");
-  if(!number)return err("Enter account number");
-  if(!/^01\d{9}$/.test(number))return err("Enter a valid 11 digit account number");
+  if(wSel!=="bkash"&&wSel!=="nagad")return err("উইথড্র মেথড সিলেক্ট করুন");
+  if(!amount||amount<=0)return err("সঠিক টাকার পরিমাণ দিন");
+  if(amount<minW)return err("সর্বনিম্ন উইথড্র ৳"+minW);
+  if(refs<minR)return err("আপনার অন্তত "+minR+" টি রেফারেল প্রয়োজন");
+  if(amount>bal)return err("পর্যাপ্ত ব্যালেন্স নেই");
+  if(!number)return err("অ্যাকাউন্ট নাম্বার দিন");
+  if(!/^01\d{9}$/.test(number))return err("সঠিক ১১ ডিজিটের নাম্বার দিন");
   const btn=document.getElementById("wBtn");if(btn)btn.disabled=true;
   
   const tx=await userRef.child("balance").transaction(v=>v===null?v:(Number(v)>=amount?Number(v)-amount:undefined));
-  if(!tx.committed||tx.snapshot.val()===null){if(btn)btn.disabled=false;return err("Insufficient balance")}
+  if(!tx.committed||tx.snapshot.val()===null){if(btn)btn.disabled=false;return err("পর্যাপ্ত ব্যালেন্স নেই")}
   const method=wMethods.find(x=>x.id===wSel);
   const id=db.ref("withdrawals").push().key;
   await db.ref("withdrawals/"+id).set({id,userId:String(currentUser.id),userName:[currentUser.first_name||"",currentUser.last_name||""].join(" ").trim(),username:currentUser.username||"",amount,methodId:method.id,methodName:method.name,accountNumber:number,status:"pending",balanceDeducted:true,createdAt:TS});
   closeModal();
-  showPopup("Request Submitted!",method.name+" withdraw request submitted successfully. It is pending processing.",amount);
+  showPopup("Request Submitted!",method.name+" উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে। এটি প্রসেসিং এ আছে।",amount);
 }
 async function openWithdrawHistory(){
   const snap=await db.ref("withdrawals").orderByChild("userId").equalTo(String(currentUser.id)).once("value");
@@ -505,7 +505,7 @@ async function openWithdrawHistory(){
     const icon=mn.toLowerCase().includes("nagad")||mn.includes("নগদ")?"🟠":"💗";
     return`<div class="li"><div class="ric">${icon}</div><div class="in"><b>${esc(mn)} • ৳${money(w.amount)}</b><span>${esc(String(w.accountNumber||"").replace(/.(?=.{4})/g,"•"))} • ${formatDate(w.createdAt)}</span></div><div style="font-size:10px;font-weight:900;${cls}">${esc(label)}</div></div>`;
   }).join("");
-  openModal("Withdraw History",`<div class="list">${h||'<div class="empty">No withdrawal history found.</div>'}</div>`);
+  openModal("উইথড্র হিস্ট্রি",`<div class="list">${h||'<div class="empty">কোনো উইথড্র হিস্ট্রি পাওয়া যায়নি।</div>'}</div>`);
 }
 
 /* ===== REFER ===== */
@@ -514,17 +514,17 @@ async function openRefer(){
   const link=bu?"https://t.me/"+bu+"/app?startapp="+encodeURIComponent(code):location.origin+location.pathname+"?ref="+encodeURIComponent(code);
   const rs=await db.ref("referrals/"+currentUser.id).once("value");
   let arr=[];rs.forEach(c=>{arr.push({id:c.key,...c.val()})});
-  const lh=arr.reverse().map(i=>`<div class="li"><div class="ric">👤</div><div class="in"><b>${esc(i.referredName||"Telegram User")}</b><span>${i.referredUsername?"@"+esc(i.referredUsername):"Telegram user"}</span></div><div style="font-size:10px;color:#16a56b;font-weight:800">Joined</div></div>`).join("")||`<div class="empty">No referrals yet.<br>Share your referral link.</div>`;
+  const lh=arr.reverse().map(i=>`<div class="li"><div class="ric">👤</div><div class="in"><b>${esc(i.referredName||"Telegram User")}</b><span>${i.referredUsername?"@"+esc(i.referredUsername):"Telegram user"}</span></div><div style="font-size:10px;color:#16a56b;font-weight:800">জয়েন করেছে</div></div>`).join("")||`<div class="empty">এখনও কোনো রেফারেল নেই।<br>আপনার রেফারেল লিংক শেয়ার করুন।</div>`;
   
   const refReward=settings.referralReward!==undefined?settings.referralReward:10;
-  openModal("Refer & Earn",`<div class="refc"><div style="font-size:13px;font-weight:800;opacity:.9">YOUR REFERRAL CODE</div><div class="refcode">${esc(code)}</div><div class="reflink">${esc(link)}</div><div class="refb"><button onclick="copyReferral()">📋 Copy</button><button onclick="shareReferral()">🚀 Share</button></div></div>
-  <div class="stats"><div class="stat"><b>${userData.totalReferrals||0}</b><span>Total Referrals</span></div><div class="stat"><b>৳${money(userData.referralEarnings||0)}</b><span>Total Earned</span></div><div class="stat"><b>৳${money(refReward)}</b><span>Per Referral</span></div></div>
-  <div class="ref-rate"><div><div class="label">💰 Referral Reward</div><div style="font-size:11px;color:#999;margin-top:4px;font-weight:700">You earn for each successful referral</div></div><div class="amount">৳${money(refReward)}</div></div>
-  <div class="stitle" style="margin-top:18px">Your Referrals</div><div class="list">${lh}</div>`);
+  openModal("Refer & Earn",`<div class="refc"><div style="font-size:13px;font-weight:800;opacity:.9">আপনার রেফারেল কোড</div><div class="refcode">${esc(code)}</div><div class="reflink">${esc(link)}</div><div class="refb"><button onclick="copyReferral()">📋 কপি করুন</button><button onclick="shareReferral()">🚀 শেয়ার করুন</button></div></div>
+  <div class="stats"><div class="stat"><b>${userData.totalReferrals||0}</b><span>মোট রেফারেল</span></div><div class="stat"><b>৳${money(userData.referralEarnings||0)}</b><span>মোট আয়</span></div><div class="stat"><b>৳${money(refReward)}</b><span>প্রতি রেফারে</span></div></div>
+  <div class="ref-rate"><div><div class="label">💰 রেফারেল রিওয়ার্ড</div><div style="font-size:11px;color:#999;margin-top:4px;font-weight:700">প্রতিটি সফল রেফারের জন্য আপনি টাকা পাবেন</div></div><div class="amount">৳${money(refReward)}</div></div>
+  <div class="stitle" style="margin-top:18px">আপনার রেফারেলসমূহ</div><div class="list">${lh}</div>`);
   window.currentReferralLink=link;
 }
 async function copyReferral(){
-  try{await navigator.clipboard.writeText(window.currentReferralLink||"");showPopup("Copied!","Referral link copied to clipboard.")}
+  try{await navigator.clipboard.writeText(window.currentReferralLink||"");showPopup("Copied!","রেফারেল লিংক কপি করা হয়েছে।")}
   catch(e){showToast(window.currentReferralLink)}
 }
 function shareReferral(){
@@ -552,10 +552,10 @@ async function openTasks(){
     const started=!left&&c&&c.status==="started";
     const img=t.image||t.imageUrl||t.logo||"";
     const act=started?`claimTask('${esc(ch.key)}')`:`openTask('${esc(t.link||t.url||"")}','${esc(ch.key)}',${Number(t.reward||0)})`;
-    const sub=left?"আবার করতে পারবেন: "+fmtT(left):"Reward: ৳"+money(t.reward||0);
-    h+=`<div class="li">${img?`<img class="ric" src="${esc(img)}">`:`<div class="ric">🎯</div>`}<div class="in"><b>${esc(t.name||t.title||"Task")}</b><span>${sub}</span></div><button class="sbtn" ${left?"disabled":""} onclick="${act}">${left?"DONE":started?"CLAIM":"START"}</button></div>`;
+    const sub=left?"আবার করতে পারবেন: "+fmtT(left):"রিওয়ার্ড: ৳"+money(t.reward||0);
+    h+=`<div class="li">${img?`<img class="ric" src="${esc(img)}">`:`<div class="ric">🎯</div>`}<div class="in"><b>${esc(t.name||t.title||"Task")}</b><span>${sub}</span></div><button class="sbtn" ${left?"disabled":""} onclick="${act}">${left?"DONE":started?"CLAIM":"শুরু করুন"}</button></div>`;
   });
-  openModal("Tasks",`<div class="info" style="margin:0 0 12px">START চাপুন, কাজ শেষ করুন, ১০ সেকেন্ড পর CLAIM চাপুন। প্রতিটি task ২৪ ঘণ্টায় ১ বার করা যাবে।</div><div class="list">${h||'<div class="empty">No active tasks available.</div>'}</div>`);
+  openModal("Tasks",`<div class="info" style="margin:0 0 12px">START চাপুন, কাজ শেষ করুন, ১০ সেকেন্ড পর CLAIM চাপুন। প্রতিটি task ২৪ ঘণ্টায় ১ বার করা যাবে।</div><div class="list">${h||'<div class="empty">বর্তমানে কোনো টাস্ক নেই।</div>'}</div>`);
 }
 async function openTask(link,id,reward){
   if(!id)return;
@@ -580,7 +580,7 @@ async function claimTask(id){
   const reward=Number(tr||t.reward||0);
   await ref.update({completedAt:Date.now()});
   await creditReward("task",reward,id);
-  showPopup("Task Completed!","Reward added to your balance.",reward);
+  showPopup("Task Completed!","রিওয়ার্ড আপনার ব্যালেন্সে যুক্ত হয়েছে।",reward);
   openTasks();
 }
 
@@ -588,16 +588,16 @@ async function claimTask(id){
 async function openBonus(){
   const claimed=(await db.ref("bonusClaims/"+currentUser.id+"/"+todayKey()).once("value")).exists();
   const r=Number(settings.dailyBonus||0);
-  openModal("Daily Bonus",`<div class="card" style="text-align:center;padding:26px"><div style="font-size:60px;animation:bob2 1.6s infinite">🎁</div><h2 style="margin-top:8px">Daily Bonus</h2><div style="color:var(--p);font-size:32px;font-weight:900;margin-top:8px">৳${money(r)}</div><p style="color:#888;font-size:11px;margin-top:8px">${claimed?"You already claimed today's bonus.":"Claim once every 24 hours."}</p><button class="pbtn" ${claimed?"disabled":""} onclick="claimBonus()">${claimed?"Already Claimed":"CLAIM BONUS"}</button></div>`);
+  openModal("ডেইলি বোনাস",`<div class="card" style="text-align:center;padding:26px"><div style="font-size:60px;animation:bob2 1.6s infinite">🎁</div><h2 style="margin-top:8px">ডেইলি বোনাস</h2><div style="color:var(--p);font-size:32px;font-weight:900;margin-top:8px">৳${money(r)}</div><p style="color:#888;font-size:11px;margin-top:8px">${claimed?"আপনি আজকের বোনাস নিয়ে নিয়েছেন।":"প্রতি ২৪ ঘণ্টায় একবার ক্লেইম করুন।"}</p><button class="pbtn" ${claimed?"disabled":""} onclick="claimBonus()">${claimed?"ইতিমধ্যেই নেওয়া হয়েছে":"বোনাস নিন"}</button></div>`);
 }
 async function claimBonus(){
   const ref=db.ref("bonusClaims/"+currentUser.id+"/"+todayKey());
   const r=Number(settings.dailyBonus||0);
   const tx=await ref.transaction(cur=>cur?undefined:{amount:r,createdAt:Date.now()});
-  if(!tx.committed)return showPopup("Already Claimed","Come back tomorrow.",null,true);
+  if(!tx.committed)return showPopup("Already Claimed","আগামীকাল আবার আসুন।",null,true);
   await creditReward("bonus",r,"daily_bonus");
   closeModal();
-  showPopup("Bonus Claimed!","Bonus added to your balance.",r);
+  showPopup("Bonus Claimed!","বোনাস আপনার ব্যালেন্সে যুক্ত হয়েছে।",r);
 }
 
 /* ===== RECENT ACTIVITY ===== */
@@ -649,7 +649,7 @@ async function showMonetagReward(){
   for(let i=0;i<12;i++){
     if(typeof window[fnName]==="function"){
       try{await Promise.resolve(window[fnName]());return{ok:true}}
-      catch(e){console.error("Monetag",e);return{ok:false,error:"Ad could not be shown. Please try again."}}
+      catch(e){console.error("Monetag",e);return{ok:false,error:"অ্যাড দেখানো যাচ্ছে না। আবার চেষ্টা করুন।"}}
     }
     await new Promise(r=>setTimeout(r,500));
   }
@@ -674,7 +674,7 @@ async function startAd(n){
   const ref=db.ref("adClaims/"+currentUser.id+"/"+todayKey());
   const max=Number(sv("adMax")||AD_MAX_DEFAULT);
   const c=Number(((await ref.once("value")).val()||{})[key]||0);
-  if(c>=max)return showPopup("Limit Reached","Today's limit for this ad is finished.",null,true);
+  if(c>=max)return showPopup("Limit Reached","আজকের জন্য এই অ্যাডের লিমিট শেষ।",null,true);
   adBusy=true;
   try{
     const adResult=await showMonetagReward();
@@ -682,7 +682,7 @@ async function startAd(n){
     const reward=Number(sv("adReward")||1);
     await ref.child(key).transaction(v=>Number(v||0)+1);
     await creditReward("ad",reward,key);
-    showPopup("Reward Earned!","Reward added to your balance.",reward);
+    showPopup("Reward Earned!","রিওয়ার্ড আপনার ব্যালেন্সে যুক্ত হয়েছে।",reward);
     if(document.getElementById("modalTitle").innerText==="Premium Income")openAds();
   }finally{adBusy=false}
 }
@@ -736,8 +736,8 @@ async function openMining(){
   const active=last&&m.status==="mining"&&!ready;
   const pr=ready?100:active?miningProgress(last):0;
   const rate=tier.low+(tier.low!==tier.high?"-"+tier.high:"");
-  const act=ready?`<button class="mbtn" onclick="claimMining()">💰 CLAIM ৳${money(m.reward||0)}</button>`:active?`<button class="mbtn" disabled>⏳ Mining in progress</button>`:`<button class="mbtn" onclick="startMining()">⛏ START 24H MINING</button>`;
-  openModal("Daily Mining",`<div class="mcard"><div style="font-size:19px;font-weight:900">⛏️ Daily Mining</div><div style="font-size:10px;opacity:.8;margin-top:4px">Your referral count controls mining speed</div><div class="ring" style="background:conic-gradient(#fff ${pr*3.6}deg,rgba(255,255,255,.25) 0)"><div class="ringin"><small>${ready?"Ready to claim":active?"Mining...":"Estimated"}</small><b>${ready?"+৳"+money(m.reward||0):"৳"+rate}</b><small>BDT / 24h</small></div></div><div style="font-size:12px;margin-bottom:12px" id="mt">${active?fmtT(last+DAY-Date.now())+" left":Math.floor(pr)+"%"}</div>${act}<div class="tiers"><div class="tier"><b>0-2</b>৳30-40</div><div class="tier"><b>3-5</b>৳50</div><div class="tier"><b>6-9</b>৳70</div><div class="tier"><b>10+</b>৳100-120</div></div></div><div class="card" style="margin-top:12px"><b style="font-size:14px">Your Mining Level</b><div style="font-size:12px;color:#777;margin-top:6px">${refs} referral(s) • Current rate ৳${rate}/24h</div></div><div class="info">Start mining once, wait 24 hours, then claim your reward. More referrals increase your daily rate.</div>`);
+  const act=ready?`<button class="mbtn" onclick="claimMining()">💰 ক্লেইম করুন ৳${money(m.reward||0)}</button>`:active?`<button class="mbtn" disabled>⏳ মাইনিং চলছে</button>`:`<button class="mbtn" onclick="startMining()">⛏ ২৪ ঘণ্টার মাইনিং শুরু করুন</button>`;
+  openModal("ডেইলি মাইনিং",`<div class="mcard"><div style="font-size:19px;font-weight:900">⛏️ ডেইলি মাইনিং</div><div style="font-size:10px;opacity:.8;margin-top:4px">আপনার রেফার সংখ্যার উপর মাইনিং স্পিড নির্ভর করে</div><div class="ring" style="background:conic-gradient(#fff ${pr*3.6}deg,rgba(255,255,255,.25) 0)"><div class="ringin"><small>${ready?"ক্লেইম করতে প্রস্তুত":active?"মাইনিং চলছে...":"সম্ভাব্য আয়"}</small><b>${ready?"+৳"+money(m.reward||0):"৳"+rate}</b><small>BDT / 24h</small></div></div><div style="font-size:12px;margin-bottom:12px" id="mt">${active?fmtT(last+DAY-Date.now())+" left":Math.floor(pr)+"%"}</div>${act}<div class="tiers"><div class="tier"><b>0-2</b>৳30-40</div><div class="tier"><b>3-5</b>৳50</div><div class="tier"><b>6-9</b>৳70</div><div class="tier"><b>10+</b>৳100-120</div></div></div><div class="card" style="margin-top:12px"><b style="font-size:14px">আপনার মাইনিং লেভেল</b><div style="font-size:12px;color:#777;margin-top:6px">${refs} টি রেফারেল • বর্তমান রেট ৳${rate}/24h</div></div><div class="info">একবার মাইনিং শুরু করুন, ২৪ ঘণ্টা অপেক্ষা করে আপনার রিওয়ার্ড ক্লেইম করুন। বেশি রেফার করলে আপনার দৈনিক আয় বাড়বে।</div>`);
   if(active){
     tickT=setInterval(()=>{
       const e=document.getElementById("mt");
@@ -751,23 +751,23 @@ async function startMining(){
   const ref=db.ref("mining/"+currentUser.id);
   const m=(await ref.once("value")).val()||{};
   const now=Date.now();
-  if(m.status==="mining"&&m.lastStart&&now-Number(m.lastStart)<DAY)return showPopup("Already Running","Mining is already running.",null,true);
+  if(m.status==="mining"&&m.lastStart&&now-Number(m.lastStart)<DAY)return showPopup("Already Running","মাইনিং ইতিমধ্যেই চলছে।",null,true);
   const refs=Number(userData.totalReferrals||0);
   await ref.set({lastStart:now,reward:miningReward(refs),status:"mining",referralCount:refs,updatedAt:TS});
-  showPopup("Mining Started ⛏️","Come back after 24 hours to claim your reward.");
+  showPopup("Mining Started ⛏️","আপনার রিওয়ার্ড ক্লেইম করতে ২৪ ঘণ্টা পর আবার আসুন।");
   openMining();
 }
 async function claimMining(){
   const ref=db.ref("mining/"+currentUser.id);
   const m=(await ref.once("value")).val()||{};
   const last=Number(m.lastStart||0),reward=Number(m.reward||0);
-  if(m.status!=="mining"||!last||Date.now()-last<DAY)return showPopup("Not Ready","Your mining cycle is not complete yet.",null,true);
-  if(!reward)return showPopup("Error","No mining reward available.",null,true);
+  if(m.status!=="mining"||!last||Date.now()-last<DAY)return showPopup("Not Ready","আপনার মাইনিং সাইকেল এখনও সম্পূর্ণ হয়নি।",null,true);
+  if(!reward)return showPopup("Error","কোনো মাইনিং রিওয়ার্ড পাওয়া যায়নি।",null,true);
   const tx=await ref.child("status").transaction(s=>s===null?s:(s==="mining"?"claimed":undefined));
-  if(!tx.committed||tx.snapshot.val()!=="claimed")return showPopup("Error","Claim failed, please try again.",null,true);
+  if(!tx.committed||tx.snapshot.val()!=="claimed")return showPopup("Error","ক্লেইম ব্যর্থ হয়েছে, অনুগ্রহ করে আবার চেষ্টা করুন।",null,true);
   await ref.update({lastClaim:TS});
   await creditReward("mining",reward,"daily_mining");
-  showPopup("Mining Reward!","Reward added to your balance.",reward);
+  showPopup("Mining Reward!","রিওয়ার্ড আপনার ব্যালেন্সে যুক্ত হয়েছে।",reward);
   openMining();
 }
 
@@ -776,35 +776,35 @@ function infoCard(icon,t,p,btn,fn){
   return`<div class="card" style="text-align:center;padding:26px"><div style="font-size:56px;animation:bob2 1.6s infinite">${icon}</div><h2 style="margin-top:10px;font-size:21px;font-weight:900">${t}</h2><p style="color:#777;font-size:14px;font-weight:700;margin-top:10px;line-height:1.7">${p}</p><button class="pbtn" onclick="${fn}">${btn}</button></div>`;
 }
 function openSupport(){
-  openModal("Support",infoCard(`<img src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png" alt="Telegram Support" style="width:54px;height:54px;object-fit:cover;border-radius:14px;">`,"Need Help?","If you have any problem, contact our official support.","💬 Contact Support",`openTelegram('${esc(getSupportTelegram())}')`));
+  openModal("Support",infoCard(`<img src="https://cdn.pixabay.com/photo/2021/12/27/10/50/telegram-6896827_1280.png" alt="Telegram Support" style="width:54px;height:54px;object-fit:cover;border-radius:14px;">`,"সাহায্য প্রয়োজন?","আপনার কোনো সমস্যা হলে আমাদের অফিশিয়াল সাপোর্টে যোগাযোগ করুন।","💬 সাপোর্টে যোগাযোগ করুন",`openTelegram('${esc(getSupportTelegram())}')`));
 }
 function openOfficial(){
-  openModal("Payment Group",infoCard("📢","Payment Group","Join our payment group to see payment proofs and updates.","📢 Open Group",`openExternal('${esc(getOfficialChannel())}')`));
+  openModal("Payment Group",infoCard("📢","পেমেন্ট গ্রুপ","পেমেন্ট প্রুফ এবং আপডেট পেতে আমাদের পেমেন্ট গ্রুপে জয়েন করুন।","📢 গ্রুপ ওপেন করুন",`openExternal('${esc(getOfficialChannel())}')`));
 }
 async function openNotice(){
   const snap=await db.ref("notices").once("value");let h="";
   snap.forEach(ch=>{
     const n=ch.val()||{};
     if(n.status===false||n.status==="inactive")return;
-    h+=`<div class="card" style="border-left:4px solid var(--p)"><b style="font-size:14px">${esc(n.title||"Notice")}</b><p style="color:#666;font-size:12px;line-height:1.6;margin-top:7px">${esc(n.text||n.description||"")}</p><small style="display:block;color:#aaa;margin-top:9px">${formatDate(n.date||n.createdAt)}</small></div>`;
+    h+=`<div class="card" style="border-left:4px solid var(--p)"><b style="font-size:14px">${esc(n.title||"নোটিশ")}</b><p style="color:#666;font-size:12px;line-height:1.6;margin-top:7px">${esc(n.text||n.description||"")}</p><small style="display:block;color:#aaa;margin-top:9px">${formatDate(n.date||n.createdAt)}</small></div>`;
   });
-  openModal("Notice",`<div class="list">${h||'<div class="empty">No notices available.</div>'}</div>`);
+  openModal("Notice",`<div class="list">${h||'<div class="empty">কোনো নোটিশ নেই।</div>'}</div>`);
 }
 function openTutorial(){
   const u=getTutorialUrl();
-  if(!u)return showPopup("Not Available","Tutorial not configured.",null,true);
-  openModal("Tutorial",`<div class="card" style="text-align:center;padding:20px"><img src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial" style="width:96px;height:96px;border-radius:22px;object-fit:cover;border:2px solid #f7c3da;box-shadow:0 8px 20px rgba(226,19,110,.15)"><h2 style="font-size:21px;font-weight:900;margin-top:14px">Tutorial</h2><p style="font-size:14px;font-weight:700;color:#777;line-height:1.7;margin-top:8px">Watch the tutorial video to learn how to use the app.</p><button class="pbtn" onclick="openExternal('${esc(u)}')">🎬 Watch Tutorial</button></div>`);
+  if(!u)return showPopup("Not Available","টিউটোরিয়াল সেট আপ করা নেই।",null,true);
+  openModal("Tutorial",`<div class="card" style="text-align:center;padding:20px"><img src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial" style="width:96px;height:96px;border-radius:22px;object-fit:cover;border:2px solid #f7c3da;box-shadow:0 8px 20px rgba(226,19,110,.15)"><h2 style="font-size:21px;font-weight:900;margin-top:14px">টিউটোরিয়াল</h2><p style="font-size:14px;font-weight:700;color:#777;line-height:1.7;margin-top:8px">অ্যাপটি কীভাবে ব্যবহার করতে হয় তা শিখতে টিউটোরিয়াল ভিডিওটি দেখুন।</p><button class="pbtn" onclick="openExternal('${esc(u)}')">🎬 টিউটোরিয়াল দেখুন</button></div>`);
 }
 
 /* ===== SETTINGS MENU ===== */
 function openSettingsMenu(){
   const it=(i,t,s,f)=>`<button class="row" style="margin:0" onclick="${f}"><div class="ric">${i}</div><div><b>${t}</b><span class="s">${s}</span></div><div class="arrow">›</div></button>`;
   openModal(getBotName(),`<div class="list">
-    ${it(`<img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial">`,"Tutorial","Learn how to use the app","openTutorial()")}
-    ${it("🧾","Withdraw History","View your withdrawal history","openWithdrawHistory()")}
-    ${it("🔔","Notice","Latest announcements","openNotice()")}
-    ${it("📢","Payment Group","Join our payment group","openOfficial()")}
-    ${it("🎧","Support","Contact support","openSupport()")}
+    ${it(`<img class="tutorial-logo" src="https://i.ibb.co/TMYGBPSG/6204174559833954130-121.jpg" alt="Tutorial">`,"টিউটোরিয়াল","অ্যাপটি কীভাবে ব্যবহার করতে হয় তা শিখুন","openTutorial()")}
+    ${it("🧾","উইথড্র হিস্ট্রি","আপনার উইথড্র হিস্ট্রি দেখুন","openWithdrawHistory()")}
+    ${it("🔔","নোটিশ","সর্বশেষ আপডেটগুলো দেখুন","openNotice()")}
+    ${it("📢","পেমেন্ট গ্রুপ","আমাদের পেমেন্ট গ্রুপে জয়েন করুন","openOfficial()")}
+    ${it("🎧","সাপোর্ট","সাপোর্টে যোগাযোগ করুন","openSupport()")}
   </div>`);
 }
 
