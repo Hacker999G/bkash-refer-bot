@@ -337,13 +337,11 @@ async function processReferral(){
   if(c.startsWith("REF"))c=c.substring(3);
   const rid=String(c).trim();
 
-  // নিজের রেফারেল লিংক বা ভুল আইডি ব্লক
   if(!/^\d+$/.test(rid)||rid===String(currentUser.id))return;
 
   const refSnap=await db.ref("users/"+rid).once("value");
   if(!refSnap.exists())return;
 
-  // রেফারেল হিস্ট্রি অ্যাড করা
   const tx=await db.ref("referrals/"+rid+"/"+currentUser.id).transaction(cur=>{
     if(cur)return;
     return{
@@ -360,7 +358,6 @@ async function processReferral(){
 
   if(!tx.committed)return;
 
-  // Settings থেকে অ্যামাউন্ট নিবে, না থাকলে ডিফল্ট ১০ টাকা নিবে
   const reward=Number(settings.referralReward!==undefined?settings.referralReward:10);
   const rref=db.ref("users/"+rid);
   
@@ -514,7 +511,7 @@ async function openWithdrawHistory(){
 /* ===== REFER ===== */
 async function openRefer(){
   const bu=getBotUsername(),code=String(currentUser.id);
-  const link=bu?"https://t.me/"+bu+"?start=ref_"+encodeURIComponent(code):location.origin+location.pathname+"?ref="+encodeURIComponent(code);
+  const link=bu?"https://t.me/"+bu+"/app?startapp="+encodeURIComponent(code):location.origin+location.pathname+"?ref="+encodeURIComponent(code);
   const rs=await db.ref("referrals/"+currentUser.id).once("value");
   let arr=[];rs.forEach(c=>{arr.push({id:c.key,...c.val()})});
   const lh=arr.reverse().map(i=>`<div class="li"><div class="ric">👤</div><div class="in"><b>${esc(i.referredName||"Telegram User")}</b><span>${i.referredUsername?"@"+esc(i.referredUsername):"Telegram user"}</span></div><div style="font-size:10px;color:#16a56b;font-weight:800">Joined</div></div>`).join("")||`<div class="empty">No referrals yet.<br>Share your referral link.</div>`;
@@ -531,7 +528,8 @@ async function copyReferral(){
   catch(e){showToast(window.currentReferralLink)}
 }
 function shareReferral(){
-  const u="https://t.me/share/url?url="+encodeURIComponent(window.currentReferralLink||"")+"&text="+encodeURIComponent("Join "+getBotName()+" and earn rewards! 🎁");
+  const shareText = "বন্ধুদের রেফার করুন এবং ইনকাম করুন!\nলিংক:";
+  const u="https://t.me/share/url?url="+encodeURIComponent(window.currentReferralLink||"")+"&text="+encodeURIComponent(shareText);
   if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,"_blank");
 }
 
