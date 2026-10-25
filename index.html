@@ -219,8 +219,10 @@ button{border:0;cursor:pointer;background:none}
 <main class="content">
 <div class="stitle">কুইক সার্ভিসেস</div>
 <div class="grid">
-  <button class="svc" onclick="openPage('typing')"><div class="sic"><img src="https://i.ibb.co.com/209HWZYc/IMG-3563.jpg" alt="Typing Job" loading="eager"></div><div class="snm">Typing</div></button>
-  <button class="svc" onclick="openPage('quiz')"><div class="sic"><img src="https://i.ibb.co.com/Z6zQh4BW/IMG-3566.jpg" alt="Quiz" loading="eager"></div><div class="snm">Quiz</div></button>
+  <!-- Typing Button with new logo -->
+  <button class="svc" onclick="openPage('typing')"><div class="sic"><img src="https://i.ibb.co/YBNPzpRH/IMG-4855.jpg" alt="Typing Job" loading="eager"></div><div class="snm">Typing</div></button>
+  <!-- Quiz Button with new logo -->
+  <button class="svc" onclick="openPage('quiz')"><div class="sic"><img src="https://i.ibb.co/jZTzY5Vb/IMG-4856.jpg" alt="Quiz" loading="eager"></div><div class="snm">Quiz</div></button>
   <button class="svc" onclick="openPage('refer')"><div class="sic"><img src="https://i.ibb.co.com/kgPP66Z6/IMG-3564.jpg" alt="Refer" loading="eager"></div><div class="snm">Refer</div></button>
   <button class="svc" onclick="openPage('task')"><div class="sic"><img src="https://i.ibb.co.com/Z6zQh4BW/IMG-3566.jpg" alt="Task" loading="eager"></div><div class="snm">Task</div></button>
   <button class="svc" onclick="openPage('bonus')"><div class="sic"><img src="https://i.ibb.co.com/1JhxrzwG/IMG-3562.jpg" alt="Bonus" loading="eager"></div><div class="snm">Bonus</div></button>
@@ -424,7 +426,6 @@ function goHome(){closeModal();window.scrollTo({top:0,behavior:"smooth"})}
 /* ===== TYPING JOB FEATURE (5 questions = 20 BDT) ===== */
 let typingState = { current: 0, total: 5, list: [], reward: 20 };
 function openTypingJob() {
-  // Generate 5 random math problems (+ and -)
   let list = [];
   for(let i=0; i<5; i++) {
     let isAdd = Math.random() > 0.5;
@@ -492,7 +493,7 @@ const ALL_QUIZ_POOL = [
   {q: "বাংলাদেশের রাজধানীর নাম কী?", opts: ["চট্টগ্রাম", "সিলেট", "ঢাকা", "রাজশাহী"], ans: 2},
   {q: "গাছের পাতা সাধারণত কোন রঙের হয়?", opts: ["লাল", "সবুজ", "হলুদ", "নীল"], ans: 1},
   {q: "পানি আমরা কী করি?", opts: ["খাই", "পড়ি", "েলি", "ঘুমাই"], ans: 0},
-  {q: "কোন الحيوان মিয়াঁও মিয়াঁও করে ডাকে?", opts: ["কুকুর", "বিড়াল", "গরু", "ছাগল"], ans: 1},
+  {q: "কোন প্রাণী মিয়াঁও মিয়াঁও করে ডাকে?", opts: ["কুকুর", "বিড়াল", "গরু", "ছাগল"], ans: 1},
   {q: "গরু আমাদের কী দেয়?", opts: ["দুধ", "ডিম", "উল", "মধু"], ans: 0},
   {q: "মৌমাছি আমাদের কী দেয়?", opts: ["চিনি", "মধু", "ফল", "দুধ"], ans: 1},
   {q: "১ হালি সমান কয়টি?", opts: ["২টি", "৩টি", "৪টি", "৫টি"], ans: 2},
@@ -511,7 +512,6 @@ const ALL_QUIZ_POOL = [
 
 let quizState = { current: 0, total: 10, list: [], score: 0, reward: 50 };
 function openQuizGame() {
-  // Shuffle pool and pick 10 random questions
   let shuffled = [...ALL_QUIZ_POOL].sort(() => 0.5 - Math.random());
   let list = shuffled.slice(0, 10);
   quizState = { current: 0, total: 10, list: list, score: 0, reward: 50 };
@@ -946,7 +946,7 @@ function openTelegram(u){
   if(tg&&tg.openTelegramLink&&url.includes("t.me/"))tg.openTelegramLink(url);else window.open(url,"_blank");
 }
 function openExternal(u){
-  if(-!u)return showPopup("Not Available","Link not configured.",null,true);
+  if(!u)return showPopup("Not Available","Link not configured.",null,true);
   if(tg&&tg.openLink)tg.openLink(u);else window.open(u,"_blank");
 }
 
